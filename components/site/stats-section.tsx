@@ -291,17 +291,17 @@ export function StatsSection() {
           </div>
 
           {/* Stat cells with continuous ripple emanation behind each number */}
-          <div className="impact-cells relative mt-24 md:mt-32">
-            <div className="grid gap-y-28 gap-x-8 md:grid-cols-3">
+          <div className="impact-cells relative mt-20 md:mt-28">
+            <div className="grid gap-y-24 gap-x-8 md:grid-cols-3">
               {STATS.map((s, i) => (
                 <article
                   key={i}
-                  className="stat-cell relative flex flex-col items-center text-center"
+                  className="stat-cell relative flex min-w-0 flex-col items-center text-center"
                 >
-                  {/* Ripple stack: 4 concentric rings emitting from a center drop */}
+                  {/* Ripple stack: 4 concentric rings, no center dot */}
                   <div
                     aria-hidden
-                    className="ripple-stack pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[min(30rem,90vw)] -translate-x-1/2 -translate-y-[60%]"
+                    className="ripple-stack pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[min(22rem,78vw)] -translate-x-1/2 -translate-y-1/2"
                   >
                     {[0, 1, 2, 3].map((r) => (
                       <span
@@ -313,18 +313,10 @@ export function StatsSection() {
                         }}
                       />
                     ))}
-                    {/* Center "drop" */}
-                    <span
-                      className="ripple-drop absolute left-1/2 top-1/2 h-2 w-2 rounded-full"
-                      style={{
-                        background: s.accent,
-                        transform: "translate(-50%, -50%)",
-                      }}
-                    />
                   </div>
 
                   {/* Index marker */}
-                  <div className="relative z-10 mb-6 flex items-center gap-3">
+                  <div className="relative z-10 mb-5 flex items-center gap-3">
                     <span
                       aria-hidden
                       className="block h-1.5 w-1.5 rounded-full"
@@ -335,8 +327,8 @@ export function StatsSection() {
                     </span>
                   </div>
 
-                  {/* Massive number — the hero */}
-                  <div className="stat-num-wrap relative z-10 flex items-baseline justify-center font-display font-light leading-none tracking-tight text-[clamp(4.5rem,12vw,9rem)]">
+                  {/* The number — the hero, sized to never overflow its column */}
+                  <div className="stat-num-wrap relative z-10 flex w-full items-baseline justify-center whitespace-nowrap font-display font-light leading-none tracking-tight text-[clamp(2.5rem,6.5vw,5rem)]">
                     {s.prefix && <span>{s.prefix}</span>}
                     <span
                       className="stat-num"
@@ -351,13 +343,13 @@ export function StatsSection() {
                   {/* Hairline accent */}
                   <span
                     aria-hidden
-                    className="stat-rule mt-8 block h-px w-16 origin-center"
+                    className="stat-rule mt-7 block h-px w-14 origin-center"
                     style={{ background: s.accent }}
                   />
 
                   {/* Label + caption */}
-                  <div className="stat-meta relative z-10 mt-8">
-                    <div className="font-display text-2xl md:text-3xl font-normal">
+                  <div className="stat-meta relative z-10 mt-7">
+                    <div className="font-display text-xl md:text-2xl font-normal">
                       {s.label}{" "}
                       {s.italic && (
                         <span

@@ -57,16 +57,6 @@ const EXECUTIVES: Member[] = [
   },
 ];
 
-const BRANCH_LEADERS: Member[] = [
-  {
-    name: "Devon Kellis",
-    role: "Milton Branch Leader",
-    photo: "/team/devon-kellis.jpg",
-    focusY: 30,
-    accent: "rose",
-  },
-];
-
 function PortraitCard({
   m,
   size = "md",
@@ -443,7 +433,7 @@ export function TeamRoster() {
         <GroupHeader
           eyebrow="Co-founders"
           index="01"
-          total="03"
+          total="02"
           caption="Two students who started Hands of Hope with one stubborn question, what does showing up actually look like, and have spent every year since answering it."
         />
 
@@ -466,7 +456,7 @@ export function TeamRoster() {
           <GroupHeader
             eyebrow="Executive Team"
             index="02"
-            total="03"
+            total="02"
             caption="The leadership team running operations, marketing, and technology across every chapter."
           />
         </div>
@@ -482,45 +472,6 @@ export function TeamRoster() {
             {EXECUTIVES.map((m, i) => (
               <PortraitCard key={m.name} m={m} size="md" index={i} />
             ))}
-          </div>
-        </div>
-
-        {/* ───────────── Branch Leaders ───────────── */}
-        <div className="mt-32 md:mt-40">
-          <GroupHeader
-            eyebrow="Branch Leaders"
-            index="03"
-            total="03"
-            caption="The people on the ground: running a chapter, building a local team, and keeping the work close to the community it serves."
-          />
-        </div>
-
-        <div className="relative mt-14">
-          <div className="roster-floating pointer-events-none absolute -top-10 right-0 hidden md:block">
-            <span className="font-display italic text-7xl text-foreground/[0.06] leading-none">
-              03
-            </span>
-          </div>
-
-          <div className="grid gap-x-8 gap-y-14 sm:grid-cols-2 lg:grid-cols-4">
-            {BRANCH_LEADERS.map((m, i) => (
-              <div key={m.name} className="sm:col-span-1 lg:col-span-1">
-                <PortraitCard m={m} size="sm" index={i} />
-              </div>
-            ))}
-
-            {/* Quiet placeholders that signal "more branches, more leaders" without
-                pretending we have photos for them. Kept restrained on purpose. */}
-            <div className="hidden sm:flex roster-placeholder flex-col justify-between border border-dashed border-border/70 aspect-[3/4] p-5">
-              <div className="editorial-eyebrow text-muted-foreground/70">
-                More branches
-              </div>
-              <div className="font-display italic text-2xl text-foreground/40 leading-tight">
-                Leaders for new
-                <br />
-                chapters, soon.
-              </div>
-            </div>
           </div>
         </div>
       </div>
