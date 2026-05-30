@@ -1,0 +1,273 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    /* Warm ivory base, deep ink foreground, single restrained accent */
+    --background: oklch(0.965 0.006 80);
+    --foreground: oklch(0.18 0.012 60);
+
+    --card: oklch(0.985 0.004 80);
+    --card-foreground: oklch(0.18 0.012 60);
+
+    --popover: oklch(0.985 0.004 80);
+    --popover-foreground: oklch(0.18 0.012 60);
+
+    /* Single editorial accent: deep, muted oxblood */
+    --primary: oklch(0.42 0.09 25);
+    --primary-foreground: oklch(0.98 0.004 80);
+
+    --secondary: oklch(0.93 0.01 60);
+    --secondary-foreground: oklch(0.22 0.012 60);
+
+    --muted: oklch(0.94 0.005 80);
+    --muted-foreground: oklch(0.5 0.012 60);
+
+    --accent: oklch(0.93 0.012 25);
+    --accent-foreground: oklch(0.22 0.012 60);
+
+    --destructive: oklch(0.55 0.18 25);
+    --destructive-foreground: oklch(0.98 0.004 80);
+
+    --border: oklch(0.88 0.008 70);
+    --input: oklch(0.92 0.008 70);
+    --ring: oklch(0.42 0.09 25);
+
+    /* Brand accents: deep navy + dark rose, sourced from the HoH mark.
+       Reserved for accent use only: hairlines, hover, dropcap numerals,
+       small ornaments. Never replace --foreground. */
+    --brand-navy: oklch(0.28 0.075 255);
+    --brand-rose: oklch(0.45 0.13 350);
+    --brand-navy-soft: oklch(0.42 0.06 255);
+    --brand-rose-soft: oklch(0.6 0.1 350);
+
+    --radius: 0.25rem;
+  }
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --font-sans: var(--font-inter);
+  --font-display: var(--font-cormorant);
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  html, body {
+    background: var(--background);
+    color: var(--foreground);
+  }
+  body {
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11";
+  }
+  ::selection {
+    background: var(--foreground);
+    color: var(--background);
+  }
+}
+
+/* ── Display + utility layers ─────────────────────────────────────── */
+.font-display {
+  font-family: var(--font-cormorant), ui-serif, "Times New Roman", serif;
+  font-feature-settings: "lnum", "ss01";
+}
+
+.editorial-display {
+  font-family: var(--font-cormorant), ui-serif, "Times New Roman", serif;
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+.editorial-eyebrow {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  font-size: 0.7rem;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+}
+
+.editorial-rule {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.editorial-rule::before {
+  content: "";
+  width: 2.25rem;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.5;
+}
+
+/* Brand accent helpers (use sparingly) */
+.brand-navy { color: var(--brand-navy); }
+.brand-rose { color: var(--brand-rose); }
+.bg-brand-navy { background-color: var(--brand-navy); }
+.bg-brand-rose { background-color: var(--brand-rose); }
+.border-brand-navy { border-color: var(--brand-navy); }
+.border-brand-rose { border-color: var(--brand-rose); }
+
+/* Hairline that draws in on intersection */
+.draw-rule {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  height: 1px;
+  overflow: hidden;
+  background: oklch(0.88 0.008 70);
+}
+.draw-rule::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 0;
+  background: var(--brand-rose);
+  transition: width 1.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.draw-rule.is-in::after { width: 100%; }
+.draw-rule.is-in.draw-rule-navy::after { background: var(--brand-navy); }
+
+/* Tiny editorial ornament: slowly rotating rosette */
+@keyframes rotate-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.rotate-very-slow { animation: rotate-slow 80s linear infinite; }
+.rotate-slow { animation: rotate-slow 50s linear infinite; }
+.rotate-slow-reverse { animation: rotate-slow 65s linear infinite reverse; }
+
+/* Slow Ken Burns */
+@keyframes ken-burns {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.06); }
+}
+.animate-ken-burns { animation: ken-burns 18s ease-out forwards; }
+
+/* Subtle, restrained motion only */
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-fade-in { animation: fade-in 1.2s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+.animate-fade-up { animation: fade-up 1s cubic-bezier(0.2, 0.8, 0.2, 1) both; }
+
+/* Image overlay helper: applied to a sibling of the image.
+   Goal: white text on top reads cleanly without crushing the photo. */
+.tint-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      oklch(0.14 0.012 60 / 0.55) 0%,
+      oklch(0.12 0.012 60 / 0.65) 50%,
+      oklch(0.10 0.012 60 / 0.82) 100%),
+    linear-gradient(0deg,
+      oklch(0.10 0.012 60 / 0.20),
+      oklch(0.10 0.012 60 / 0.20));
+  pointer-events: none;
+}
+.tint-overlay-strong {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(180deg,
+      oklch(0.12 0.012 60 / 0.70) 0%,
+      oklch(0.10 0.012 60 / 0.85) 100%),
+    linear-gradient(0deg,
+      oklch(0.08 0.012 60 / 0.25),
+      oklch(0.08 0.012 60 / 0.25));
+  pointer-events: none;
+}
+
+/* On-image text container */
+.on-image {
+  color: oklch(0.99 0.004 80);
+}
+.on-image .editorial-eyebrow {
+  color: oklch(0.99 0.004 80 / 0.85);
+}
+
+/* Outlined display type for layered marquees */
+.text-outline {
+  -webkit-text-stroke: 1px var(--foreground);
+  color: transparent;
+}
+.text-outline-rose {
+  -webkit-text-stroke: 1px var(--brand-rose);
+  color: transparent;
+}
+
+/* Headline word reveal: parent clips, child rises into view */
+.impact-headline-mask {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: bottom;
+  line-height: 1.05;
+}
+
+/* Soft, slow ping for "still counting" pulse */
+@keyframes ping-soft {
+  0%   { transform: scale(1);   opacity: 0.7; }
+  75%, 100% { transform: scale(2.4); opacity: 0; }
+}
+.animate-ping-soft {
+  animation: ping-soft 2.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Chatbot typing-indicator dots */
+@keyframes chatbot-dot {
+  0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-2px); }
+}
+.chatbot-dot { animation: chatbot-dot 1.2s ease-in-out infinite; }
+.chatbot-dot-2 { animation-delay: 0.15s; }
+.chatbot-dot-3 { animation-delay: 0.3s; }
+
+/* Soft horizontal edge fade for marquee bands */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    black 6%,
+    black 94%,
+    transparent 100%
+  );
+}

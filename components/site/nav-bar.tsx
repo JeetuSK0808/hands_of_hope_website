@@ -1,0 +1,161 @@
+"use client";
+
+import * as React from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { Menu, X } from "lucide-react";
+import { AnimatedLogo } from "./animated-logo";
+import { cn } from "@/lib/utils";
+
+const NAV_LINKS = [
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Meet the Team", href: "/team" },
+  { label: "Impact", href: "/#impact" },
+  { label: "Partners", href: "/#partners" },
+  { label: "Donate", href: "/donate" },
+];
+
+export function NavBar() {
+  const pathname = usePathname();
+  const [scrolled, setScrolled] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  React.useEffect(() => setOpen(false), [pathname]);
+
+  React.useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [open]);
+
+  return (
+    <>
+      <header
+        className={cn(
+          "fixed inset-x-0 top-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-500",
+          scrolled
+            ? "border-b border-border/70 bg-background/85 backdrop-blur-md"
+            : "border-b border-transparent bg-transparent"
+        )}
+      >
+        <nav className="mx-auto flex w-full max-w-[88rem] items-center justify-between gap-6 px-6 py-5 md:px-12">
+          <Link href="/" className="group">
+            <AnimatedLogo size={34} />
+          </Link>
+
+          <ul className="hidden md:flex items-center gap-8">
+            {NAV_LINKS.map((l) => {
+              const active =
+                l.href === "/"
+                  ? pathname === "/"
+                  : pathname === l.href ||
+                    (l.href.startsWith("/") && !l.href.includes("#") &&
+                      pathname?.startsWith(l.href + "/"));
+              return (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className={cn(
+                      "relative text-sm font-medium transition-colors",
+                      active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                    )}
+                  >
+                    {l.label}
+                    {active && (
+                      <span className="absolute -bottom-1.5 left-0 right-0 mx-auto h-px w-4 bg-[var(--brand-rose)]" />
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+
+          <div className="hidden md:flex">
+            <Link
+              href="/contact"
+              className="inline-flex items-center border-b border-foreground pb-0.5 text-sm font-medium text-foreground transition-opacity hover:opacity-70"
+            >
+              Get involved
+            </Link>
+          </div>
+
+          <button
+            type="button"
+            aria-label="Open menu"
+            onClick={() => setOpen(true)}
+            className="md:hidden inline-flex h-10 w-10 items-center justify-center text-foreground"
+          >
+            <Menu className="h-5 w-5" strokeWidth={1.5} />
+          </button>
+        </nav>
+      </header>
+
+      {/* Mobile drawer */}
+      <div
+        className={cn(
+          "fixed inset-0 z-[60] md:hidden",
+          open ? "pointer-events-auto" : "pointer-events-none"
+        )}
+        aria-hidden={!open}
+      >
+        <div
+          className={cn(
+            "absolute inset-0 bg-foreground/20 backdrop-blur-sm transition-opacity duration-500",
+            open ? "opacity-100" : "opacity-0"
+          )}
+          onClick={() => setOpen(false)}
+        />
+        <div
+          className={cn(
+            "absolute inset-y-0 right-0 w-[88vw] max-w-sm overflow-hidden bg-background border-l border-border transition-transform duration-500",
+            open ? "translate-x-0" : "translate-x-full"
+          )}
+        >
+          <div className="flex items-center justify-between px-6 py-5 border-b border-border">
+            <AnimatedLogo size={32} />
+            <button
+              type="button"
+              aria-label="Close menu"
+              onClick={() => setOpen(false)}
+              className="inline-flex h-10 w-10 items-center justify-center text-foreground"
+            >
+              <X className="h-5 w-5" strokeWidth={1.5} />
+            </button>
+          </div>
+          <ul className="flex flex-col px-2 py-6">
+            {NAV_LINKS.map((l) => (
+              <li key={l.href}>
+                <Link
+                  href={l.href}
+                  className="block px-6 py-4 font-display text-3xl font-light italic tracking-tight text-foreground"
+                >
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+            <li className="mt-4 px-6">
+              <Link
+                href="/contact"
+                className="inline-block border-b border-foreground pb-1 text-sm font-medium text-foreground"
+              >
+                Get involved
+              </Link>
+            </li>
+          </ul>
+          <div className="absolute bottom-6 left-6 right-6 editorial-eyebrow text-muted-foreground">
+            Atlanta · 501(c)(3)
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
