@@ -15,9 +15,7 @@ type Stat = {
   label: string;
   italic?: string;
   caption: string;
-  fill: number; // 0..1
   accent: string;
-  ticks: number; // count of decorative tally marks behind the ring
 };
 
 const STATS: Stat[] = [
@@ -27,10 +25,8 @@ const STATS: Stat[] = [
     format: "comma",
     label: "Volunteer",
     italic: "hours",
-    caption: "logged across our chapters in 2026",
-    fill: 0.78,
+    caption: "Hours our students gave this year.",
     accent: "var(--brand-rose)",
-    ticks: 24,
   },
   {
     prefix: "$",
@@ -38,10 +34,8 @@ const STATS: Stat[] = [
     format: "money",
     label: "Raised",
     italic: "for community",
-    caption: "directed to underserved partners and programs",
-    fill: 0.62,
+    caption: "Dollars routed to partners and programs.",
     accent: "var(--brand-navy)",
-    ticks: 24,
   },
   {
     value: 250,
@@ -49,15 +43,10 @@ const STATS: Stat[] = [
     format: "plain",
     label: "Students",
     italic: "empowered",
-    caption: "leading projects in their cities, every semester",
-    fill: 0.91,
+    caption: "Leading projects in their cities, every semester.",
     accent: "var(--brand-rose-soft)",
-    ticks: 24,
   },
 ];
-
-const RADIUS = 88;
-const CIRCUMFERENCE = 2 * Math.PI * RADIUS;
 
 function formatNumber(n: number, fmt: Stat["format"]) {
   if (fmt === "comma" || fmt === "money") return Math.round(n).toLocaleString("en-US");
@@ -101,94 +90,36 @@ export function StatsSection() {
         );
       });
 
-      // Connector line that draws across all three stats as you scroll
-      gsap.fromTo(
-        ".impact-connector",
-        { scaleX: 0 },
-        {
-          scaleX: 1,
-          ease: "none",
-          scrollTrigger: {
-            trigger: ".impact-cells",
-            start: "top 75%",
-            end: "bottom 60%",
-            scrub: 0.6,
-          },
-        }
-      );
-      gsap.utils.toArray<HTMLElement>(".impact-connector-dot").forEach((dot, i) => {
-        gsap.fromTo(
-          dot,
-          { scale: 0, opacity: 0 },
-          {
-            scale: 1,
-            opacity: 1,
-            duration: 0.5,
-            ease: "back.out(2)",
-            scrollTrigger: { trigger: dot, start: "top 80%" },
-            delay: i * 0.08,
-          }
-        );
-      });
-
+      // Stat cells: activate ripples + drop, rise the number, count up, reveal label
       gsap.utils.toArray<HTMLElement>(".stat-cell").forEach((cell, i) => {
         const numEl = cell.querySelector<HTMLElement>(".stat-num");
-        const ruleEl = cell.querySelector<HTMLElement>(".draw-rule");
-        const ringFg = cell.querySelector<SVGCircleElement>(".ring-fg");
-        const ringTrail = cell.querySelector<SVGCircleElement>(".ring-trail");
-        const fill = Number(cell.dataset.fill || "0.7");
-        const ticks = cell.querySelectorAll<SVGLineElement>(".tally-tick");
-        const totalTicks = ticks.length;
-        const litTicks = Math.round(totalTicks * fill);
+        const numWrap = cell.querySelector<HTMLElement>(".stat-num-wrap");
+        const label = cell.querySelector<HTMLElement>(".stat-meta");
+        const rule = cell.querySelector<HTMLElement>(".stat-rule");
+        const ripples = cell.querySelector<HTMLElement>(".ripple-stack");
 
         ScrollTrigger.create({
           trigger: cell,
           start: "top 82%",
           once: true,
           onEnter: () => {
-            ruleEl?.classList.add("is-in");
+            if (ripples) ripples.classList.add("is-active");
 
-            if (ringFg) {
+            if (numWrap) {
               gsap.fromTo(
-                ringFg,
-                { strokeDashoffset: CIRCUMFERENCE },
+                numWrap,
+                { y: 40, opacity: 0, scale: 0.94, filter: "blur(8px)" },
                 {
-                  strokeDashoffset: CIRCUMFERENCE * (1 - fill),
-                  duration: 2.4,
+                  y: 0,
+                  opacity: 1,
+                  scale: 1,
+                  filter: "blur(0px)",
+                  duration: 1.4,
                   ease: "power3.out",
-                  delay: 0.05 + i * 0.08,
+                  delay: i * 0.14,
                 }
               );
             }
-            if (ringTrail) {
-              gsap.fromTo(
-                ringTrail,
-                { opacity: 0 },
-                {
-                  opacity: 0.35,
-                  duration: 1.2,
-                  ease: "power2.out",
-                  delay: 0.4 + i * 0.08,
-                }
-              );
-            }
-
-            ticks.forEach((tick, t) => {
-              if (t < litTicks) {
-                gsap.fromTo(
-                  tick,
-                  { opacity: 0, scaleY: 0.4 },
-                  {
-                    opacity: 1,
-                    scaleY: 1,
-                    transformOrigin: "center",
-                    duration: 0.5,
-                    ease: "power2.out",
-                    delay: 0.4 + i * 0.08 + t * 0.025,
-                  }
-                );
-              }
-            });
 
             if (numEl) {
               const target = Number(numEl.dataset.value);
@@ -196,41 +127,61 @@ export function StatsSection() {
               const obj = { v: 0 };
               gsap.to(obj, {
                 v: target,
-                duration: 2.4,
+                duration: 2.8,
                 ease: "power3.out",
-                delay: 0.05 + i * 0.08,
+                delay: 0.25 + i * 0.14,
                 onUpdate: () => {
                   numEl.textContent = formatNumber(obj.v, fmt);
                 },
               });
             }
 
-            gsap.fromTo(
-              cell.querySelector(".stat-meta"),
-              { y: 14, opacity: 0 },
-              {
-                y: 0,
-                opacity: 1,
-                duration: 0.9,
-                ease: "power3.out",
-                delay: 0.6 + i * 0.08,
-              }
-            );
+            if (rule) {
+              gsap.fromTo(
+                rule,
+                { scaleX: 0 },
+                {
+                  scaleX: 1,
+                  duration: 1.1,
+                  ease: "power3.out",
+                  delay: 0.55 + i * 0.14,
+                  transformOrigin: "center center",
+                }
+              );
+            }
 
-            gsap.fromTo(
-              cell.querySelector(".stat-pulse"),
-              { scale: 0, opacity: 0 },
-              {
-                scale: 1,
-                opacity: 1,
-                duration: 0.6,
-                ease: "back.out(2)",
-                delay: 1.4 + i * 0.08,
-              }
-            );
+            if (label) {
+              gsap.fromTo(
+                label,
+                { y: 22, opacity: 0 },
+                {
+                  y: 0,
+                  opacity: 1,
+                  duration: 1,
+                  ease: "power3.out",
+                  delay: 0.75 + i * 0.14,
+                }
+              );
+            }
           },
         });
       });
+
+      // Connecting sine wave draws across as you scroll
+      gsap.fromTo(
+        ".impact-wave-path",
+        { strokeDashoffset: 2400 },
+        {
+          strokeDashoffset: 0,
+          ease: "none",
+          scrollTrigger: {
+            trigger: ".impact-cells",
+            start: "top 80%",
+            end: "bottom 50%",
+            scrub: 0.8,
+          },
+        }
+      );
 
       // Slow gentle parallax on the photographic backdrop
       gsap.to(".impact-bg-photo", {
@@ -281,7 +232,7 @@ export function StatsSection() {
         />
       </div>
 
-      <div className="relative px-6 md:px-12 pt-32 md:pt-44 pb-20 md:pb-28">
+      <div className="relative px-6 md:px-12 pt-32 md:pt-44 pb-24 md:pb-32">
         {/* Editorial ornament */}
         <div
           aria-hidden
@@ -335,176 +286,120 @@ export function StatsSection() {
               </h2>
             </div>
             <p className="impact-rise max-w-md text-muted-foreground md:text-right md:self-end leading-relaxed">
-              Every hour, every dollar, every student is a ripple. Together,
-              they become the wave we&apos;re building.
+              Hours, dollars, students. The work, by the numbers.
             </p>
           </div>
 
-          {/* Connector line: draws across the section as you scroll */}
-          <div className="relative mt-20 hidden md:block h-2">
-            <div className="absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 bg-border" />
-            <div
-              className="impact-connector absolute left-0 right-0 top-1/2 h-px -translate-y-1/2 origin-left"
-              style={{ background: "var(--brand-rose)" }}
-            />
-          </div>
-
-          <div className="impact-cells mt-16 grid gap-y-20 gap-x-10 md:grid-cols-3 md:divide-x md:divide-border">
-            {STATS.map((s, i) => (
-              <article
-                key={i}
-                className="stat-cell group relative md:px-10 first:md:pl-0 last:md:pr-0"
-                data-fill={s.fill}
-              >
-                <div className="flex items-center justify-between">
-                  <div className="editorial-eyebrow text-muted-foreground">
-                    {String(i + 1).padStart(2, "0")} · of 03
+          {/* Stat cells with continuous ripple emanation behind each number */}
+          <div className="impact-cells relative mt-24 md:mt-32">
+            <div className="grid gap-y-28 gap-x-8 md:grid-cols-3">
+              {STATS.map((s, i) => (
+                <article
+                  key={i}
+                  className="stat-cell relative flex flex-col items-center text-center"
+                >
+                  {/* Ripple stack: 4 concentric rings emitting from a center drop */}
+                  <div
+                    aria-hidden
+                    className="ripple-stack pointer-events-none absolute left-1/2 top-1/2 aspect-square w-[min(30rem,90vw)] -translate-x-1/2 -translate-y-[60%]"
+                  >
+                    {[0, 1, 2, 3].map((r) => (
+                      <span
+                        key={r}
+                        className="ripple-ring absolute inset-0 rounded-full"
+                        style={{
+                          borderColor: s.accent,
+                          animationDelay: `${r * 1.4}s`,
+                        }}
+                      />
+                    ))}
+                    {/* Center "drop" */}
+                    <span
+                      className="ripple-drop absolute left-1/2 top-1/2 h-2 w-2 rounded-full"
+                      style={{
+                        background: s.accent,
+                        transform: "translate(-50%, -50%)",
+                      }}
+                    />
                   </div>
+
+                  {/* Index marker */}
+                  <div className="relative z-10 mb-6 flex items-center gap-3">
+                    <span
+                      aria-hidden
+                      className="block h-1.5 w-1.5 rounded-full"
+                      style={{ background: s.accent }}
+                    />
+                    <span className="editorial-eyebrow text-muted-foreground">
+                      {String(i + 1).padStart(2, "0")} · of 03
+                    </span>
+                  </div>
+
+                  {/* Massive number — the hero */}
+                  <div className="stat-num-wrap relative z-10 flex items-baseline justify-center font-display font-light leading-none tracking-tight text-[clamp(4.5rem,12vw,9rem)]">
+                    {s.prefix && <span>{s.prefix}</span>}
+                    <span
+                      className="stat-num"
+                      data-value={s.value}
+                      data-fmt={s.format}
+                    >
+                      0
+                    </span>
+                    {s.suffix && <span>{s.suffix}</span>}
+                  </div>
+
+                  {/* Hairline accent */}
                   <span
                     aria-hidden
-                    className="h-1.5 w-1.5 rounded-full"
+                    className="stat-rule mt-8 block h-px w-16 origin-center"
                     style={{ background: s.accent }}
                   />
-                </div>
 
-                {/* Square wrapper sized to the ring; number is centered inside */}
-                <div className="relative mx-auto mt-8 aspect-square w-full max-w-[20rem]">
-                  {/* Tally ticks behind the ring (vertical marks fanning around) */}
-                  <svg
-                    aria-hidden
-                    viewBox="0 0 200 200"
-                    className="absolute inset-0 h-full w-full overflow-visible"
-                  >
-                    {Array.from({ length: s.ticks }).map((_, t) => {
-                      const angle = (t / s.ticks) * 360 - 90;
-                      const rad = (angle * Math.PI) / 180;
-                      const r1 = 96;
-                      const r2 = 102;
-                      const x1 = Number((100 + r1 * Math.cos(rad)).toFixed(4));
-                      const y1 = Number((100 + r1 * Math.sin(rad)).toFixed(4));
-                      const x2 = Number((100 + r2 * Math.cos(rad)).toFixed(4));
-                      const y2 = Number((100 + r2 * Math.sin(rad)).toFixed(4));
-                      return (
-                        <line
-                          key={t}
-                          className="tally-tick"
-                          x1={x1}
-                          y1={y1}
-                          x2={x2}
-                          y2={y2}
-                          stroke={s.accent}
-                          strokeWidth="0.9"
-                          opacity="0"
-                        />
-                      );
-                    })}
-                  </svg>
-
-                  {/* Animated ring */}
-                  <svg
-                    aria-hidden
-                    viewBox="0 0 200 200"
-                    className="absolute inset-0 h-full w-full -rotate-90"
-                  >
-                    <circle
-                      cx="100"
-                      cy="100"
-                      r={RADIUS}
-                      fill="none"
-                      stroke="var(--border)"
-                      strokeWidth="1.2"
-                    />
-                    <circle
-                      className="ring-trail"
-                      cx="100"
-                      cy="100"
-                      r={RADIUS - 6}
-                      fill="none"
-                      stroke={s.accent}
-                      strokeWidth="0.6"
-                      strokeDasharray="0.8 2.4"
-                      opacity="0"
-                    />
-                    <circle
-                      className="ring-fg"
-                      cx="100"
-                      cy="100"
-                      r={RADIUS}
-                      fill="none"
-                      stroke={s.accent}
-                      strokeWidth="2.2"
-                      strokeLinecap="round"
-                      strokeDasharray={CIRCUMFERENCE}
-                      strokeDashoffset={CIRCUMFERENCE}
-                    />
-                  </svg>
-
-                  {/* Number sized to fit comfortably inside the ring */}
-                  <div className="absolute inset-0 flex items-center justify-center px-6">
-                    <div className="flex items-baseline justify-center font-display text-[clamp(2.25rem,6vw,4.25rem)] font-light leading-none tracking-tight">
-                      {s.prefix && <span>{s.prefix}</span>}
-                      <span
-                        className="stat-num"
-                        data-value={s.value}
-                        data-fmt={s.format}
-                      >
-                        0
-                      </span>
-                      {s.suffix && <span>{s.suffix}</span>}
+                  {/* Label + caption */}
+                  <div className="stat-meta relative z-10 mt-8">
+                    <div className="font-display text-2xl md:text-3xl font-normal">
+                      {s.label}{" "}
+                      {s.italic && (
+                        <span
+                          className="italic"
+                          style={{ color: s.accent }}
+                        >
+                          {s.italic}
+                        </span>
+                      )}
                     </div>
+                    <p className="mx-auto mt-3 max-w-xs text-sm text-muted-foreground leading-relaxed">
+                      {s.caption}
+                    </p>
                   </div>
-
-                  {/* Pulse near the ring's top-right edge */}
-                  <span
-                    aria-hidden
-                    className="stat-pulse pointer-events-none absolute right-[14%] top-[12%] inline-flex h-2 w-2"
-                    style={{ opacity: 0 }}
-                  >
-                    <span
-                      className="absolute inset-0 rounded-full animate-ping-soft"
-                      style={{ background: s.accent }}
-                    />
-                    <span
-                      className="relative inline-flex h-2 w-2 rounded-full"
-                      style={{ background: s.accent }}
-                    />
-                  </span>
-                </div>
-
-                <div className="mt-8 draw-rule" />
-
-                <div className="stat-meta mt-7">
-                  <div className="font-display text-2xl font-normal">
-                    {s.label}{" "}
-                    {s.italic && (
-                      <span
-                        className="italic"
-                        style={{ color: s.accent }}
-                      >
-                        {s.italic}
-                      </span>
-                    )}
-                  </div>
-                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed max-w-xs">
-                    {s.caption}
-                  </p>
-                </div>
-              </article>
-            ))}
-          </div>
-
-          {/* Pull-quote band */}
-          <div className="impact-rise mt-28 md:mt-36 grid gap-10 md:grid-cols-[auto_1fr] md:items-center">
-            <div className="font-display text-7xl md:text-9xl font-light italic leading-none text-foreground/15 select-none">
-              &ldquo;
+                </article>
+              ))}
             </div>
-            <blockquote className="font-display text-2xl md:text-3xl font-light italic leading-snug max-w-3xl text-foreground/85">
-              We don&apos;t measure success in hours alone. We measure it in the
-              <span style={{ color: "var(--brand-rose)" }}> students</span>,
-              <span style={{ color: "var(--brand-navy)" }}> partners</span>,
-              and <span style={{ color: "var(--brand-rose-soft)" }}>neighbors</span>{" "}
-              who keep showing up.
-            </blockquote>
+
+            {/* Sine wave connecting all three stats — draws on scroll */}
+            <svg
+              aria-hidden
+              viewBox="0 0 1200 80"
+              preserveAspectRatio="none"
+              className="pointer-events-none mt-20 hidden md:block h-16 w-full"
+            >
+              <path
+                d="M 0 40 Q 100 0, 200 40 T 400 40 T 600 40 T 800 40 T 1000 40 T 1200 40"
+                fill="none"
+                stroke="var(--border)"
+                strokeWidth="1"
+              />
+              <path
+                className="impact-wave-path"
+                d="M 0 40 Q 100 0, 200 40 T 400 40 T 600 40 T 800 40 T 1000 40 T 1200 40"
+                fill="none"
+                stroke="var(--brand-rose)"
+                strokeWidth="1.2"
+                strokeDasharray="2400"
+                strokeDashoffset="2400"
+                strokeLinecap="round"
+              />
+            </svg>
           </div>
         </div>
       </div>

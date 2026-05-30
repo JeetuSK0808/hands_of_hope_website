@@ -49,7 +49,7 @@ export function NavBar() {
       >
         <nav className="mx-auto flex w-full max-w-[88rem] items-center justify-between gap-6 px-6 py-5 md:px-12">
           <Link href="/" className="group">
-            <AnimatedLogo size={34} />
+            <AnimatedLogo size={34} monochrome={scrolled ? "dark" : "light"} />
           </Link>
 
           <ul className="hidden md:flex items-center gap-8">
@@ -65,8 +65,14 @@ export function NavBar() {
                   <Link
                     href={l.href}
                     className={cn(
-                      "relative text-sm font-medium transition-colors",
-                      active ? "text-foreground" : "text-muted-foreground hover:text-foreground"
+                      "relative text-sm font-medium transition-colors duration-500",
+                      scrolled
+                        ? active
+                          ? "text-foreground"
+                          : "text-muted-foreground hover:text-foreground"
+                        : active
+                          ? "text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]"
+                          : "text-white/80 hover:text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]"
                     )}
                   >
                     {l.label}
@@ -82,7 +88,12 @@ export function NavBar() {
           <div className="hidden md:flex">
             <Link
               href="/contact"
-              className="inline-flex items-center border-b border-foreground pb-0.5 text-sm font-medium text-foreground transition-opacity hover:opacity-70"
+              className={cn(
+                "inline-flex items-center border-b pb-0.5 text-sm font-medium transition-colors duration-500 hover:opacity-70",
+                scrolled
+                  ? "border-foreground text-foreground"
+                  : "border-white text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]"
+              )}
             >
               Get involved
             </Link>
@@ -92,7 +103,10 @@ export function NavBar() {
             type="button"
             aria-label="Open menu"
             onClick={() => setOpen(true)}
-            className="md:hidden inline-flex h-10 w-10 items-center justify-center text-foreground"
+            className={cn(
+              "md:hidden inline-flex h-10 w-10 items-center justify-center transition-colors duration-500",
+              scrolled ? "text-foreground" : "text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]"
+            )}
           >
             <Menu className="h-5 w-5" strokeWidth={1.5} />
           </button>

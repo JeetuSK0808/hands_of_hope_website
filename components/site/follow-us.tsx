@@ -113,9 +113,8 @@ export function FollowUs() {
               </span>
             </h2>
             <p className="follow-rise mt-8 max-w-xl text-muted-foreground leading-relaxed">
-              The work is mostly quiet. Students showing up week after week.
-              The loud parts live on Instagram and LinkedIn. Come along and
-              see what your neighbors are building.
+              Most of what we do is quiet — students showing up, week after
+              week. The loud parts live on Instagram and LinkedIn. Follow along.
             </p>
           </div>
 

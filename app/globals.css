@@ -202,11 +202,11 @@
   inset: 0;
   background:
     linear-gradient(180deg,
-      oklch(0.12 0.012 60 / 0.70) 0%,
-      oklch(0.10 0.012 60 / 0.85) 100%),
+      oklch(0.22 0.014 60 / 0.46) 0%,
+      oklch(0.18 0.012 60 / 0.62) 100%),
     linear-gradient(0deg,
-      oklch(0.08 0.012 60 / 0.25),
-      oklch(0.08 0.012 60 / 0.25));
+      oklch(0.16 0.012 60 / 0.12),
+      oklch(0.16 0.012 60 / 0.12));
   pointer-events: none;
 }
 
@@ -243,6 +243,35 @@
 }
 .animate-ping-soft {
   animation: ping-soft 2.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* Impact section ripple: continuous emanation from a center "drop".
+   Rings start tiny, expand to fill the stack, fade as they go.
+   Multiple rings with staggered animation-delay create a steady rhythm. */
+@keyframes ripple-grow {
+  0%   { transform: scale(0.04); opacity: 0; }
+  10%  { opacity: 0.55; }
+  60%  { opacity: 0.18; }
+  100% { transform: scale(1);    opacity: 0; }
+}
+.ripple-stack .ripple-ring {
+  transform: scale(0.04);
+  opacity: 0;
+  border-width: 1px;
+  border-style: solid;
+}
+.ripple-stack.is-active .ripple-ring {
+  animation: ripple-grow 5.6s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+  will-change: transform, opacity;
+}
+
+/* Center "drop" dot: a soft pulse that hints at the source of the ripple */
+@keyframes drop-pulse {
+  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.9; }
+  50%      { transform: translate(-50%, -50%) scale(1.35); opacity: 1; }
+}
+.ripple-stack.is-active .ripple-drop {
+  animation: drop-pulse 2.8s cubic-bezier(0.4, 0, 0.4, 1) infinite;
 }
 
 /* Chatbot typing-indicator dots */

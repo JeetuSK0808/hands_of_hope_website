@@ -14,19 +14,19 @@ const ALLOCATION = [
   {
     pct: "72%",
     label: "Programs",
-    body: "Direct funding for STEM Buddies kits, chapter projects, and Start-a-Chapter starter kits.",
+    body: "STEM Buddies kits, chapter projects, and the supplies that go straight to community partners.",
     accent: "var(--brand-rose)",
   },
   {
     pct: "18%",
     label: "Awards & events",
-    body: "The Hands of Hope Awards Ceremony and Ripple for Change, the moments that recognize the work.",
+    body: "Two nights a year: the Awards Ceremony and Ripple for Change. Where the work gets seen.",
     accent: "var(--brand-navy)",
   },
   {
     pct: "10%",
     label: "Operations",
-    body: "Insurance, supplies, and the fiscal sponsorship fee that keeps the organization compliant.",
+    body: "Insurance, supplies, and the fiscal sponsorship fee. The bare minimum to keep us compliant.",
     accent: "var(--brand-rose-soft)",
   },
 ];
@@ -134,15 +134,24 @@ export default function DonatePage() {
         className="relative w-full px-6 md:px-12 py-24 md:py-32 border-t border-border"
       >
         <div className="mx-auto w-full max-w-[88rem]">
-          <div className="editorial-rule editorial-eyebrow text-muted-foreground">
-            Where it goes
+          <div className="grid gap-8 md:grid-cols-[1.6fr_1fr] md:items-end">
+            <div>
+              <div className="editorial-rule editorial-eyebrow text-muted-foreground">
+                Where it goes
+              </div>
+              <h2 className="mt-8 editorial-display leading-[1.08] pb-2 text-[clamp(2.25rem,5.5vw,4.5rem)] max-w-2xl">
+                Mostly to the{" "}
+                <span className="italic" style={{ color: "var(--brand-navy)" }}>
+                  ground.
+                </span>
+              </h2>
+            </div>
+            <p className="max-w-md text-muted-foreground leading-relaxed md:text-right md:self-end">
+              <span className="text-foreground font-medium">72¢ of every dollar</span>{" "}
+              goes straight into programs. The rest covers the nights that
+              honor the work, and the paperwork that keeps the lights on.
+            </p>
           </div>
-          <h2 className="mt-8 editorial-display leading-[1.08] pb-2 text-[clamp(2.25rem,5.5vw,4.5rem)] max-w-2xl">
-            Mostly to the{" "}
-            <span className="italic" style={{ color: "var(--brand-navy)" }}>
-              ground.
-            </span>
-          </h2>
 
           <div className="mt-16 grid gap-10 md:grid-cols-3 md:divide-x md:divide-border">
             {ALLOCATION.map((a, i) => (
