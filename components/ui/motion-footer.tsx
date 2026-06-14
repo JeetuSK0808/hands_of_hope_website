@@ -331,7 +331,7 @@ export function CinematicFooter() {
                   links={[
                     { label: "Chapters", href: "/about#branches" },
                     { label: "STEM Buddies", href: "/about#branches" },
-                    { label: "Awards", href: "/about#awards" },
+                    { label: "Awards", href: "/annual-events" },
                   ]}
                 />
                 <FooterCol
@@ -339,7 +339,7 @@ export function CinematicFooter() {
                   links={[
                     { label: "Contact", href: "/contact" },
                     { label: "FAQ", href: "/#faq" },
-                    { label: "Ripple for Change", href: "/about#ripple" },
+                    { label: "Ripple for Change", href: "/annual-events" },
                   ]}
                 />
                 <FooterCol

@@ -105,23 +105,34 @@ const INTENTS: Intent[] = [
     id: "ripple",
     utterances: [
       "ripple for change", "what is ripple", "tell me about ripple",
-      "signature event", "annual event",
+      "kit packing", "summer event", "annual event",
     ],
     responses: [
-      "Ripple for Change is our signature evening of stories, art, and momentum. Students, families, and partners gather to share what one small act of service can start, and what it can build. Details for this year are forthcoming.",
+      "Ripple for Change is our summer kit-packing assembly. Every year, students, families, and partners gather for one long afternoon to pack thousands of community kits that ship out to partner shelters and schools the same week. Full details live at /annual-events.",
     ],
-    followUps: ["When is the awards ceremony?", "Tell me about your impact"],
+    followUps: ["When is the awards ceremony?", "How can I sponsor a night?"],
   },
   {
     id: "awards",
     utterances: [
       "awards ceremony", "awards", "when is the awards", "honors",
-      "recognition", "service hours award",
+      "recognition", "service hours award", "winter event",
     ],
     responses: [
-      "The Hands of Hope Awards Ceremony is held annually each spring. It honors service, leadership, and impact: verified hours, national honors, and an evening dedicated to the students who showed up.",
+      "The Hands of Hope Awards Ceremony is our winter formal. Held every year, it honors service hours, leadership, and impact with award presentations, dinner, and live music. Full details live at /annual-events.",
     ],
-    followUps: ["What programs do you run?", "How can I volunteer?"],
+    followUps: ["What programs do you run?", "How can I sponsor a night?"],
+  },
+  {
+    id: "sponsor",
+    utterances: [
+      "sponsor", "sponsorship", "sponsor a night", "become a sponsor",
+      "sponsor packet", "sponsorship packet", "underwrite",
+    ],
+    responses: [
+      "Sponsorship tiers run from local community partner to title sponsor across both the winter Awards Ceremony and the summer Ripple for Change assembly. The full packet is still being put together, so for now email info@handsofhopeoutreach.com and the team will walk you through current options.",
+    ],
+    followUps: ["What is Ripple for Change?", "When is the awards ceremony?"],
   },
   {
     id: "start",

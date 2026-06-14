@@ -327,7 +327,7 @@ export function StatsSection() {
                     </span>
                   </div>
 
-                  {/* The number — the hero, sized to never overflow its column */}
+                  {/* The number, sized to never overflow its column */}
                   <div className="stat-num-wrap relative z-10 flex w-full items-baseline justify-center whitespace-nowrap font-display font-light leading-none tracking-tight text-[clamp(2.5rem,6.5vw,5rem)]">
                     {s.prefix && <span>{s.prefix}</span>}
                     <span
@@ -368,7 +368,7 @@ export function StatsSection() {
               ))}
             </div>
 
-            {/* Sine wave connecting all three stats — draws on scroll */}
+            {/* Sine wave connecting all three stats, draws on scroll */}
             <svg
               aria-hidden
               viewBox="0 0 1200 80"

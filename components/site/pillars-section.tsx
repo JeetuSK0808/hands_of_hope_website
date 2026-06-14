@@ -25,7 +25,7 @@ const PILLARS: Pillar[] = [
     italic: "Event",
     body:
       "A night of stories, art, and momentum. Students, families, and partners gather to share what one small act of service can start, and what it can build.",
-    cta: { label: "Learn about the event", href: "/about#ripple" },
+    cta: { label: "Learn about the event", href: "/annual-events" },
     image: "/general/first-kit-packing.jpg",
     alt: "Volunteers packing the first kits at the Ripple for Change event",
   },
@@ -55,7 +55,7 @@ const PILLARS: Pillar[] = [
     italic: "Ceremony",
     body:
       "An annual evening dedicated to the students whose service hours, leadership, and steady presence reshape the communities around them.",
-    cta: { label: "About the ceremony", href: "/about#awards" },
+    cta: { label: "About the ceremony", href: "/annual-events" },
     image: "/general/service-line.jpg",
     alt: "Volunteers serving the community in a long line of effort",
   },

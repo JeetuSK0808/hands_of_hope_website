@@ -1,7 +1,6 @@
 import { AboutHero } from "@/components/site/about-hero";
 import { InternationalSection } from "@/components/site/international-section";
 import { BranchesShowcase } from "@/components/site/branches-showcase";
-import { SignatureEvents } from "@/components/site/signature-events";
 import { FollowUs } from "@/components/site/follow-us";
 import { SiteFooter } from "@/components/site/site-footer";
 
@@ -17,7 +16,6 @@ export default function AboutPage() {
       <AboutHero />
       <BranchesShowcase />
       <InternationalSection />
-      <SignatureEvents />
       <FollowUs />
       <SiteFooter />
     </>

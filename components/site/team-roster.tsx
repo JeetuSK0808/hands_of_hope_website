@@ -11,7 +11,7 @@ type Member = {
   name: string;
   role: string;
   photo: string;
-  /** Vertical focus of the portrait crop, 0–100. Defaults to 35 (slightly upper). */
+  /** Vertical focus of the portrait crop, 0 to 100. Defaults to 35 (slightly upper). */
   focusY?: number;
   accent?: "rose" | "navy";
 };
