@@ -54,13 +54,13 @@ export function TeamHero() {
         </h1>
         <p className="mt-10 max-w-2xl text-base md:text-lg text-white/80 leading-relaxed animate-fade-up [animation-delay:380ms]">
           A small group of students stewarding the work behind Hands of Hope.
-          Founders, executives, and the changemakers who make any of it real,
-          in their own portraits, after this break.
+          Founders, executives, and the changemakers who make any of it real.
+          Their portraits follow.
         </p>
 
         <div className="mt-16 flex items-center justify-between gap-8 animate-fade-up [animation-delay:560ms]">
           <span className="editorial-eyebrow">
-            On the ground · Hands of Hope
+            The team · Hands of Hope
           </span>
           <span className="font-display italic text-base text-white/75">
             № 01

@@ -55,7 +55,7 @@ const MOMENTS: Moment[] = [
   {
     src: "/general/general-photo.jpg",
     alt: "Hands of Hope volunteers gathered for a project",
-    eyebrow: "IV. On the ground",
+    eyebrow: "IV. Service hours",
     caption: "Quiet weekday work, the kind that adds up.",
     area: "md:col-span-4 md:row-span-2",
     parallax: -28,

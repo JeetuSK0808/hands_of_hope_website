@@ -11,6 +11,7 @@ const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Meet the Team", href: "/team" },
+  { label: "Annual Events", href: "/annual-events" },
   { label: "Impact", href: "/#impact" },
   { label: "Partners", href: "/#partners" },
   { label: "Donate", href: "/donate" },
@@ -52,7 +53,7 @@ export function NavBar() {
             <AnimatedLogo size={34} monochrome={scrolled ? "dark" : "light"} />
           </Link>
 
-          <ul className="hidden md:flex items-center gap-8">
+          <ul className="hidden md:flex items-center gap-5 lg:gap-7">
             {NAV_LINKS.map((l) => {
               const active =
                 l.href === "/"

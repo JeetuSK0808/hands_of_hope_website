@@ -142,7 +142,7 @@ export default function DonatePage() {
               <h2 className="mt-8 editorial-display leading-[1.08] pb-2 text-[clamp(2.25rem,5.5vw,4.5rem)] max-w-2xl">
                 Mostly to the{" "}
                 <span className="italic" style={{ color: "var(--brand-navy)" }}>
-                  ground.
+                  work.
                 </span>
               </h2>
             </div>

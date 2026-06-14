@@ -14,8 +14,8 @@ const NAV = [
 ];
 
 const RESOURCES = [
-  { label: "Awards Ceremony", href: "/about#awards" },
-  { label: "Ripple for Change", href: "/about#ripple" },
+  { label: "Awards Ceremony", href: "/annual-events" },
+  { label: "Ripple for Change", href: "/annual-events" },
   { label: "Start a Chapter", href: "/contact" },
   { label: "STEM Buddies", href: "/about#branches" },
 ];
