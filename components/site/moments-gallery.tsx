@@ -254,8 +254,8 @@ export function MomentsGallery() {
               </h2>
             </div>
             <p className="moments-rise max-w-md text-muted-foreground md:text-right md:self-end leading-relaxed">
-              Receipts, mostly. A camera in the room while students showed up,
-              packed kits, taught, listened, and stayed for the after.
+              A few photos from the past year. Students showed up, packed kits,
+              taught, listened, and stayed late.
             </p>
           </div>
 
