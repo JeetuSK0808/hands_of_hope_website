@@ -28,7 +28,7 @@ These require **your accounts/credentials** or product decisions:
    - `supabase/policies.sql`
    - `supabase/triggers.sql`
 2. **Create a `proof` storage bucket** (private) in Supabase. Add a policy so authenticated users can upload to their own `{region_id}/{branch_id}/{user_id}/*` prefix.
-3. **Fill `.env.local`** from `.env.example` with the Supabase URL, anon key, service-role key, and the Resend API key.
+3. **Fill `.env.local`** from `.env.example` with the Supabase URL, anon key, and service-role key.
 4. **Provision Super Admins** manually via the Supabase dashboard: after creating auth users, `UPDATE public.users SET role = 'super_admin' WHERE email = '…'`.
 5. **Seed regions and branches.** Branch codes are stored as bcrypt hashes — hash with a cost of 10 before insert. Example SQL:
    ```sql
@@ -40,9 +40,8 @@ These require **your accounts/credentials** or product decisions:
    );
    ```
    (Requires `pgcrypto`, already enabled by schema.)
-6. **Resend account + DNS records** (SPF, DKIM) for `noreply@handsofhopeoutreach.com`. Email sending code is not yet wired — add a `lib/email/resend.ts` module and call it from the approval/rejection server actions.
-7. **DNS + Vercel custom domain** for `portal.handsofhopeoutreach.com`. Add a CNAME to `cname.vercel-dns.com`.
-8. **Add the "Volunteer Portal" link** to the main marketing site's `NavBar` once the portal domain is live.
+6. **DNS + Vercel custom domain** for `portal.handsofhopeoutreach.com`. Add a CNAME to `cname.vercel-dns.com`.
+7. **Add the "Volunteer Portal" link** to the main marketing site's `NavBar` once the portal domain is live.
 
 ## Still to implement (spec items with clear TODOs in code)
 
@@ -53,7 +52,6 @@ These require **your accounts/credentials** or product decisions:
 - Individual PDF export button (`jsPDF` + `jspdf-autotable` — deps installed)
 - Bulk CSV / compiled PDF export (Region Leader+ / Admin+)
 - In-app notification bell + feed
-- Resend integration for email notifications
 - Rate limiting on `/login` (5 fails → 15-min lockout)
 - Super Admin mutual-approval flow for their own hours
 

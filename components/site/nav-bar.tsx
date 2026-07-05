@@ -7,6 +7,9 @@ import { Menu, X } from "lucide-react";
 import { AnimatedLogo } from "./animated-logo";
 import { cn } from "@/lib/utils";
 
+const PORTAL_URL =
+  process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://hands-of-hope-portal.vercel.app";
+
 const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
@@ -86,9 +89,20 @@ export function NavBar() {
             })}
           </ul>
 
-          <div className="hidden md:flex">
-            <Link
-              href="/contact"
+          <div className="hidden md:flex items-center gap-5">
+            <a
+              href={`${PORTAL_URL}/login`}
+              className={cn(
+                "text-sm font-medium transition-colors duration-500 hover:opacity-70",
+                scrolled
+                  ? "text-foreground"
+                  : "text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]"
+              )}
+            >
+              Log in
+            </a>
+            <a
+              href={`${PORTAL_URL}/sign-up`}
               className={cn(
                 "inline-flex items-center border-b pb-0.5 text-sm font-medium transition-colors duration-500 hover:opacity-70",
                 scrolled
@@ -96,8 +110,8 @@ export function NavBar() {
                   : "border-white text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]"
               )}
             >
-              Get involved
-            </Link>
+              Sign up
+            </a>
           </div>
 
           <button
@@ -157,13 +171,19 @@ export function NavBar() {
                 </Link>
               </li>
             ))}
-            <li className="mt-4 px-6">
-              <Link
-                href="/contact"
-                className="inline-block border-b border-foreground pb-1 text-sm font-medium text-foreground"
+            <li className="mt-4 px-6 flex flex-col gap-3">
+              <a
+                href={`${PORTAL_URL}/login`}
+                className="text-sm font-medium text-foreground"
               >
-                Get involved
-              </Link>
+                Log in
+              </a>
+              <a
+                href={`${PORTAL_URL}/sign-up`}
+                className="inline-block self-start border-b border-foreground pb-1 text-sm font-medium text-foreground"
+              >
+                Sign up
+              </a>
             </li>
           </ul>
           <div className="absolute bottom-6 left-6 right-6 editorial-eyebrow text-muted-foreground">
