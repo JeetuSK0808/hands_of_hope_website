@@ -1,0 +1,99 @@
+@import "tailwindcss";
+
+:root {
+  --hoh-purple: #b5478a;
+  --hoh-purple-hover: #9a3a76;
+  --hoh-blue: #7dc8e3;
+  --hoh-gray-hand: #c8c8c8;
+  --hoh-off-white: #f7f7f7;
+  --hoh-ink: #111111;
+  --hoh-ink-muted: #555555;
+  --hoh-border: #e0e0e0;
+
+  --status-approved: #2a9d5c;
+  --status-rejected: #c0392b;
+  --status-pending: #e08a00;
+}
+
+@theme inline {
+  --color-background: #ffffff;
+  --color-foreground: var(--hoh-ink);
+  --color-muted: var(--hoh-ink-muted);
+  --color-surface: var(--hoh-off-white);
+  --color-border: var(--hoh-border);
+  --color-brand: var(--hoh-purple);
+  --color-brand-hover: var(--hoh-purple-hover);
+  --color-accent: var(--hoh-blue);
+  --font-sans:
+    ui-sans-serif, system-ui, -apple-system, "Segoe UI", Inter, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+html,
+body {
+  background: #ffffff;
+  color: var(--hoh-ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+.eyebrow {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--hoh-ink-muted);
+}
+
+.btn-primary {
+  background: var(--hoh-purple);
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: 500;
+  transition: background-color 150ms ease;
+}
+.btn-primary:hover {
+  background: var(--hoh-purple-hover);
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--hoh-purple);
+  border: 1px solid var(--hoh-purple);
+  padding: 10px 20px;
+  border-radius: 4px;
+  font-weight: 500;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--hoh-border);
+  border-radius: 4px;
+  padding: 24px;
+}
+
+.input {
+  border: 1px solid var(--hoh-border);
+  border-radius: 4px;
+  padding: 10px 12px;
+  width: 100%;
+  background: #fff;
+}
+.input:focus {
+  outline: none;
+  border-color: var(--hoh-purple);
+  box-shadow: 0 0 0 3px rgba(181, 71, 138, 0.12);
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.badge-pending { background: rgba(224, 138, 0, 0.12); color: var(--status-pending); }
+.badge-approved { background: rgba(42, 157, 92, 0.12); color: var(--status-approved); }
+.badge-rejected { background: rgba(192, 57, 43, 0.12); color: var(--status-rejected); }
