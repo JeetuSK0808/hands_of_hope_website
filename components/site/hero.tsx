@@ -11,7 +11,7 @@ export function Hero() {
       {/* Background image */}
       <Image
         src="/general/ripple-banner-group.jpg"
-        alt="Hands of Hope students gathered behind the Ripple for Change banner"
+        alt="Hands of Hope Outreach students gathered behind the Ripple for Change banner"
         fill
         priority
         sizes="100vw"
@@ -40,9 +40,9 @@ export function Hero() {
 
         <div className="mt-12 grid gap-10 md:grid-cols-[1fr_auto] md:items-end">
           <p className="max-w-xl text-base md:text-lg text-white/80 leading-relaxed animate-fade-up [animation-delay:520ms]">
-            Hands of Hope ignites compassion by connecting high school students
-            with the real world, turning empathy into meaningful action across
-            Atlanta and beyond.
+            Hands of Hope Outreach ignites compassion by connecting high
+            school students with the real world, turning empathy into meaningful
+            action across Atlanta and beyond.
           </p>
 
           <div className="flex flex-wrap gap-8 animate-fade-up [animation-delay:680ms]">

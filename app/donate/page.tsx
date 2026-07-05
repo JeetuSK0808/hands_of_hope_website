@@ -1,13 +1,21 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import { DonatePanel } from "@/components/site/donate-panel";
 import { ImpactBand } from "@/components/site/impact-band";
 import { FollowUs } from "@/components/site/follow-us";
 import { SiteFooter } from "@/components/site/site-footer";
 
-export const metadata = {
-  title: "Donate · Hands of Hope",
+export const metadata: Metadata = {
+  title: "Donate to Hands of Hope Outreach",
   description:
-    "Support Hands of Hope. Every gift is tax-deductible and directed to student-led service across Atlanta and beyond. 501(c)(3), fiscally sponsored by Hack Club.",
+    "Donate to Hands of Hope Outreach. Every gift is tax-deductible under our 501(c)(3) status (fiscally sponsored by Hack Club) and funds student-led STEM mentoring, chapter projects, and community service across Atlanta and beyond.",
+  alternates: { canonical: "/donate" },
+  openGraph: {
+    url: "https://www.handsofhopeoutreach.com/donate",
+    title: "Donate to Hands of Hope Outreach",
+    description:
+      "Tax-deductible gifts fund STEM Buddies, chapter projects, and the Awards Ceremony.",
+  },
 };
 
 const ALLOCATION = [
