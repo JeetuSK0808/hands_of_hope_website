@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { ContactForm } from "@/components/site/contact-form";
 import { SiteFooter } from "@/components/site/site-footer";
+import { SeoBreadcrumb } from "@/components/site/seo-breadcrumb";
 
 export const metadata: Metadata = {
-  title: "Contact Hands of Hope Outreach",
+  title: "Contact — Start a chapter, volunteer, or partner",
   description:
     "Contact Hands of Hope Outreach to start a high school chapter, volunteer, partner with us, sponsor an event, or reach the executive team. Email info@handsofhopeoutreach.com.",
   alternates: { canonical: "/contact" },
@@ -105,6 +106,7 @@ export default function ContactPage() {
       </section>
 
       <SiteFooter />
+      <SeoBreadcrumb trail={[{ name: "Contact", path: "/contact" }]} />
     </>
   );
 }

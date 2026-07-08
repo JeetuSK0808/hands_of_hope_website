@@ -4,11 +4,12 @@ import { AnnualEventsStage } from "@/components/site/annual-events-stage";
 import { AnnualEventsSponsor } from "@/components/site/annual-events-sponsor";
 import { FollowUs } from "@/components/site/follow-us";
 import { SiteFooter } from "@/components/site/site-footer";
+import { SeoBreadcrumb } from "@/components/site/seo-breadcrumb";
 
 export const metadata: Metadata = {
   title: "Annual Events — Awards Ceremony & Ripple for Change",
   description:
-    "The two flagship Hands of Hope Outreach events: the winter Awards Ceremony and the summer Ripple for Change kit-packing assembly. Sponsorship, tickets, and volunteer sign-up.",
+    "Hands of Hope Outreach runs two flagship events every year: the winter Awards Ceremony and the summer Ripple for Change kit-packing assembly. Sponsorship info, tickets, and volunteer sign-up.",
   alternates: { canonical: "/annual-events" },
   openGraph: {
     url: "https://www.handsofhopeoutreach.com/annual-events",
@@ -26,6 +27,9 @@ export default function AnnualEventsPage() {
       <AnnualEventsSponsor />
       <FollowUs />
       <SiteFooter />
+      <SeoBreadcrumb
+        trail={[{ name: "Annual Events", path: "/annual-events" }]}
+      />
     </>
   );
 }

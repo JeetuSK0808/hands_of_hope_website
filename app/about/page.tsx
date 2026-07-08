@@ -4,15 +4,16 @@ import { InternationalSection } from "@/components/site/international-section";
 import { BranchesShowcase } from "@/components/site/branches-showcase";
 import { FollowUs } from "@/components/site/follow-us";
 import { SiteFooter } from "@/components/site/site-footer";
+import { SeoBreadcrumb } from "@/components/site/seo-breadcrumb";
 
 export const metadata: Metadata = {
-  title: "About Hands of Hope Outreach",
+  title: "About · Student-led 501(c)(3) nonprofit in Atlanta",
   description:
-    "Hands of Hope Outreach was founded in Atlanta by high school students. The 501(c)(3) network runs chapters, STEM Buddies mentoring, and the annual Awards Ceremony across the US, Canada, Chile, and Denmark.",
+    "Hands of Hope Outreach is a student-led 501(c)(3) nonprofit founded by high school students in Atlanta. Chapters and STEM Buddies programs run across the US, Canada, Chile, and Denmark. Learn who we are, what we do, and how to start a Hands of Hope chapter.",
   alternates: { canonical: "/about" },
   openGraph: {
     url: "https://www.handsofhopeoutreach.com/about",
-    title: "About Hands of Hope Outreach",
+    title: "About Hands of Hope Outreach — Student-led 501(c)(3)",
     description:
       "Student-led 501(c)(3) network of high school chapters — Atlanta, US, Canada, Chile, Denmark.",
   },
@@ -26,6 +27,7 @@ export default function AboutPage() {
       <InternationalSection />
       <FollowUs />
       <SiteFooter />
+      <SeoBreadcrumb trail={[{ name: "About", path: "/about" }]} />
     </>
   );
 }

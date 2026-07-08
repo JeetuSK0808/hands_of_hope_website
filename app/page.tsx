@@ -7,18 +7,89 @@ import { PartnersSection } from "@/components/site/partners-section";
 import { FollowUs } from "@/components/site/follow-us";
 import { SiteFooter } from "@/components/site/site-footer";
 
+const SITE_URL = "https://www.handsofhopeoutreach.com";
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: [
+    {
+      "@type": "Question",
+      name: "What is Hands of Hope Outreach?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Hands of Hope Outreach is a student-led 501(c)(3) nonprofit based in Atlanta. High school chapters across the US, Canada, Chile, and Denmark run STEM Buddies mentoring, the Ripple for Change kit-packing assembly, and the annual Awards Ceremony.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Is Hands of Hope a registered 501(c)(3)?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Yes. Hands of Hope Outreach is a registered 501(c)(3) nonprofit, fiscally sponsored by The Hack Foundation (Hack Club). Donations are tax-deductible.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "Where is Hands of Hope Outreach based?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "The organization was founded in Atlanta, Georgia, with active high school chapters across the United States, Canada, Chile, and Denmark.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How do I start a Hands of Hope chapter at my high school?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Email info@handsofhopeoutreach.com or use the contact form at handsofhopeoutreach.com/contact. The executive team will walk you through the chapter application, on-boarding, and the projects your school can adopt.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "What programs does Hands of Hope Outreach run?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Programs include STEM Buddies (elementary STEM mentoring), Ripple for Change (an annual summer kit-packing assembly for local partners), and the winter Awards Ceremony recognizing top student volunteers.",
+      },
+    },
+    {
+      "@type": "Question",
+      name: "How can I donate to Hands of Hope Outreach?",
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: "Donations are accepted at handsofhopeoutreach.com/donate. Every gift is tax-deductible under our 501(c)(3) status via our fiscal sponsor, Hack Club.",
+      },
+    },
+  ],
+};
+
+const homeBreadcrumbJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  itemListElement: [
+    {
+      "@type": "ListItem",
+      position: 1,
+      name: "Hands of Hope Outreach",
+      item: SITE_URL,
+    },
+  ],
+};
+
 export const metadata: Metadata = {
   title: {
-    absolute: "Hands of Hope Outreach · Student-led nonprofit in Atlanta",
+    absolute:
+      "Hands of Hope Outreach · Student-led 501(c)(3) nonprofit · Atlanta",
   },
   description:
-    "Hands of Hope Outreach is a student-led 501(c)(3) nonprofit based in Atlanta. High school chapters run STEM Buddies mentoring, the annual Awards Ceremony, and the Ripple for Change kit-packing assembly.",
+    "Hands of Hope Outreach is a student-led 501(c)(3) nonprofit based in Atlanta. High school chapters across the US, Canada, Chile, and Denmark run STEM Buddies mentoring, the Ripple for Change kit-packing assembly, and the annual Awards Ceremony.",
   alternates: { canonical: "/" },
   openGraph: {
     url: "https://www.handsofhopeoutreach.com/",
-    title: "Hands of Hope Outreach · Student-led nonprofit in Atlanta",
+    title: "Hands of Hope Outreach · Student-led 501(c)(3) nonprofit",
     description:
-      "Student-led 501(c)(3) nonprofit connecting high schoolers with the communities just outside their classroom.",
+      "Student-led 501(c)(3) nonprofit connecting high schoolers with the communities just outside their classroom. Chapters in Atlanta, US, Canada, Chile, and Denmark.",
   },
 };
 
@@ -32,6 +103,16 @@ export default function HomePage() {
       <PartnersSection />
       <FollowUs />
       <SiteFooter />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(homeBreadcrumbJsonLd),
+        }}
+      />
     </>
   );
 }

@@ -20,22 +20,33 @@ const cormorant = Cormorant_Garamond({
 
 const SITE_URL = "https://www.handsofhopeoutreach.com";
 const SITE_NAME = "Hands of Hope Outreach";
+const DEFAULT_TITLE =
+  "Hands of Hope Outreach · Student-led 501(c)(3) nonprofit · Atlanta";
 const DEFAULT_DESCRIPTION =
-  "Hands of Hope Outreach is a student-led 501(c)(3) nonprofit based in Atlanta connecting high school students with the communities just outside their classroom, through chapters, STEM Buddies, the annual Awards Ceremony, and the Ripple for Change kit-packing assembly.";
+  "Hands of Hope Outreach is a student-led 501(c)(3) nonprofit based in Atlanta. High school chapters across the US, Canada, Chile, and Denmark run STEM Buddies mentoring, the Ripple for Change kit-packing assembly, and the annual Awards Ceremony.";
 const OG_IMAGE = `${SITE_URL}/general/award-ceremony-hi.jpg`;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Hands of Hope Outreach · Student-led nonprofit in Atlanta",
-    template: "%s · Hands of Hope Outreach",
+    default: DEFAULT_TITLE,
+    // Brand front-loaded so "Hands of Hope Outreach" is always the first token
+    // in the SERP title link — strengthens brand-name recognition ranking.
+    template: "Hands of Hope Outreach · %s",
   },
   description: DEFAULT_DESCRIPTION,
   applicationName: SITE_NAME,
   keywords: [
-    "Hands of Hope Outreach",
     "Hands of Hope",
+    "Hands of Hope Outreach",
+    "handsofhope",
     "handsofhopeoutreach",
+    "handsofhope outreach",
+    "hands of hope nonprofit",
+    "hands of hope atlanta",
+    "hands of hope 501c3",
+    "hands of hope high school",
+    "hands of hope student nonprofit",
     "student nonprofit Atlanta",
     "high school volunteer nonprofit",
     "STEM Buddies",
@@ -43,8 +54,11 @@ export const metadata: Metadata = {
     "youth-led 501c3",
     "Atlanta youth service",
     "chapter-based volunteer network",
+    "Hack Club fiscally sponsored",
   ],
-  authors: [{ name: "Hands of Hope Outreach" }],
+  authors: [
+    { name: "Hands of Hope Outreach", url: SITE_URL },
+  ],
   creator: SITE_NAME,
   publisher: SITE_NAME,
   category: "nonprofit",
@@ -55,7 +69,7 @@ export const metadata: Metadata = {
     type: "website",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "Hands of Hope Outreach · Student-led nonprofit in Atlanta",
+    title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
     locale: "en_US",
     images: [
@@ -69,9 +83,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Hands of Hope Outreach · Student-led nonprofit in Atlanta",
+    title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
     images: [OG_IMAGE],
+    creator: "@handsofhope_outreach",
+    site: "@handsofhope_outreach",
   },
   robots: {
     index: true,
@@ -88,21 +104,51 @@ export const metadata: Metadata = {
     icon: "/icon.png",
     apple: "/apple-icon.png",
   },
+  manifest: "/manifest.webmanifest",
+  other: {
+    "google-site-verification": process.env.GOOGLE_SITE_VERIFICATION ?? "",
+  },
 };
 
 const organizationJsonLd = {
   "@context": "https://schema.org",
   "@type": "NGO",
+  "@id": `${SITE_URL}/#organization`,
   name: SITE_NAME,
-  alternateName: ["Hands of Hope", "HOH"],
+  legalName: "Hands of Hope Outreach",
+  alternateName: [
+    "Hands of Hope",
+    "HoH",
+    "HOH",
+    "HOH Outreach",
+    "Hands of Hope Nonprofit",
+  ],
   url: SITE_URL,
-  logo: `${SITE_URL}/brand/logo.png`,
+  logo: {
+    "@type": "ImageObject",
+    url: `${SITE_URL}/brand/logo.png`,
+    width: 512,
+    height: 512,
+  },
   image: OG_IMAGE,
   description: DEFAULT_DESCRIPTION,
+  slogan: "Compassion, in action.",
   email: "info@handsofhopeoutreach.com",
   foundingLocation: {
     "@type": "Place",
     name: "Atlanta, Georgia, United States",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Atlanta",
+      addressRegion: "GA",
+      addressCountry: "US",
+    },
+  },
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Atlanta",
+    addressRegion: "GA",
+    addressCountry: "US",
   },
   areaServed: [
     { "@type": "AdministrativeArea", name: "Atlanta, Georgia" },
@@ -111,14 +157,33 @@ const organizationJsonLd = {
     { "@type": "Country", name: "Chile" },
     { "@type": "Country", name: "Denmark" },
   ],
+  knowsAbout: [
+    "student-led community service",
+    "STEM mentoring for elementary students",
+    "high school volunteer chapters",
+    "youth-run nonprofit programs",
+    "kit-packing service events",
+  ],
+  keywords:
+    "Hands of Hope, Hands of Hope Outreach, student nonprofit, Atlanta, 501(c)(3), STEM Buddies, Ripple for Change, high school volunteering",
   nonprofitStatus: "Nonprofit501c3",
-  sameAs: ["https://www.instagram.com/handsofhope_outreach/"],
+  parentOrganization: {
+    "@type": "Organization",
+    name: "The Hack Foundation (Hack Club)",
+    url: "https://hackclub.com",
+    description: "Fiscal sponsor",
+  },
+  sameAs: [
+    "https://www.instagram.com/handsofhope_outreach/",
+    "https://linkedin.com/company/handsofhopeoutreach",
+  ],
   contactPoint: [
     {
       "@type": "ContactPoint",
       contactType: "General",
       email: "info@handsofhopeoutreach.com",
       availableLanguage: ["English"],
+      areaServed: ["US", "CA", "CL", "DK"],
     },
   ],
 };
@@ -126,11 +191,20 @@ const organizationJsonLd = {
 const websiteJsonLd = {
   "@context": "https://schema.org",
   "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
   name: SITE_NAME,
-  alternateName: "Hands of Hope",
+  alternateName: ["Hands of Hope", "HoH", "HOH Outreach"],
   url: SITE_URL,
   inLanguage: "en-US",
-  publisher: { "@type": "NGO", name: SITE_NAME, url: SITE_URL },
+  publisher: { "@id": `${SITE_URL}/#organization` },
+  potentialAction: {
+    "@type": "SearchAction",
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: `${SITE_URL}/?q={search_term_string}`,
+    },
+    "query-input": "required name=search_term_string",
+  },
 };
 
 export default function RootLayout({

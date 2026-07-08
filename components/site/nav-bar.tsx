@@ -7,14 +7,12 @@ import { Menu, X } from "lucide-react";
 import { AnimatedLogo } from "./animated-logo";
 import { cn } from "@/lib/utils";
 
-const PORTAL_URL =
-  process.env.NEXT_PUBLIC_PORTAL_URL ?? "https://hands-of-hope-portal.vercel.app";
-
 const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "About", href: "/about" },
   { label: "Meet the Team", href: "/team" },
   { label: "Annual Events", href: "/annual-events" },
+  { label: "Shop", href: "/merch" },
   { label: "Impact", href: "/#impact" },
   { label: "Partners", href: "/#partners" },
   { label: "Donate", href: "/donate" },
@@ -24,6 +22,8 @@ export function NavBar() {
   const pathname = usePathname();
   const [scrolled, setScrolled] = React.useState(false);
   const [open, setOpen] = React.useState(false);
+
+  const inPortal = pathname?.startsWith("/portal");
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 16);
@@ -40,6 +40,8 @@ export function NavBar() {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  if (inPortal) return null;
 
   return (
     <>
@@ -91,7 +93,7 @@ export function NavBar() {
 
           <div className="hidden md:flex items-center gap-5">
             <a
-              href={`${PORTAL_URL}/login`}
+              href="/portal/login"
               className={cn(
                 "text-sm font-medium transition-colors duration-500 hover:opacity-70",
                 scrolled
@@ -102,7 +104,7 @@ export function NavBar() {
               Log in
             </a>
             <a
-              href={`${PORTAL_URL}/sign-up`}
+              href="/portal/sign-up"
               className={cn(
                 "inline-flex items-center border-b pb-0.5 text-sm font-medium transition-colors duration-500 hover:opacity-70",
                 scrolled
@@ -173,13 +175,13 @@ export function NavBar() {
             ))}
             <li className="mt-4 px-6 flex flex-col gap-3">
               <a
-                href={`${PORTAL_URL}/login`}
+                href="/portal/login"
                 className="text-sm font-medium text-foreground"
               >
                 Log in
               </a>
               <a
-                href={`${PORTAL_URL}/sign-up`}
+                href="/portal/sign-up"
                 className="inline-block self-start border-b border-foreground pb-1 text-sm font-medium text-foreground"
               >
                 Sign up

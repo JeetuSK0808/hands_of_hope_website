@@ -80,8 +80,19 @@ export function SiteFooter() {
           <div className="editorial-eyebrow text-muted-foreground">
             © 2026 Hands of Hope · 501(c)(3)
           </div>
-          <div className="text-xs text-muted-foreground">
-            Fiscally sponsored by Hack Club
+          <div className="flex flex-col gap-1 text-xs text-muted-foreground md:flex-row md:items-center md:gap-6">
+            <span>Fiscally sponsored by Hack Club</span>
+            <span>
+              3D previews generated with{" "}
+              <a
+                href="https://www.meshy.ai/"
+                target="_blank"
+                rel="noreferrer"
+                className="underline underline-offset-2 hover:text-foreground"
+              >
+                Meshy AI
+              </a>
+            </span>
           </div>
         </div>
       </div>

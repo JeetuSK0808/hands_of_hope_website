@@ -4,9 +4,10 @@ import { DonatePanel } from "@/components/site/donate-panel";
 import { ImpactBand } from "@/components/site/impact-band";
 import { FollowUs } from "@/components/site/follow-us";
 import { SiteFooter } from "@/components/site/site-footer";
+import { SeoBreadcrumb } from "@/components/site/seo-breadcrumb";
 
 export const metadata: Metadata = {
-  title: "Donate to Hands of Hope Outreach",
+  title: "Donate — Support student-led community work",
   description:
     "Donate to Hands of Hope Outreach. Every gift is tax-deductible under our 501(c)(3) status (fiscally sponsored by Hack Club) and funds student-led STEM mentoring, chapter projects, and community service across Atlanta and beyond.",
   alternates: { canonical: "/donate" },
@@ -305,6 +306,31 @@ export default function DonatePage() {
 
       <FollowUs />
       <SiteFooter />
+      <SeoBreadcrumb trail={[{ name: "Donate", path: "/donate" }]} />
+      <DonateActionJsonLd />
     </>
+  );
+}
+
+function DonateActionJsonLd() {
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "DonateAction",
+    name: "Donate to Hands of Hope Outreach",
+    description:
+      "Support the student-led 501(c)(3) nonprofit. All gifts are tax-deductible via our fiscal sponsor, Hack Club.",
+    recipient: {
+      "@id": "https://www.handsofhopeoutreach.com/#organization",
+    },
+    target: {
+      "@type": "EntryPoint",
+      urlTemplate: "https://hcb.hackclub.com/donations/start/hands-of-hope",
+    },
+  };
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+    />
   );
 }
