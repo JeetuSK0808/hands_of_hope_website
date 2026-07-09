@@ -49,10 +49,12 @@ create table if not exists public.users (
   role         public.user_role not null default 'member',
   branch_id    uuid references public.branches(branch_id) on delete set null,
   region_id    uuid references public.regions(region_id) on delete set null,
-  mfa_enabled  boolean not null default false,
   is_active    boolean not null default true,
   created_at   timestamptz not null default now()
 );
+
+-- Drop the MFA column from any earlier deployment that still has it.
+alter table public.users drop column if exists mfa_enabled;
 
 do $$ begin
   alter table public.regions

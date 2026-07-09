@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { LoginForm } from "./login-form";
 
 export default function PortalLoginPage() {
@@ -13,10 +12,7 @@ export default function PortalLoginPage() {
         <LoginForm />
       </div>
       <div className="mt-8 text-sm text-muted-foreground">
-        New volunteer?{" "}
-        <Link href="/portal/sign-up" className="underline underline-offset-4 text-foreground">
-          Create an account
-        </Link>
+        Need an account? Accounts are provisioned by your chapter&rsquo;s Branch Leader.
       </div>
     </div>
   );

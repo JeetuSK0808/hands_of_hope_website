@@ -1,23 +1,9 @@
 "use server";
 
-import { cookies, headers } from "next/headers";
-import { redirect } from "next/navigation";
+import { headers } from "next/headers";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/portal/supabase/server";
 import { notifyAccountLocked } from "@/lib/portal/email/notify";
-import { GUEST_COOKIE } from "@/lib/portal/auth/guest";
-
-export async function signInAsGuest() {
-  const store = await cookies();
-  store.set(GUEST_COOKIE, "1", {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    path: "/",
-    maxAge: 60 * 60 * 24 * 7,
-  });
-  redirect("/portal/dashboard");
-}
 
 const LOCK_THRESHOLD = 5;
 
@@ -39,13 +25,18 @@ export async function preCheckLogin(email: string): Promise<PreCheck> {
   const parsed = EmailSchema.safeParse(email);
   if (!parsed.success) return { ok: false, error: "Invalid email.", locked: false };
   const supabase = await createSupabaseServerClient();
-  const { data: locked } = await supabase.rpc("is_login_locked", { p_email: parsed.data });
-  if (locked === true) {
-    return {
-      ok: false,
-      locked: true,
-      error: "Account locked — 5 failed attempts in the last 15 minutes. Try again shortly; a security notice was emailed to the account owner.",
-    };
+  try {
+    const { data: locked } = await supabase.rpc("is_login_locked", { p_email: parsed.data });
+    if (locked === true) {
+      return {
+        ok: false,
+        locked: true,
+        error:
+          "Account locked — 5 failed attempts in the last 15 minutes. Try again shortly; a security notice was emailed to the account owner.",
+      };
+    }
+  } catch {
+    // Rate-limit RPCs not installed on this Supabase project yet — skip precheck.
   }
   return { ok: true };
 }
@@ -59,19 +50,20 @@ export async function recordLoginResult(
 
   const ip = await requestIp();
   const supabase = await createSupabaseServerClient();
-  await supabase.rpc("log_login_attempt", { p_email: parsed.data, p_ip: ip, p_succeeded: succeeded });
-
-  if (succeeded) {
-    await supabase.rpc("clear_failed_attempts", { p_email: parsed.data });
+  try {
+    await supabase.rpc("log_login_attempt", { p_email: parsed.data, p_ip: ip, p_succeeded: succeeded });
+    if (succeeded) {
+      await supabase.rpc("clear_failed_attempts", { p_email: parsed.data });
+      return { locked: false, remaining: LOCK_THRESHOLD };
+    }
+    const { data: count } = await supabase.rpc("recent_failed_attempts", { p_email: parsed.data });
+    const attempts = typeof count === "number" ? count : 0;
+    const locked = attempts >= LOCK_THRESHOLD;
+    if (locked) {
+      await notifyAccountLocked({ email: parsed.data, ip }).catch(() => { /* best-effort */ });
+    }
+    return { locked, remaining: Math.max(0, LOCK_THRESHOLD - attempts) };
+  } catch {
     return { locked: false, remaining: LOCK_THRESHOLD };
   }
-
-  const { data: count } = await supabase.rpc("recent_failed_attempts", { p_email: parsed.data });
-  const attempts = typeof count === "number" ? count : 0;
-  const locked = attempts >= LOCK_THRESHOLD;
-
-  if (locked) {
-    await notifyAccountLocked({ email: parsed.data, ip }).catch(() => { /* best-effort */ });
-  }
-  return { locked, remaining: Math.max(0, LOCK_THRESHOLD - attempts) };
 }

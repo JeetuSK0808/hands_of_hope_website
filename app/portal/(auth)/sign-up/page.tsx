@@ -1,20 +1,17 @@
 import Link from "next/link";
-import { SignUpForm } from "./sign-up-form";
 
 export default function PortalSignUpPage() {
   return (
     <div>
-      <div className="portal-eyebrow">II · Create account</div>
-      <h1 className="portal-display mt-4 text-4xl">Join a chapter.</h1>
+      <div className="portal-eyebrow">II · Invite only</div>
+      <h1 className="portal-display mt-4 text-4xl">Ask a chapter lead.</h1>
       <p className="mt-3 text-sm text-muted-foreground">
-        Members and Branch Leaders create accounts here. Admins and Region Leaders are invited by email.
+        Hands of Hope accounts are provisioned by Super Admins, Admins, Region Leaders,
+        and Branch Leaders from inside the portal. If you volunteer with a chapter, ask
+        your Branch Leader to add you.
       </p>
       <div className="mt-10">
-        <SignUpForm />
-      </div>
-      <div className="mt-8 text-sm text-muted-foreground">
-        Already signed up?{" "}
-        <Link href="/portal/login" className="underline underline-offset-4 text-foreground">
+        <Link href="/portal/login" className="portal-btn-primary">
           Sign in
         </Link>
       </div>

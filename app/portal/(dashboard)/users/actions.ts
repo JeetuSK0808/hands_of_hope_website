@@ -105,7 +105,6 @@ export async function createUser(input: unknown): Promise<Result> {
         role,
         branch_id,
         region_id,
-        mfa_enabled: false,
         is_active: true,
       },
       { onConflict: "user_id" },

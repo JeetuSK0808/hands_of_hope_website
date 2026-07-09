@@ -14,7 +14,6 @@ export interface DbUser {
   role: UserRole;
   branch_id: string | null;
   region_id: string | null;
-  mfa_enabled: boolean;
   is_active: boolean;
   created_at: string;
 }

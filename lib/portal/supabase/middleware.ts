@@ -1,12 +1,10 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
-import { GUEST_COOKIE } from "@/lib/portal/auth/guest";
 
 type CookieToSet = { name: string; value: string; options: CookieOptions };
 
 const PUBLIC_PATHS = [
   "/portal/login",
-  "/portal/sign-up",
   "/portal/verify-email",
   "/portal/auth",
 ];
@@ -16,16 +14,10 @@ export async function updatePortalSession(request: NextRequest) {
   requestHeaders.set("x-portal-path", request.nextUrl.pathname);
   let response = NextResponse.next({ request: { headers: requestHeaders } });
 
-  // Guest session — bypass Supabase entirely.
-  if (request.cookies.get(GUEST_COOKIE)?.value === "1") {
-    return response;
-  }
-
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
 
-  // If Supabase isn't configured (e.g. env vars not set on this deployment),
-  // let the request through instead of crashing the whole edge function.
+  // If Supabase isn't configured, let the request through instead of 500'ing.
   if (!supabaseUrl || !supabaseAnonKey) {
     return response;
   }
@@ -63,8 +55,6 @@ export async function updatePortalSession(request: NextRequest) {
 
     return response;
   } catch {
-    // Any failure inside the auth check should not 500 the whole route —
-    // fall through and let server components handle unauthenticated state.
     return response;
   }
 }

@@ -24,7 +24,6 @@ const ITEMS: NavItem[] = [
   { href: "/portal/users", label: "Users", minRole: "branch_leader", section: "admin" },
   { href: "/portal/branches", label: "Branches", minRole: "region_leader", section: "admin" },
   { href: "/portal/regions", label: "Regions", minRole: "admin", section: "system" },
-  { href: "/portal/mfa", label: "Two-factor auth", minRole: "member", section: "system" },
 ];
 
 function roleAtLeast(role: UserRole, min: UserRole) {
