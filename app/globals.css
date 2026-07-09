@@ -291,3 +291,145 @@
     transparent 100%
   );
 }
+
+/* ── Portal (Volunteer Tracker) ───────────────────────────────────── */
+/* Uses main site's tokens (ivory/ink/rose) — same visual family. */
+
+.portal-shell {
+  --status-approved: oklch(0.55 0.13 145);
+  --status-rejected: oklch(0.55 0.18 25);
+  --status-pending: oklch(0.65 0.14 70);
+  --portal-surface: var(--card);
+  --portal-line: var(--border);
+}
+
+.portal-eyebrow {
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.7rem;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+.portal-display {
+  font-family: var(--font-cormorant), ui-serif, "Times New Roman", serif;
+  font-weight: 300;
+  letter-spacing: -0.015em;
+  line-height: 1.05;
+}
+
+.portal-btn-primary {
+  background: var(--foreground);
+  color: var(--background);
+  padding: 10px 20px;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 120ms ease, opacity 120ms ease;
+  border: 1px solid var(--foreground);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.portal-btn-primary:hover { opacity: 0.86; }
+.portal-btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.portal-btn-secondary {
+  background: transparent;
+  color: var(--foreground);
+  border: 1px solid var(--border);
+  padding: 9px 18px;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: background-color 120ms ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.portal-btn-secondary:hover { background: var(--muted); }
+
+.portal-btn-danger {
+  background: transparent;
+  color: var(--brand-rose);
+  border: 1px solid var(--brand-rose);
+  padding: 9px 18px;
+  border-radius: var(--radius);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.portal-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.portal-input {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 10px 12px;
+  width: 100%;
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.875rem;
+}
+.portal-input:focus {
+  outline: none;
+  border-color: var(--foreground);
+  box-shadow: 0 0 0 2px var(--muted);
+}
+
+.portal-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid var(--border);
+}
+.portal-badge-pending  { color: var(--status-pending); border-color: color-mix(in oklch, var(--status-pending) 40%, transparent); background: color-mix(in oklch, var(--status-pending) 8%, transparent); }
+.portal-badge-approved { color: var(--status-approved); border-color: color-mix(in oklch, var(--status-approved) 40%, transparent); background: color-mix(in oklch, var(--status-approved) 8%, transparent); }
+.portal-badge-rejected { color: var(--status-rejected); border-color: color-mix(in oklch, var(--status-rejected) 40%, transparent); background: color-mix(in oklch, var(--status-rejected) 8%, transparent); }
+
+.portal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+.portal-table thead th {
+  text-align: left;
+  padding: 10px 8px;
+  font-weight: 500;
+  color: var(--muted-foreground);
+  border-bottom: 1px solid var(--border);
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.portal-table tbody tr { border-top: 1px solid var(--border); }
+.portal-table tbody tr:nth-child(even) { background: var(--muted); }
+.portal-table td { padding: 12px 8px; vertical-align: top; }
+
+.portal-role-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: color-mix(in oklch, var(--brand-rose) 8%, transparent);
+  color: var(--brand-rose);
+  font-size: 0.7rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+}

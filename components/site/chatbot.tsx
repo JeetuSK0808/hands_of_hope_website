@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { MessageCircle, Send, X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 
 type Msg = { id: number; from: "bot" | "user"; text: string };
@@ -317,6 +318,7 @@ const FALLBACK = [
 let fallbackIdx = 0;
 
 export function Chatbot() {
+  const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
   const [input, setInput] = React.useState("");
   const [thinking, setThinking] = React.useState(false);
@@ -368,6 +370,8 @@ export function Chatbot() {
       if (nextSuggestions) setSuggestions(nextSuggestions);
     }, delay);
   };
+
+  if (pathname?.startsWith("/portal")) return null;
 
   return (
     <>

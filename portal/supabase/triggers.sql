@@ -1,5 +1,4 @@
--- Audit triggers. Every mutation of interest writes an audit_log row.
--- Runs SECURITY DEFINER so it bypasses the "nobody writes audit" RLS block.
+-- Audit + auth triggers. Idempotent — safe to re-run.
 
 create or replace function public.log_hour_status_change()
 returns trigger language plpgsql security definer set search_path = public as $$
@@ -25,6 +24,7 @@ begin
   return new;
 end $$;
 
+drop trigger if exists hour_logs_audit on public.hour_logs;
 create trigger hour_logs_audit
   after update on public.hour_logs
   for each row execute function public.log_hour_status_change();
@@ -42,12 +42,12 @@ begin
   return new;
 end $$;
 
+drop trigger if exists users_role_audit on public.users;
 create trigger users_role_audit
   after update on public.users
   for each row execute function public.log_role_change();
 
--- New sign-ups: mirror auth.users into public.users as 'member' with no branch.
--- Branch is claimed via the join-branch flow using a branch code.
+-- New sign-ups: mirror auth.users into public.users as 'member'.
 create or replace function public.handle_new_auth_user()
 returns trigger language plpgsql security definer set search_path = public as $$
 begin
@@ -62,6 +62,7 @@ begin
   return new;
 end $$;
 
+drop trigger if exists on_auth_user_created on auth.users;
 create trigger on_auth_user_created
   after insert on auth.users
   for each row execute function public.handle_new_auth_user();
