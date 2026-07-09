@@ -2,6 +2,7 @@ import { requireRole } from "@/lib/portal/auth/current-user";
 import { createSupabaseServerClient } from "@/lib/portal/supabase/server";
 import type { DbBranch, DbUser } from "@/lib/portal/db/types";
 import { UsersTable } from "./users-table";
+import { CreateUserForm } from "./create-user-form";
 
 interface UserRow extends DbUser {
   branches: { name: string } | null;
@@ -30,6 +31,7 @@ export default async function PortalUsersPage() {
           Promote, demote, or reassign volunteers you have authority over.
         </p>
       </div>
+      <CreateUserForm actor={actor} branches={(branches ?? []) as DbBranch[]} />
       <div className="portal-card">
         <UsersTable
           actor={actor}
