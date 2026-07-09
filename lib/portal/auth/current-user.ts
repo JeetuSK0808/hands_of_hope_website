@@ -8,18 +8,29 @@ export function roleAtLeast(role: UserRole, min: UserRole): boolean {
 }
 
 export async function getCurrentUser(): Promise<DbUser | null> {
-  const supabase = await createSupabaseServerClient();
-  const { data: authData } = await supabase.auth.getUser();
-  if (!authData.user) return null;
+  if (
+    !process.env.NEXT_PUBLIC_SUPABASE_URL ||
+    !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  ) {
+    return null;
+  }
 
-  const { data, error } = await supabase
-    .from("users")
-    .select("*")
-    .eq("user_id", authData.user.id)
-    .maybeSingle();
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { data: authData } = await supabase.auth.getUser();
+    if (!authData.user) return null;
 
-  if (error || !data) return null;
-  return data as DbUser;
+    const { data, error } = await supabase
+      .from("users")
+      .select("*")
+      .eq("user_id", authData.user.id)
+      .maybeSingle();
+
+    if (error || !data) return null;
+    return data as DbUser;
+  } catch {
+    return null;
+  }
 }
 
 export async function requireUser(): Promise<DbUser> {

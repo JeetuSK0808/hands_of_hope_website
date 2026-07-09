@@ -54,7 +54,12 @@ export function NavBar() {
         )}
       >
         <nav className="mx-auto flex w-full max-w-[88rem] items-center justify-between gap-6 px-6 py-5 md:px-12">
-          <Link href="/" className="group">
+          <Link
+            href="/"
+            className="group"
+            aria-label="Hands of Hope Outreach — Home"
+            title="Hands of Hope Outreach"
+          >
             <AnimatedLogo size={34} monochrome={scrolled ? "dark" : "light"} />
           </Link>
 
@@ -93,18 +98,7 @@ export function NavBar() {
 
           <div className="hidden md:flex items-center gap-5">
             <a
-              href="/portal/login"
-              className={cn(
-                "text-sm font-medium transition-colors duration-500 hover:opacity-70",
-                scrolled
-                  ? "text-foreground"
-                  : "text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]"
-              )}
-            >
-              Log in
-            </a>
-            <a
-              href="/portal/sign-up"
+              href="/portal"
               className={cn(
                 "inline-flex items-center border-b pb-0.5 text-sm font-medium transition-colors duration-500 hover:opacity-70",
                 scrolled
@@ -112,7 +106,7 @@ export function NavBar() {
                   : "border-white text-white drop-shadow-[0_1px_8px_rgba(0,0,0,0.35)]"
               )}
             >
-              Sign up
+              Volunteer Portal
             </a>
           </div>
 
@@ -175,16 +169,10 @@ export function NavBar() {
             ))}
             <li className="mt-4 px-6 flex flex-col gap-3">
               <a
-                href="/portal/login"
-                className="text-sm font-medium text-foreground"
-              >
-                Log in
-              </a>
-              <a
-                href="/portal/sign-up"
+                href="/portal"
                 className="inline-block self-start border-b border-foreground pb-1 text-sm font-medium text-foreground"
               >
-                Sign up
+                Volunteer Portal
               </a>
             </li>
           </ul>
