@@ -29,7 +29,7 @@ export function AnimatedLogo({
           alt="Hands of Hope"
           fill
           sizes={`${size}px`}
-          className="object-contain scale-[1.85]"
+          className="object-contain"
           priority
         />
       </span>

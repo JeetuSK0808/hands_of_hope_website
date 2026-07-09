@@ -46,3 +46,6 @@ next-env.d.ts
 # python bytecode (from local skill scripts)
 __pycache__/
 *.pyc
+
+.vercel
+.env*
