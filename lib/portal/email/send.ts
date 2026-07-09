@@ -63,7 +63,7 @@ export function shell(title: string, body: string): string {
           ${body}
         </td></tr>
         <tr><td style="padding:20px 40px;border-top:1px solid #e0dcd3;font-size:11px;color:#7a746b;letter-spacing:.06em;">
-          Hands of Hope Outreach · handsofhopeoutreach.com
+          Hands of Hope Outreach · handsofhopeoutreach.org
         </td></tr>
       </table>
     </td></tr>

@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "Hands of Hope Outreach runs two flagship events every year: the winter Awards Ceremony and the summer Ripple for Change kit-packing assembly. Sponsorship info, tickets, and volunteer sign-up.",
   alternates: { canonical: "/annual-events" },
   openGraph: {
-    url: "https://www.handsofhopeoutreach.com/annual-events",
+    url: "https://handsofhopeoutreach.org/annual-events",
     title: "Annual Events · Hands of Hope Outreach",
     description:
       "The Awards Ceremony every winter and the Ripple for Change kit-packing assembly every summer.",

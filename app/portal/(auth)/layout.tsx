@@ -42,7 +42,7 @@ export default function PortalAuthLayout({ children }: { children: ReactNode }) 
 
         <div className="text-xs opacity-60">
           <Link href="/" className="underline underline-offset-4">
-            ← Back to handsofhopeoutreach.com
+            ← Back to handsofhopeoutreach.org
           </Link>
         </div>
       </aside>

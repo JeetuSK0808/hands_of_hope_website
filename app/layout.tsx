@@ -18,7 +18,7 @@ const cormorant = Cormorant_Garamond({
   style: ["normal", "italic"],
 });
 
-const SITE_URL = "https://www.handsofhopeoutreach.com";
+const SITE_URL = "https://handsofhopeoutreach.org";
 const SITE_NAME = "Hands of Hope Outreach";
 const DEFAULT_TITLE =
   "Hands of Hope Outreach · Student-led 501(c)(3) nonprofit · Atlanta";

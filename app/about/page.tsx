@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "Hands of Hope Outreach is a student-led 501(c)(3) nonprofit founded by high school students in Atlanta. Chapters and STEM Buddies programs run across the US, Canada, Chile, and Denmark. Learn who we are, what we do, and how to start a Hands of Hope chapter.",
   alternates: { canonical: "/about" },
   openGraph: {
-    url: "https://www.handsofhopeoutreach.com/about",
+    url: "https://handsofhopeoutreach.org/about",
     title: "About Hands of Hope Outreach — Student-led 501(c)(3)",
     description:
       "Student-led 501(c)(3) network of high school chapters — Atlanta, US, Canada, Chile, Denmark.",

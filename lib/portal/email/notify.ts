@@ -4,7 +4,7 @@ import { escapeHtml, sendEmail, shell } from "./send";
 import { ROLE_LABEL, type UserRole } from "@/lib/portal/db/types";
 
 const PORTAL_URL_BASE =
-  process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.handsofhopeoutreach.com";
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://handsofhopeoutreach.org";
 
 function link(path: string): string {
   return `${PORTAL_URL_BASE}${path}`;

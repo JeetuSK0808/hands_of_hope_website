@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     "Contact Hands of Hope Outreach to start a high school chapter, volunteer, partner with us, sponsor an event, or reach the executive team. Email info@handsofhopeoutreach.com.",
   alternates: { canonical: "/contact" },
   openGraph: {
-    url: "https://www.handsofhopeoutreach.com/contact",
+    url: "https://handsofhopeoutreach.org/contact",
     title: "Contact Hands of Hope Outreach",
     description:
       "Start a chapter, volunteer, or partner with a student-led 501(c)(3) nonprofit.",

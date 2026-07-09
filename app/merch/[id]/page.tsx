@@ -40,7 +40,7 @@ export async function generateMetadata({
     description: product.description || `${product.name} — Hands of Hope Outreach.`,
     alternates: { canonical: `/merch/${product.id}` },
     openGraph: {
-      url: `https://www.handsofhopeoutreach.com/merch/${product.id}`,
+      url: `https://handsofhopeoutreach.org/merch/${product.id}`,
       title: product.name,
       description:
         product.description || `${product.name} — Hands of Hope Outreach.`,

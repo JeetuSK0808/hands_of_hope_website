@@ -12,7 +12,7 @@ export const metadata: Metadata = {
     "Donate to Hands of Hope Outreach. Every gift is tax-deductible under our 501(c)(3) status (fiscally sponsored by Hack Club) and funds student-led STEM mentoring, chapter projects, and community service across Atlanta and beyond.",
   alternates: { canonical: "/donate" },
   openGraph: {
-    url: "https://www.handsofhopeoutreach.com/donate",
+    url: "https://handsofhopeoutreach.org/donate",
     title: "Donate to Hands of Hope Outreach",
     description:
       "Tax-deductible gifts fund STEM Buddies, chapter projects, and the Awards Ceremony.",
@@ -320,7 +320,7 @@ function DonateActionJsonLd() {
     description:
       "Support the student-led 501(c)(3) nonprofit. All gifts are tax-deductible via our fiscal sponsor, Hack Club.",
     recipient: {
-      "@id": "https://www.handsofhopeoutreach.com/#organization",
+      "@id": "https://handsofhopeoutreach.org/#organization",
     },
     target: {
       "@type": "EntryPoint",

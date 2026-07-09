@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     "Shop Hands of Hope Outreach: student-designed apparel from the Atlanta-based 501(c)(3). Every purchase helps fund STEM Buddies, the Ripple for Change assembly, and the annual Awards Ceremony.",
   alternates: { canonical: "/merch" },
   openGraph: {
-    url: "https://www.handsofhopeoutreach.com/merch",
+    url: "https://handsofhopeoutreach.org/merch",
     title: "Shop · Hands of Hope Outreach",
     description:
       "Student-designed apparel. Every order supports chapter programs across the network.",

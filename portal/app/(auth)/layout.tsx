@@ -23,8 +23,8 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
             Compassion,<br /> in action.
           </div>
           <div className="mt-8 text-sm text-white/70">
-            <Link href="https://www.handsofhopeoutreach.com" className="underline underline-offset-4">
-              ← Back to handsofhopeoutreach.com
+            <Link href="https://handsofhopeoutreach.org" className="underline underline-offset-4">
+              ← Back to handsofhopeoutreach.org
             </Link>
           </div>
         </div>

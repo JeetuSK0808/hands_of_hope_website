@@ -1,4 +1,4 @@
-const SITE_URL = "https://www.handsofhopeoutreach.com";
+const SITE_URL = "https://handsofhopeoutreach.org";
 
 type Crumb = { name: string; path: string };
 

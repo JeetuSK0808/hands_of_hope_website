@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     "The founders and executive board behind Hands of Hope Outreach, the student-led 501(c)(3) nonprofit based in Atlanta running chapters across the US, Canada, Chile, and Denmark.",
   alternates: { canonical: "/team" },
   openGraph: {
-    url: "https://www.handsofhopeoutreach.com/team",
+    url: "https://handsofhopeoutreach.org/team",
     title: "Meet the Team · Hands of Hope Outreach",
     description:
       "The founders and executive board behind Hands of Hope Outreach.",
