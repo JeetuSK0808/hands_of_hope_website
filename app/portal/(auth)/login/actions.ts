@@ -1,9 +1,23 @@
 "use server";
 
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/portal/supabase/server";
 import { notifyAccountLocked } from "@/lib/portal/email/notify";
+import { GUEST_COOKIE } from "@/lib/portal/auth/guest";
+
+export async function signInAsGuest() {
+  const store = await cookies();
+  store.set(GUEST_COOKIE, "1", {
+    httpOnly: true,
+    sameSite: "lax",
+    secure: process.env.NODE_ENV === "production",
+    path: "/",
+    maxAge: 60 * 60 * 24 * 7,
+  });
+  redirect("/portal/dashboard");
+}
 
 const LOCK_THRESHOLD = 5;
 

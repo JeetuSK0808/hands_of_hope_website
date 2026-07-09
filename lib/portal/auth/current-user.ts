@@ -1,6 +1,8 @@
 import "server-only";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/portal/supabase/server";
+import { GUEST_COOKIE, GUEST_USER } from "@/lib/portal/auth/guest";
 import { ROLE_RANK, type DbUser, type UserRole } from "@/lib/portal/db/types";
 
 export function roleAtLeast(role: UserRole, min: UserRole): boolean {
@@ -8,6 +10,11 @@ export function roleAtLeast(role: UserRole, min: UserRole): boolean {
 }
 
 export async function getCurrentUser(): Promise<DbUser | null> {
+  const store = await cookies();
+  if (store.get(GUEST_COOKIE)?.value === "1") {
+    return GUEST_USER;
+  }
+
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY

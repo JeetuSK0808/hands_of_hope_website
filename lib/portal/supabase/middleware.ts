@@ -1,5 +1,6 @@
 import { createServerClient, type CookieOptions } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { GUEST_COOKIE } from "@/lib/portal/auth/guest";
 
 type CookieToSet = { name: string; value: string; options: CookieOptions };
 
@@ -14,6 +15,11 @@ export async function updatePortalSession(request: NextRequest) {
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set("x-portal-path", request.nextUrl.pathname);
   let response = NextResponse.next({ request: { headers: requestHeaders } });
+
+  // Guest session — bypass Supabase entirely.
+  if (request.cookies.get(GUEST_COOKIE)?.value === "1") {
+    return response;
+  }
 
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
