@@ -30,12 +30,14 @@ export function Hero() {
         </div>
 
         <h1 className="mt-10 editorial-display text-[clamp(3.25rem,9vw,9.5rem)] max-w-[20ch]">
-          <span className="block animate-fade-up [animation-delay:240ms]">
+          <span className="sr-only">Hands of Hope Outreach — </span>
+          <span className="block animate-fade-up [animation-delay:240ms]" aria-hidden="true">
             Compassion,
           </span>
-          <span className="block italic animate-fade-up [animation-delay:380ms]">
+          <span className="block italic animate-fade-up [animation-delay:380ms]" aria-hidden="true">
             in action.
           </span>
+          <span className="sr-only">Compassion, in action. Student-led 501(c)(3) nonprofit based in Atlanta.</span>
         </h1>
 
         <div className="mt-12 grid gap-10 md:grid-cols-[1fr_auto] md:items-end">

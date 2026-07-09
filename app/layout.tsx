@@ -105,8 +105,10 @@ export const metadata: Metadata = {
     apple: "/apple-icon.png",
   },
   manifest: "/manifest.webmanifest",
-  other: {
-    "google-site-verification": process.env.GOOGLE_SITE_VERIFICATION ?? "",
+  verification: {
+    google:
+      process.env.GOOGLE_SITE_VERIFICATION ??
+      "Jv8YkF1mUCdbrZiXOilo_7-3miiXIYwaP1YAbVUrghk",
   },
 };
 
