@@ -108,7 +108,7 @@ export const metadata: Metadata = {
   verification: {
     google:
       process.env.GOOGLE_SITE_VERIFICATION ??
-      "Jv8YkF1mUCdbrZiXOilo_7-3miiXIYwaP1YAbVUrghk",
+      "xm8B9f8HWc5LK2KaYC_Evpd4uGVLX1oxnQWRDeDwUxA",
   },
 };
 
