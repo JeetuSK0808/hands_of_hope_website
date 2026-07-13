@@ -22,7 +22,7 @@ export default function ContactPage() {
     <>
       <section className="relative isolate w-full overflow-hidden border-b border-border pt-40 pb-20 md:pb-28">
         <Image
-          src="/general/volunteer-focused.jpg"
+          src="/general/good-photo.png"
           alt=""
           fill
           priority

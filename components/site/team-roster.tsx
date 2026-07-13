@@ -384,6 +384,47 @@ export function TeamRoster() {
           },
         }
       );
+
+      // Crew band reveal + slow parallax on the photo itself
+      gsap.utils.toArray<HTMLElement>(".crew-band").forEach((band) => {
+        gsap.fromTo(
+          band,
+          { y: 50, opacity: 0, filter: "blur(6px)" },
+          {
+            y: 0,
+            opacity: 1,
+            filter: "blur(0px)",
+            duration: 1.4,
+            ease: "power3.out",
+            scrollTrigger: { trigger: band, start: "top 85%" },
+          },
+        );
+        const img = band.querySelector<HTMLElement>(".crew-band-img");
+        if (img) {
+          gsap.fromTo(
+            img,
+            { scale: 1.14 },
+            {
+              scale: 1,
+              duration: 1.8,
+              ease: "power3.out",
+              scrollTrigger: { trigger: band, start: "top 85%" },
+            },
+          );
+          if (!prefersReduced) {
+            gsap.to(img, {
+              yPercent: -6,
+              ease: "none",
+              scrollTrigger: {
+                trigger: band,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+              },
+            });
+          }
+        }
+      });
     }, rootRef);
 
     return () => ctx.revert();
@@ -450,6 +491,33 @@ export function TeamRoster() {
             ))}
           </div>
         </div>
+
+        {/* ───────────── Crew photo band ───────────── */}
+        <figure className="crew-band relative mt-28 md:mt-36 overflow-hidden">
+          <div className="relative aspect-[16/8] w-full">
+            <Image
+              src="/general/our-crew.png"
+              alt="Hands of Hope Outreach crew gathered together after a service day"
+              fill
+              sizes="100vw"
+              className="crew-band-img object-cover"
+            />
+            <div className="tint-overlay" aria-hidden />
+            {/* Corner brackets */}
+            <span aria-hidden className="absolute left-4 top-4 h-6 w-6 border-l border-t border-white/60" />
+            <span aria-hidden className="absolute right-4 top-4 h-6 w-6 border-r border-t border-white/60" />
+            <span aria-hidden className="absolute left-4 bottom-4 h-6 w-6 border-l border-b border-white/60" />
+            <span aria-hidden className="absolute right-4 bottom-4 h-6 w-6 border-r border-b border-white/60" />
+          </div>
+          <figcaption className="mt-6 flex flex-wrap items-baseline justify-between gap-4">
+            <div className="editorial-rule editorial-eyebrow text-muted-foreground">
+              Our crew · Off the clock
+            </div>
+            <div className="font-display italic text-sm md:text-base text-muted-foreground">
+              The whole team, one frame.
+            </div>
+          </figcaption>
+        </figure>
 
         {/* ───────────── Executives ───────────── */}
         <div className="mt-32 md:mt-40">

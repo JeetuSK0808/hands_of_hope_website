@@ -1,5 +1,6 @@
 "use server";
 
+import { after } from "next/server";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/portal/supabase/server";
 import { requireUser, isBranchExempt } from "@/lib/portal/auth/current-user";
@@ -65,15 +66,17 @@ export async function submitHours(formData: FormData): Promise<Result> {
 
   if (insertErr) return { ok: false, error: insertErr.message };
 
-  await notifyHoursSubmitted({
-    submitterName: user.name,
-    submitterRole: user.role,
-    branchId: user.branch_id,
-    regionId: user.region_id,
-    hours: parsed.data.hours,
-    activityDate: parsed.data.date,
-    description: parsed.data.description,
-  }).catch(() => { /* email best-effort */ });
+  after(() =>
+    notifyHoursSubmitted({
+      submitterName: user.name,
+      submitterRole: user.role,
+      branchId: user.branch_id,
+      regionId: user.region_id,
+      hours: parsed.data.hours,
+      activityDate: parsed.data.date,
+      description: parsed.data.description,
+    }).catch(() => { /* email best-effort */ }),
+  );
 
   return { ok: true };
 }

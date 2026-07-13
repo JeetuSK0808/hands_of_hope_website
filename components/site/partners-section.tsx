@@ -29,8 +29,10 @@ const PARTNERS: Partner[] = [
   { name: "COLC",                         src: "/partners/colc.png",            accent: "var(--brand-rose)" },
   { name: "GG",                           src: "/partners/gg.png",              accent: "var(--brand-navy)" },
   { name: "ABC",                          src: "/partners/abc.png",             accent: "var(--brand-rose-soft)" },
+  { name: "Axelroad",                     src: "/partners/axelroad.png",        accent: "var(--brand-navy)" },
 ];
 
+// Outer ring holds 8 chips; the rest orbit closer to the center.
 const OUTER = PARTNERS.slice(0, 8);
 const INNER = PARTNERS.slice(8);
 

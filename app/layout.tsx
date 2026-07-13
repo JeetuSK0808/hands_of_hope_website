@@ -195,7 +195,13 @@ const websiteJsonLd = {
   "@type": "WebSite",
   "@id": `${SITE_URL}/#website`,
   name: SITE_NAME,
-  alternateName: ["Hands of Hope", "HoH", "HOH Outreach"],
+  alternateName: [
+    "Hands of Hope",
+    "HoH",
+    "HOH Outreach",
+    "Hands of Hope Nonprofit",
+    "Hands of Hope Atlanta",
+  ],
   url: SITE_URL,
   inLanguage: "en-US",
   publisher: { "@id": `${SITE_URL}/#organization` },
@@ -209,6 +215,23 @@ const websiteJsonLd = {
   },
 };
 
+// Site-wide sitelinks searchbox hint: helps Google surface the brand's own
+// primary CTAs (Donate, Contact, Team, Annual Events) as sitelinks under the
+// main "Hands of Hope Outreach" result.
+const siteNavJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "@id": `${SITE_URL}/#sitelinks`,
+  name: `${SITE_NAME} — key pages`,
+  itemListElement: [
+    { "@type": "SiteNavigationElement", name: "About", url: `${SITE_URL}/about` },
+    { "@type": "SiteNavigationElement", name: "Meet the Team", url: `${SITE_URL}/team` },
+    { "@type": "SiteNavigationElement", name: "Annual Events", url: `${SITE_URL}/annual-events` },
+    { "@type": "SiteNavigationElement", name: "Donate", url: `${SITE_URL}/donate` },
+    { "@type": "SiteNavigationElement", name: "Contact", url: `${SITE_URL}/contact` },
+  ].map((el, i) => ({ ...el, position: i + 1 })),
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
@@ -217,6 +240,14 @@ export default function RootLayout({
       lang="en"
       className={`${inter.variable} ${cormorant.variable} h-full antialiased`}
     >
+      <head>
+        {/* Consolidate the legacy .com origin under the .org so link equity flows to a single canonical host. */}
+        <link rel="alternate" hrefLang="en" href={SITE_URL} />
+        <link rel="alternate" hrefLang="x-default" href={SITE_URL} />
+        {/* Warm the connection to storage/CDN origins used on interactive pages. */}
+        <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
       <body className="min-h-full flex flex-col bg-background text-foreground overflow-x-hidden">
         <NavBar />
         <main className="flex-1">{children}</main>
@@ -228,6 +259,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(siteNavJsonLd) }}
         />
       </body>
     </html>

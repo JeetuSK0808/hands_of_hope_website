@@ -33,7 +33,7 @@ const MOMENTS: Moment[] = [
     accent: "var(--brand-rose)",
   },
   {
-    src: "/general/canadian-chapters-hi.jpg",
+    src: "/general/canadian-chapter.jpg",
     alt: "Hands of Hope Canadian chapter event in motion",
     eyebrow: "II. Chapter Network",
     caption: "Canadian chapter, mid-project.",
@@ -43,7 +43,7 @@ const MOMENTS: Moment[] = [
     accent: "var(--brand-navy)",
   },
   {
-    src: "/general/stem-buddies-hi.jpg",
+    src: "/general/stem-buddies.jpg",
     alt: "STEM Buddies session, hands-on activity in progress",
     eyebrow: "III. STEM Buddies",
     caption: "Where curiosity sets the pace.",

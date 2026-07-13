@@ -1,5 +1,6 @@
 "use server";
 
+import { after } from "next/server";
 import { headers } from "next/headers";
 import { z } from "zod";
 import { createSupabaseServerClient } from "@/lib/portal/supabase/server";
@@ -41,6 +42,11 @@ export async function preCheckLogin(email: string): Promise<PreCheck> {
   return { ok: true };
 }
 
+/**
+ * Records a login attempt and returns lockout status. Runs synchronously on
+ * failure (so the client can surface remaining-attempts text) and is fire-and-
+ * forget-safe on success (the caller can wrap it in `after()`).
+ */
 export async function recordLoginResult(
   email: string,
   succeeded: boolean,
@@ -53,14 +59,16 @@ export async function recordLoginResult(
   try {
     await supabase.rpc("log_login_attempt", { p_email: parsed.data, p_ip: ip, p_succeeded: succeeded });
     if (succeeded) {
-      await supabase.rpc("clear_failed_attempts", { p_email: parsed.data });
+      after(() => supabase.rpc("clear_failed_attempts", { p_email: parsed.data }));
       return { locked: false, remaining: LOCK_THRESHOLD };
     }
     const { data: count } = await supabase.rpc("recent_failed_attempts", { p_email: parsed.data });
     const attempts = typeof count === "number" ? count : 0;
     const locked = attempts >= LOCK_THRESHOLD;
     if (locked) {
-      await notifyAccountLocked({ email: parsed.data, ip }).catch(() => { /* best-effort */ });
+      after(() =>
+        notifyAccountLocked({ email: parsed.data, ip }).catch(() => { /* best-effort */ }),
+      );
     }
     return { locked, remaining: Math.max(0, LOCK_THRESHOLD - attempts) };
   } catch {

@@ -21,29 +21,34 @@ export function LoginForm() {
     setBusy(true);
 
     try {
-      const pre = await preCheckLogin(email);
+      // Run lockout precheck and auth in parallel — precheck is advisory,
+      // so we don't want it adding a serial round-trip on the happy path.
+      const [pre, signIn] = await Promise.all([
+        preCheckLogin(email),
+        supabase.auth.signInWithPassword({ email, password }),
+      ]);
+
       if (!pre.ok) {
         setError(pre.error);
         return;
       }
 
-      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password });
-      if (signInError) {
+      if (signIn.error) {
         const status = await recordLoginResult(email, false);
         if (status.locked) {
           setError("Account locked for 15 minutes. A security notice was emailed to you.");
         } else {
           setError(
-            `${mapAuthError(signInError.message)} · ${status.remaining} attempt${status.remaining === 1 ? "" : "s"} left before lockout.`,
+            `${mapAuthError(signIn.error.message)} · ${status.remaining} attempt${status.remaining === 1 ? "" : "s"} left before lockout.`,
           );
         }
         return;
       }
 
-      await recordLoginResult(email, true);
+      // Fire-and-forget the success record — server-side `after()` finishes it.
+      void recordLoginResult(email, true);
       startTransition(() => {
-        router.push("/portal/dashboard");
-        router.refresh();
+        router.replace("/portal/dashboard");
       });
     } finally {
       setBusy(false);

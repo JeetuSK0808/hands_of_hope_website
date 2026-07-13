@@ -195,6 +195,52 @@ export function StatsSection() {
         },
       });
 
+      // Editorial photo triptych below the numbers — clean staggered reveal
+      gsap.utils.toArray<HTMLElement>(".hours-photo").forEach((el, i) => {
+        const inner = el.querySelector<HTMLElement>(".hours-photo-inner");
+        const caption = el.querySelector<HTMLElement>(".hours-photo-caption");
+        const tl = gsap.timeline({
+          scrollTrigger: { trigger: el, start: "top 82%" },
+          defaults: { ease: "power3.out" },
+          delay: i * 0.12,
+        });
+        tl.fromTo(
+          el,
+          { y: 60, opacity: 0 },
+          { y: 0, opacity: 1, duration: 1.1 },
+        );
+        if (inner) {
+          tl.fromTo(
+            inner,
+            { clipPath: "inset(0% 0% 100% 0%)", scale: 1.14 },
+            { clipPath: "inset(0% 0% 0% 0%)", scale: 1, duration: 1.3, ease: "power4.out" },
+            0.15,
+          );
+        }
+        if (caption) {
+          tl.fromTo(
+            caption,
+            { y: 14, opacity: 0 },
+            { y: 0, opacity: 1, duration: 0.8 },
+            0.55,
+          );
+        }
+      });
+
+      // Gentle continuous drift on the triptych (mid-scroll, parallax feel)
+      gsap.utils.toArray<HTMLElement>(".hours-photo").forEach((el, i) => {
+        gsap.to(el, {
+          yPercent: i === 1 ? 8 : i === 0 ? -6 : -4,
+          ease: "none",
+          scrollTrigger: {
+            trigger: el,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 1,
+          },
+        });
+      });
+
       // Marquee
       gsap.to(".stats-marquee-track", {
         xPercent: -50,
@@ -216,11 +262,11 @@ export function StatsSection() {
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="impact-bg-photo absolute inset-0 will-change-transform">
           <Image
-            src="/general/assembly-team.jpg"
+            src="/general/hours-hero.png"
             alt=""
             fill
             sizes="100vw"
-            className="object-cover opacity-[0.16]"
+            className="object-cover opacity-[0.18]"
           />
         </div>
         <div
@@ -366,6 +412,89 @@ export function StatsSection() {
                   </div>
                 </article>
               ))}
+            </div>
+
+            {/* Editorial photo triptych — the five thousand hours, in frame */}
+            <div className="mt-24 md:mt-32">
+              <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 md:gap-8 md:grid-cols-3 md:items-end">
+                {[
+                  {
+                    src: "/general/hours-hero.png",
+                    alt: "Hands of Hope volunteers on the ground during a service day",
+                    caption: "In the field",
+                    ratio: "aspect-[4/5]",
+                    offset: "md:translate-y-4",
+                    accent: "var(--brand-rose)",
+                  },
+                  {
+                    src: "/general/hours-secondary.png",
+                    alt: "Volunteers coordinating supplies at a Hands of Hope Ripple for Change assembly",
+                    caption: "At the tables",
+                    ratio: "aspect-[3/4]",
+                    offset: "md:-translate-y-6",
+                    accent: "var(--brand-navy)",
+                  },
+                  {
+                    src: "/general/hours-tertiary.png",
+                    alt: "Portrait of a Hands of Hope student volunteer mid-shift",
+                    caption: "On the shift",
+                    ratio: "aspect-[4/5]",
+                    offset: "md:translate-y-8",
+                    accent: "var(--brand-rose-soft)",
+                  },
+                ].map((p) => (
+                  <figure
+                    key={p.src}
+                    className={`hours-photo group relative ${p.offset}`}
+                  >
+                    <div
+                      className={`hours-photo-inner relative ${p.ratio} w-full overflow-hidden bg-muted`}
+                    >
+                      <Image
+                        src={p.src}
+                        alt={p.alt}
+                        fill
+                        sizes="(min-width: 768px) 30vw, 90vw"
+                        className="object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-[1.045]"
+                      />
+                      {/* Hairline inner border */}
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-3 border border-white/15 transition-colors duration-700 group-hover:border-white/35"
+                      />
+                      {/* Corner brackets */}
+                      <span aria-hidden className="absolute left-3 top-3 h-3 w-3 border-l border-t border-white/55" />
+                      <span aria-hidden className="absolute right-3 top-3 h-3 w-3 border-r border-t border-white/55" />
+                      <span aria-hidden className="absolute left-3 bottom-3 h-3 w-3 border-l border-b border-white/55" />
+                      <span aria-hidden className="absolute right-3 bottom-3 h-3 w-3 border-r border-b border-white/55" />
+                      {/* Slow tint */}
+                      <div
+                        aria-hidden
+                        className="pointer-events-none absolute inset-0 transition-opacity duration-700 group-hover:opacity-0"
+                        style={{
+                          background:
+                            "linear-gradient(180deg, oklch(0.12 0.012 60 / 0.10) 0%, oklch(0.10 0.012 60 / 0.28) 100%)",
+                        }}
+                      />
+                      <span
+                        aria-hidden
+                        className="absolute top-3 right-3 h-1.5 w-1.5 rounded-full"
+                        style={{ background: p.accent }}
+                      />
+                    </div>
+                    <figcaption className="hours-photo-caption mt-5 flex items-center gap-3">
+                      <span
+                        aria-hidden
+                        className="block h-px w-6"
+                        style={{ background: p.accent, opacity: 0.75 }}
+                      />
+                      <span className="editorial-eyebrow text-muted-foreground">
+                        {p.caption}
+                      </span>
+                    </figcaption>
+                  </figure>
+                ))}
+              </div>
             </div>
 
             {/* Sine wave connecting all three stats, draws on scroll */}

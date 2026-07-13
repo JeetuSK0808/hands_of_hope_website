@@ -72,8 +72,7 @@ export function LogHoursForm({ role, events }: { role: UserRole; events: EventOp
     const result = await submitHours(formData);
     if (result.ok) {
       startTransition(() => {
-        router.push("/portal/dashboard");
-        router.refresh();
+        router.replace("/portal/dashboard");
       });
     } else {
       setError(result.error);

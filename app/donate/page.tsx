@@ -64,8 +64,8 @@ export default function DonatePage() {
       {/* Hero */}
       <section className="relative isolate flex min-h-[78svh] w-full flex-col justify-end overflow-hidden">
         <Image
-          src="/general/first-kit-packing.jpg"
-          alt="Hands of Hope volunteers packing the first kits for the community"
+          src="/general/assembly-team.jpg"
+          alt="Hands of Hope volunteer team gathered before a service day"
           fill
           priority
           sizes="100vw"
