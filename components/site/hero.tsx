@@ -25,7 +25,7 @@ export function Hero() {
       <div className="relative z-10 mx-auto w-full max-w-[88rem] px-6 md:px-12 pb-20 md:pb-28 pt-40 on-image">
         <div className="animate-fade-up [animation-delay:120ms]">
           <span className="editorial-rule editorial-eyebrow">
-            Hands of Hope
+            Hands of Hope Outreach · Student-led 501(c)(3)
           </span>
         </div>
 
@@ -37,7 +37,9 @@ export function Hero() {
           <span className="block italic animate-fade-up [animation-delay:380ms]" aria-hidden="true">
             in action.
           </span>
-          <span className="sr-only">Compassion, in action. Student-led 501(c)(3) nonprofit based in Atlanta.</span>
+          <span className="sr-only">
+            Hands of Hope Outreach — Compassion, in action. Student-led 501(c)(3) nonprofit based in Atlanta with high school chapters across the US, Canada, Chile, and Denmark.
+          </span>
         </h1>
 
         <div className="mt-12 grid gap-10 md:grid-cols-[1fr_auto] md:items-end">

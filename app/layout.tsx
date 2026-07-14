@@ -112,9 +112,29 @@ export const metadata: Metadata = {
   },
 };
 
+const FOUNDER_DAKSH = {
+  "@type": "Person",
+  "@id": `${SITE_URL}/team#daksh-shah`,
+  name: "Daksh Shah",
+  jobTitle: "Co-founder",
+  worksFor: { "@id": `${SITE_URL}/#organization` },
+  image: `${SITE_URL}/team/daksh-shah.jpg`,
+  url: `${SITE_URL}/team`,
+};
+
+const FOUNDER_SHUBHAM = {
+  "@type": "Person",
+  "@id": `${SITE_URL}/team#shubham-trivedi`,
+  name: "Shubham Trivedi",
+  jobTitle: "Co-founder",
+  worksFor: { "@id": `${SITE_URL}/#organization` },
+  image: `${SITE_URL}/team/shubham-trivedi.jpg`,
+  url: `${SITE_URL}/team`,
+};
+
 const organizationJsonLd = {
   "@context": "https://schema.org",
-  "@type": "NGO",
+  "@type": ["NGO", "EducationalOrganization"],
   "@id": `${SITE_URL}/#organization`,
   name: SITE_NAME,
   legalName: "Hands of Hope Outreach",
@@ -124,18 +144,25 @@ const organizationJsonLd = {
     "HOH",
     "HOH Outreach",
     "Hands of Hope Nonprofit",
+    "Hands of Hope Atlanta",
+    "Hands of Hope 501c3",
+    "Hands of Hope student nonprofit",
+    "handsofhopeoutreach",
   ],
   url: SITE_URL,
+  mainEntityOfPage: SITE_URL,
   logo: {
     "@type": "ImageObject",
     url: `${SITE_URL}/brand/logo.png`,
     width: 512,
     height: 512,
+    caption: "Hands of Hope Outreach logo",
   },
   image: OG_IMAGE,
   description: DEFAULT_DESCRIPTION,
   slogan: "Compassion, in action.",
   email: "info@handsofhopeoutreach.com",
+  foundingDate: "2023",
   foundingLocation: {
     "@type": "Place",
     name: "Atlanta, Georgia, United States",
@@ -165,10 +192,20 @@ const organizationJsonLd = {
     "high school volunteer chapters",
     "youth-run nonprofit programs",
     "kit-packing service events",
+    "volunteer hour tracking",
+    "chapter starter kits",
   ],
   keywords:
     "Hands of Hope, Hands of Hope Outreach, student nonprofit, Atlanta, 501(c)(3), STEM Buddies, Ripple for Change, high school volunteering",
   nonprofitStatus: "Nonprofit501c3",
+  hasCredential: {
+    "@type": "EducationalOccupationalCredential",
+    credentialCategory: "Tax status",
+    name: "IRS 501(c)(3) — via fiscal sponsor The Hack Foundation",
+  },
+  founder: [FOUNDER_DAKSH, FOUNDER_SHUBHAM],
+  founders: [FOUNDER_DAKSH, FOUNDER_SHUBHAM],
+  member: [FOUNDER_DAKSH, FOUNDER_SHUBHAM],
   parentOrganization: {
     "@type": "Organization",
     name: "The Hack Foundation (Hack Club)",
@@ -187,7 +224,20 @@ const organizationJsonLd = {
       availableLanguage: ["English"],
       areaServed: ["US", "CA", "CL", "DK"],
     },
+    {
+      "@type": "ContactPoint",
+      contactType: "Chapter applications",
+      email: "info@handsofhopeoutreach.com",
+      availableLanguage: ["English"],
+      areaServed: ["US", "CA", "CL", "DK"],
+    },
   ],
+  subjectOf: {
+    "@type": "WebPage",
+    "@id": `${SITE_URL}/about`,
+    name: "About Hands of Hope Outreach",
+    url: `${SITE_URL}/about`,
+  },
 };
 
 const websiteJsonLd = {
@@ -247,6 +297,13 @@ export default function RootLayout({
         {/* Warm the connection to storage/CDN origins used on interactive pages. */}
         <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Identity confirmation for Google Knowledge Graph via rel="me". */}
+        <link rel="me" href="https://www.instagram.com/handsofhope_outreach/" />
+        <link rel="me" href="https://linkedin.com/company/handsofhopeoutreach" />
+        <link rel="me" href="mailto:info@handsofhopeoutreach.com" />
+        <meta name="theme-color" content="#f7f5ef" />
+        <meta name="application-name" content="Hands of Hope Outreach" />
+        <meta name="apple-mobile-web-app-title" content="Hands of Hope Outreach" />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground overflow-x-hidden">
         <NavBar />

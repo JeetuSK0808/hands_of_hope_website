@@ -56,11 +56,12 @@ export function NavBar() {
         <nav className="mx-auto flex w-full max-w-[88rem] items-center justify-between gap-6 px-6 py-5 md:px-12">
           <Link
             href="/"
-            className="group"
+            className="group inline-flex items-center gap-3"
             aria-label="Hands of Hope Outreach — Home"
             title="Hands of Hope Outreach"
           >
             <AnimatedLogo size={34} monochrome={scrolled ? "dark" : "light"} />
+            <span className="sr-only">Hands of Hope Outreach</span>
           </Link>
 
           <ul className="hidden md:flex items-center gap-5 lg:gap-7">

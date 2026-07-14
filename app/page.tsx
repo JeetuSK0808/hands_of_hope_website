@@ -77,6 +77,34 @@ const homeBreadcrumbJsonLd = {
   ],
 };
 
+const homeWebPageJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "@id": `${SITE_URL}/#webpage`,
+  url: SITE_URL,
+  name: "Hands of Hope Outreach · Student-led 501(c)(3) nonprofit · Atlanta",
+  isPartOf: { "@id": `${SITE_URL}/#website` },
+  about: { "@id": `${SITE_URL}/#organization` },
+  primaryImageOfPage: {
+    "@type": "ImageObject",
+    url: `${SITE_URL}/general/award-ceremony-hi.jpg`,
+  },
+  inLanguage: "en-US",
+  description:
+    "Official website of Hands of Hope Outreach — student-led 501(c)(3) nonprofit based in Atlanta, running high school chapters across the US, Canada, Chile, and Denmark.",
+  speakable: {
+    "@type": "SpeakableSpecification",
+    cssSelector: ["h1", "p"],
+  },
+  significantLink: [
+    `${SITE_URL}/about`,
+    `${SITE_URL}/team`,
+    `${SITE_URL}/annual-events`,
+    `${SITE_URL}/donate`,
+    `${SITE_URL}/contact`,
+  ],
+};
+
 export const metadata: Metadata = {
   title: {
     absolute:
@@ -112,6 +140,10 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(homeBreadcrumbJsonLd),
         }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(homeWebPageJsonLd) }}
       />
     </>
   );
