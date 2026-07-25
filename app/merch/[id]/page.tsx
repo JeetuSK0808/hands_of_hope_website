@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import Script from "next/script";
 import Link from "next/link";
 import { supabasePublic } from "@/lib/supabase/public";
 import { SiteFooter } from "@/components/site/site-footer";
@@ -56,12 +55,6 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
   return (
     <>
-      <Script
-        type="module"
-        src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"
-        strategy="afterInteractive"
-      />
-
       <section className="mx-auto w-full max-w-[88rem] px-6 md:px-12 pt-32 pb-6">
         <Link
           href="/merch"
@@ -73,27 +66,12 @@ export default async function ProductDetailPage({ params }: PageProps) {
 
       <section className="mx-auto w-full max-w-[88rem] px-6 md:px-12 pb-24">
         <div className="grid gap-14 lg:grid-cols-[1.15fr_1fr]">
-          <div className="flex flex-col gap-8">
-            <div className="relative aspect-square w-full overflow-hidden bg-secondary">
-              {product.glb_model_url ? (
-                <model-viewer
-                  src={product.glb_model_url}
-                  alt={`Interactive 3D preview of ${product.name}`}
-                  camera-controls
-                  auto-rotate
-                  auto-rotate-delay={1200}
-                  rotation-per-second="18deg"
-                  shadow-intensity="1"
-                  exposure="1"
-                  interaction-prompt="none"
-                  touch-action="pan-y"
-                  loading="eager"
-                  style={{ width: "100%", height: "100%", background: "transparent" }}
-                />
-              ) : product.front_image_url ? (
+          <div className="flex flex-col gap-6">
+            <div className="relative aspect-[4/5] w-full overflow-hidden bg-secondary">
+              {product.front_image_url ? (
                 <Image
                   src={product.front_image_url}
-                  alt={product.name}
+                  alt={`${product.name} — front`}
                   fill
                   sizes="(min-width: 1024px) 55vw, 100vw"
                   className="object-cover"
@@ -106,30 +84,17 @@ export default async function ProductDetailPage({ params }: PageProps) {
               )}
             </div>
 
-            <div className="grid grid-cols-2 gap-4">
-              {product.front_image_url ? (
-                <div className="relative aspect-[4/5] w-full overflow-hidden bg-secondary">
-                  <Image
-                    src={product.front_image_url}
-                    alt={`${product.name} — front`}
-                    fill
-                    sizes="(min-width: 1024px) 25vw, 45vw"
-                    className="object-cover"
-                  />
-                </div>
-              ) : null}
-              {product.back_image_url ? (
-                <div className="relative aspect-[4/5] w-full overflow-hidden bg-secondary">
-                  <Image
-                    src={product.back_image_url}
-                    alt={`${product.name} — back`}
-                    fill
-                    sizes="(min-width: 1024px) 25vw, 45vw"
-                    className="object-cover"
-                  />
-                </div>
-              ) : null}
-            </div>
+            {product.back_image_url ? (
+              <div className="relative aspect-[4/5] w-full overflow-hidden bg-secondary">
+                <Image
+                  src={product.back_image_url}
+                  alt={`${product.name} — back`}
+                  fill
+                  sizes="(min-width: 1024px) 55vw, 100vw"
+                  className="object-cover"
+                />
+              </div>
+            ) : null}
           </div>
 
           <div className="lg:sticky lg:top-32 h-fit">

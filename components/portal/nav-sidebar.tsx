@@ -23,6 +23,7 @@ const ITEMS: NavItem[] = [
   { href: "/portal/audit", label: "Audit log", minRole: "region_leader", section: "admin" },
   { href: "/portal/users", label: "Users", minRole: "branch_leader", section: "admin" },
   { href: "/portal/branches", label: "Branches", minRole: "region_leader", section: "admin" },
+  { href: "/portal/merch", label: "Merch", minRole: "admin", section: "admin" },
   { href: "/portal/regions", label: "Regions", minRole: "admin", section: "system" },
 ];
 
