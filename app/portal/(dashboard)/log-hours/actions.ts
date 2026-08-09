@@ -43,10 +43,19 @@ export async function submitHours(formData: FormData): Promise<Result> {
     if (proof.size > 2 * 1024 * 1024) {
       return { ok: false, error: "Photo must be under 2MB." };
     }
-    const path = `${user.region_id}/${user.branch_id}/${user.user_id}/${crypto.randomUUID()}-${proof.name}`;
+    if (!proof.type.startsWith("image/")) {
+      return { ok: false, error: "Photo proof must be an image file." };
+    }
+    // The original filename is attacker-controlled; keep only a safe extension
+    // and let the UUID carry uniqueness.
+    const ext = (proof.name.split(".").pop() ?? "jpg")
+      .toLowerCase()
+      .replace(/[^a-z0-9]/g, "")
+      .slice(0, 5);
+    const path = `${user.region_id}/${user.branch_id}/${user.user_id}/${crypto.randomUUID()}.${ext || "jpg"}`;
     const { error: uploadErr } = await supabase.storage
       .from("proof")
-      .upload(path, proof, { upsert: false });
+      .upload(path, proof, { upsert: false, contentType: proof.type });
     if (uploadErr) return { ok: false, error: uploadErr.message };
     proofUrl = path;
   }
@@ -60,8 +69,10 @@ export async function submitHours(formData: FormData): Promise<Result> {
     activity_date: parsed.data.date,
     description: parsed.data.description,
     proof_image_url: proofUrl,
-    // Super Admin hours auto-approved pending mutual co-founder review flow.
-    status: user.role === "super_admin" ? "pending" : "pending",
+    // Everyone lands in `pending`, Super Admins included — the spec requires
+    // a co-founder to approve the other co-founder's hours, so nothing here
+    // may self-approve.
+    status: "pending",
   });
 
   if (insertErr) return { ok: false, error: insertErr.message };

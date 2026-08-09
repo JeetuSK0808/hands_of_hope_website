@@ -4,27 +4,30 @@ import * as React from "react";
 import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
+// Mission and Vision are quoted verbatim from the organization's own wording.
+// Do not paraphrase these two strings — see hands-of-hope-how-we-work-2.md.
 const SCENES = [
   {
     numeral: "I.",
     label: "Mission",
     accent: "var(--brand-rose)",
-    lead: "Ignite compassion by connecting high school students with the real world, inspiring them to take",
-    italicTail: "meaningful action.",
+    lead: "Hands of Hope is change powered by high school students, who run a network of branches, each one mastering a single cause, and all of them uniting every spring to pack thousands of care kits for",
+    italicTail: "the communities they've served across the U.S. and internationally.",
     meta: [
       { k: "Operating since", v: "2023" },
-      { k: "Built around", v: "Local need" },
+      { k: "Each branch", v: "One cause, mastered" },
     ],
   },
   {
     numeral: "II.",
     label: "Vision",
     accent: "var(--brand-navy)",
-    lead: "Bridge the gap between high school students and communities in need through",
-    italicTail: "youth-led action that lasts.",
+    lead: "A world where compassion doesn't wait for adulthood, where students lead real change in the causes they've mastered, and every community has",
+    italicTail: "people who stick with them, not just people who show up once.",
     meta: [
       { k: "Reach", v: "U.S. & abroad" },
       { k: "Driven by", v: "Students, locally" },
@@ -35,20 +38,29 @@ const SCENES = [
 export function MissionVision() {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const pinRef = React.useRef<HTMLDivElement>(null);
+  const prefersReduced = usePrefersReducedMotion();
 
   React.useEffect(() => {
     if (!rootRef.current || !pinRef.current) return;
     const ctx = gsap.context(() => {
       const scenes = gsap.utils.toArray<HTMLElement>(".mv-scene");
 
-      // Set initial state of every scene: invisible, scaled small, blurred,
-      // letters spaced wide. Scene 0 will be animated in by the timeline.
-      gsap.set(scenes, {
-        autoAlpha: 0,
-        scale: 0.62,
-        filter: "blur(14px)",
-        letterSpacing: "0.22em",
-      });
+      // Reduced motion: both statements simply stack and stay put. No pin, no
+      // scrub, nothing that moves under the reader.
+      if (prefersReduced) {
+        gsap.set(scenes, { autoAlpha: 1, scale: 1, position: "relative" });
+        gsap.set(".mv-scene .mv-copy-line", { yPercent: 0, opacity: 1 });
+        gsap.set(".mv-scene .mv-meta-item", { y: 0, opacity: 1 });
+        gsap.set(".mv-scene .mv-rule", { scaleX: 1 });
+        gsap.set(".mv-scene .mv-numeral", { yPercent: 0, opacity: 1 });
+        return;
+      }
+
+      // Transform and opacity only. The previous version scrubbed
+      // `letter-spacing` and a 14px blur on display type sized up to 18rem,
+      // which forces a layout and a full repaint on every scroll frame — the
+      // single most expensive thing on the page.
+      gsap.set(scenes, { autoAlpha: 0, scale: 0.72, yPercent: 4 });
       gsap.set(".mv-scene .mv-copy-line", { yPercent: 110, opacity: 0 });
       gsap.set(".mv-scene .mv-meta-item", { y: 14, opacity: 0 });
       gsap.set(".mv-scene .mv-rule", { scaleX: 0, transformOrigin: "left" });
@@ -72,8 +84,7 @@ export function MissionVision() {
           {
             autoAlpha: 1,
             scale: 1,
-            filter: "blur(0px)",
-            letterSpacing: "-0.045em",
+            yPercent: 0,
             duration: 1.1,
           },
           "<"
@@ -107,9 +118,8 @@ export function MissionVision() {
           sel,
           {
             autoAlpha: 0,
-            scale: 1.18,
-            filter: "blur(12px)",
-            letterSpacing: "0.04em",
+            scale: 1.14,
+            yPercent: -4,
             duration: 0.9,
             ease: "power2.in",
           },
@@ -137,7 +147,7 @@ export function MissionVision() {
       });
     }, rootRef);
     return () => ctx.revert();
-  }, []);
+  }, [prefersReduced]);
 
   return (
     <section
@@ -222,7 +232,7 @@ export function MissionVision() {
             <div
               key={s.label}
               className={`mv-scene mv-scene-${i + 1} absolute inset-0 flex flex-col items-center justify-center text-center`}
-              style={{ willChange: "transform, filter, opacity, letter-spacing" }}
+              style={{ willChange: "transform, opacity" }}
             >
               <div className="overflow-hidden">
                 <div

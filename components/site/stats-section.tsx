@@ -38,12 +38,12 @@ const STATS: Stat[] = [
     accent: "var(--brand-navy)",
   },
   {
-    value: 250,
+    value: 400,
     suffix: "+",
     format: "plain",
     label: "Students",
-    italic: "empowered",
-    caption: "Leading projects in their cities, every semester.",
+    italic: "leading",
+    caption: "Running chapters and projects in their own cities, every semester.",
     accent: "var(--brand-rose-soft)",
   },
 ];
@@ -262,7 +262,7 @@ export function StatsSection() {
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
         <div className="impact-bg-photo absolute inset-0 will-change-transform">
           <Image
-            src="/general/hours-hero.png"
+            src="/general/service-line.jpg"
             alt=""
             fill
             sizes="100vw"

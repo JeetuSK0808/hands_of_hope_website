@@ -15,17 +15,29 @@ export default async function PortalDashboardPage() {
   const user = await requireUser();
   const supabase = await createSupabaseServerClient();
 
-  const { data: logs } = await supabase
-    .from("hour_logs")
-    .select(
-      "*, events(event_name, location), branches(name), regions(name)"
-    )
-    .eq("user_id", user.user_id)
-    .order("activity_date", { ascending: false })
-    .limit(200);
+  // Two reads in parallel, each shaped for exactly one job:
+  //  - `logs` carries the joins the table and the PDF export need, capped.
+  //  - `totals` is two tiny columns with no joins and no cap, because an
+  //    all-time figure that silently stops at the cap is worse than no figure
+  //    at all — these numbers go on Gold Award and grant applications.
+  const [{ data: logs }, { data: totals }] = await Promise.all([
+    supabase
+      .from("hour_logs")
+      .select("*, events(event_name, location), branches(name), regions(name)")
+      .eq("user_id", user.user_id)
+      .order("activity_date", { ascending: false })
+      .limit(500),
+    supabase
+      .from("hour_logs")
+      .select("hours, activity_date")
+      .eq("user_id", user.user_id)
+      .eq("status", "approved"),
+  ]);
 
   const rows = (logs ?? []) as JoinedLog[];
-  const stats = summarize(rows);
+  const stats = summarize(
+    (totals ?? []) as { hours: number; activity_date: string }[],
+  );
 
   const branchName = rows.find((r) => r.branches?.name)?.branches?.name ?? null;
   const regionName = rows.find((r) => r.regions?.name)?.regions?.name ?? null;
@@ -121,13 +133,13 @@ function StatCard({ label, value }: { label: string; value: number }) {
   );
 }
 
-function summarize(rows: DbHourLog[]) {
+/** Callers pass approved rows only — the query already filters on status. */
+function summarize(rows: { hours: number; activity_date: string }[]) {
   const now = new Date();
   const cutoffWeek = new Date(now); cutoffWeek.setDate(now.getDate() - 7);
   const cutoffMonth = new Date(now); cutoffMonth.setDate(now.getDate() - 30);
   let week = 0, month = 0, all = 0;
   for (const r of rows) {
-    if (r.status !== "approved") continue;
     const hours = Number(r.hours);
     all += hours;
     const d = new Date(r.activity_date);

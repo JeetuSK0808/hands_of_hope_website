@@ -1,4 +1,5 @@
 import "server-only";
+import { cache } from "react";
 import { redirect } from "next/navigation";
 import { createSupabaseServerClient } from "@/lib/portal/supabase/server";
 import { ROLE_RANK, type DbUser, type UserRole } from "@/lib/portal/db/types";
@@ -7,7 +8,15 @@ export function roleAtLeast(role: UserRole, min: UserRole): boolean {
   return ROLE_RANK[role] >= ROLE_RANK[min];
 }
 
-export async function getCurrentUser(): Promise<DbUser | null> {
+/**
+ * Resolves the signed-in user once per request.
+ *
+ * Every dashboard route asks for this at least twice — once in the layout to
+ * gate the shell, once in the page to gate the data — and each call costs an
+ * `auth.getUser()` plus a `users` row read. `cache()` makes the second and
+ * third callers free.
+ */
+export const getCurrentUser = cache(async function getCurrentUser(): Promise<DbUser | null> {
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -31,7 +40,7 @@ export async function getCurrentUser(): Promise<DbUser | null> {
   } catch {
     return null;
   }
-}
+});
 
 export async function requireUser(): Promise<DbUser> {
   const user = await getCurrentUser();

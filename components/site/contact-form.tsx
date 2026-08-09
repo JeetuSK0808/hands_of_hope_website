@@ -14,6 +14,8 @@ const SUBJECTS = [
   "Just saying hello",
 ];
 
+const CONTACT_EMAIL = "info@handsofhopeoutreach.org";
+
 function Field({
   id,
   label,
@@ -70,28 +72,66 @@ export function ContactForm() {
     subject: SUBJECTS[0],
     message: "",
   });
-  const [status, setStatus] = React.useState<"idle" | "submitting" | "done">(
-    "idle"
+  const [status, setStatus] = React.useState<
+    "idle" | "submitting" | "done" | "error"
+  >("idle");
+  const [honeypot, setHoneypot] = React.useState("");
+  const resetRef = React.useRef<number | null>(null);
+
+  React.useEffect(
+    () => () => {
+      if (resetRef.current) window.clearTimeout(resetRef.current);
+    },
+    [],
   );
 
   const update = (k: FieldKey) => (v: string) =>
     setForm((f) => ({ ...f, [k]: v }));
 
+  /** Pre-filled fallback so a failed send never costs the visitor their message. */
+  const mailtoHref = React.useMemo(() => {
+    const body = [
+      `Name: ${form.name}`,
+      `School / organization: ${form.school || "—"}`,
+      "",
+      form.message,
+    ].join("\n");
+    return `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(
+      form.subject,
+    )}&body=${encodeURIComponent(body)}`;
+  }, [form]);
+
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (status === "submitting") return;
     setStatus("submitting");
-    await new Promise((r) => setTimeout(r, 1100));
-    setStatus("done");
-    setTimeout(() => {
-      setStatus("idle");
-      setForm({
-        name: "",
-        email: "",
-        school: "",
-        subject: SUBJECTS[0],
-        message: "",
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...form, company: honeypot }),
       });
-    }, 3500);
+
+      if (!res.ok) {
+        setStatus("error");
+        return;
+      }
+
+      setStatus("done");
+      resetRef.current = window.setTimeout(() => {
+        setStatus("idle");
+        setForm({
+          name: "",
+          email: "",
+          school: "",
+          subject: SUBJECTS[0],
+          message: "",
+        });
+      }, 4000);
+    } catch {
+      setStatus("error");
+    }
   };
 
   return (
@@ -150,30 +190,64 @@ export function ContactForm() {
         textarea
       />
 
+      {/* Honeypot — hidden from humans and assistive tech, tempting to bots. */}
+      <div className="hidden" aria-hidden>
+        <label htmlFor="company">Company</label>
+        <input
+          id="company"
+          name="company"
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          value={honeypot}
+          onChange={(e) => setHoneypot(e.target.value)}
+        />
+      </div>
+
+      {status === "error" && (
+        <div
+          role="alert"
+          className="border border-border bg-card px-5 py-4 text-sm leading-relaxed"
+        >
+          <div className="font-medium text-foreground">
+            That didn&apos;t send.
+          </div>
+          <p className="mt-1 text-muted-foreground">
+            Something went wrong on our end — your message was not delivered.{" "}
+            <a
+              href={mailtoHref}
+              className="underline underline-offset-4 decoration-dotted text-foreground"
+            >
+              Send it by email instead
+            </a>
+            , with everything you typed already filled in.
+          </p>
+        </div>
+      )}
+
       <div className="flex flex-col-reverse gap-6 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-xs text-muted-foreground">
           We respond within 48 hours. Or email{" "}
           <a
-            href="mailto:info@handsofhopeoutreach.com"
+            href={`mailto:${CONTACT_EMAIL}`}
             className="underline underline-offset-4 decoration-dotted text-foreground"
           >
-            info@handsofhopeoutreach.com
+            {CONTACT_EMAIL}
           </a>
           .
         </p>
         <button
           type="submit"
-          disabled={status !== "idle"}
+          disabled={status === "submitting" || status === "done"}
           className={cn(
             "inline-flex items-center justify-center gap-2 px-8 py-4 text-sm font-medium transition-opacity",
-            status === "done"
-              ? "bg-foreground text-background"
-              : "bg-foreground text-background hover:opacity-80",
-            status !== "idle" && "cursor-not-allowed"
+            "bg-foreground text-background hover:opacity-80",
+            (status === "submitting" || status === "done") &&
+              "cursor-not-allowed"
           )}
           style={{ borderRadius: "1px" }}
         >
-          {status === "idle" && <>Send message</>}
+          {(status === "idle" || status === "error") && <>Send message</>}
           {status === "submitting" && (
             <>
               <Loader2 className="h-4 w-4 animate-spin" strokeWidth={1.5} />

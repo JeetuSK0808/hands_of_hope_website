@@ -36,7 +36,7 @@ export type OrderEmailPayload = {
 };
 
 const FROM_ADDRESS =
-  process.env.MERCH_EMAIL_FROM ?? "Hands of Hope <orders@handsofhopeoutreach.com>";
+  process.env.MERCH_EMAIL_FROM ?? "Hands of Hope <orders@handsofhopeoutreach.org>";
 const TIGERHILL_ADDRESS =
   process.env.TIGERHILL_ORDER_EMAIL ?? "sales.absoutfitters@gmail.com";
 
@@ -85,7 +85,7 @@ export async function sendTigerHillOrderEmail(p: OrderEmailPayload) {
   return resendClient().emails.send({
     from: FROM_ADDRESS,
     to: TIGERHILL_ADDRESS,
-    replyTo: "info@handsofhopeoutreach.com",
+    replyTo: "info@handsofhopeoutreach.org",
     subject: `HOH Order ${p.orderNumber} — ${p.customerName}`,
     text,
   });
@@ -119,7 +119,7 @@ export async function sendCustomerConfirmationEmail(p: OrderEmailPayload) {
   return resendClient().emails.send({
     from: FROM_ADDRESS,
     to: p.customerEmail,
-    replyTo: "info@handsofhopeoutreach.com",
+    replyTo: "info@handsofhopeoutreach.org",
     subject: `Order ${p.orderNumber} confirmed`,
     text,
   });

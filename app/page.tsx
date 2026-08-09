@@ -18,7 +18,7 @@ const faqJsonLd = {
       name: "What is Hands of Hope Outreach?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Hands of Hope Outreach is a student-led 501(c)(3) nonprofit based in Atlanta. High school chapters across the US, Canada, Chile, and Denmark run STEM Buddies mentoring, the Ripple for Change kit-packing assembly, and the annual Awards Ceremony.",
+        text: "Hands of Hope Outreach is a student-led 501(c)(3) nonprofit based in Atlanta. High school chapters across the US, Canada, Chile, and Denmark run STEM Together, the spring Ripple for Change kit-packing assembly, and the winter Awards Ceremony.",
       },
     },
     {
@@ -42,7 +42,7 @@ const faqJsonLd = {
       name: "How do I start a Hands of Hope chapter at my high school?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Email info@handsofhopeoutreach.com or use the contact form at handsofhopeoutreach.org/contact. The executive team will walk you through the chapter application, on-boarding, and the projects your school can adopt.",
+        text: "Email info@handsofhopeoutreach.org or use the contact form at handsofhopeoutreach.org/contact. The executive team will walk you through the chapter application, on-boarding, and the projects your school can adopt.",
       },
     },
     {
@@ -50,7 +50,7 @@ const faqJsonLd = {
       name: "What programs does Hands of Hope Outreach run?",
       acceptedAnswer: {
         "@type": "Answer",
-        text: "Programs include STEM Buddies (elementary STEM mentoring), Ripple for Change (an annual summer kit-packing assembly for local partners), and the winter Awards Ceremony recognizing top student volunteers.",
+        text: "Programs include STEM Together (accessible, hands-on STEM with special-needs schools, now running at multiple chapters), Ripple for Change (the annual spring kit-packing assembly every chapter takes part in), and the winter Awards Ceremony recognizing top student volunteers.",
       },
     },
     {
@@ -111,7 +111,7 @@ export const metadata: Metadata = {
       "Hands of Hope Outreach · Student-led 501(c)(3) nonprofit · Atlanta",
   },
   description:
-    "Hands of Hope Outreach is a student-led 501(c)(3) nonprofit based in Atlanta. High school chapters across the US, Canada, Chile, and Denmark run STEM Buddies mentoring, the Ripple for Change kit-packing assembly, and the annual Awards Ceremony.",
+    "Hands of Hope Outreach is a student-led 501(c)(3) nonprofit based in Atlanta. High school chapters across the US, Canada, Chile, and Denmark run STEM Together, the spring Ripple for Change kit-packing assembly, and the winter Awards Ceremony.",
   alternates: { canonical: "/" },
   openGraph: {
     url: "https://handsofhopeoutreach.org/",

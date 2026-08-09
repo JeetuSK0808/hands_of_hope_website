@@ -44,8 +44,8 @@ const MOMENTS: Moment[] = [
   },
   {
     src: "/general/stem-buddies.jpg",
-    alt: "STEM Buddies session, hands-on activity in progress",
-    eyebrow: "III. STEM Buddies",
+    alt: "STEM Together session, hands-on activity in progress",
+    eyebrow: "III. STEM Together",
     caption: "Where curiosity sets the pace.",
     area: "md:col-span-5 md:row-span-2",
     parallax: 36,

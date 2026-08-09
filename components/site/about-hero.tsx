@@ -27,10 +27,10 @@ export function AboutHero() {
         </h1>
         <p className="mt-12 max-w-2xl text-base md:text-lg text-white/85 leading-relaxed animate-fade-up [animation-delay:440ms]">
           What if every high schooler had a way to turn what they care about
-          into something real for someone else? Daksh Shah founded Hands of
-          Hope in Atlanta to answer that, connecting students with the
-          communities just outside their classroom, and giving them the
-          structure, recognition, and trust to lead.
+          into something real for someone else? Daksh Shah and Shubham Trivedi
+          started Hands of Hope in Atlanta to answer it, and every year since,
+          students have answered it themselves — one branch, one cause, one
+          community at a time.
         </p>
       </div>
     </section>

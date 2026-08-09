@@ -7,7 +7,7 @@ import { SeoBreadcrumb } from "@/components/site/seo-breadcrumb";
 export const metadata: Metadata = {
   title: "Contact — Start a chapter, volunteer, or partner",
   description:
-    "Contact Hands of Hope Outreach to start a high school chapter, volunteer, partner with us, sponsor an event, or reach the executive team. Email info@handsofhopeoutreach.com.",
+    "Contact Hands of Hope Outreach to start a high school chapter, volunteer, partner with us, sponsor an event, or reach the executive team. Email info@handsofhopeoutreach.org.",
   alternates: { canonical: "/contact" },
   openGraph: {
     url: "https://handsofhopeoutreach.org/contact",
@@ -52,10 +52,10 @@ export default function ContactPage() {
                 Email
               </div>
               <a
-                href="mailto:info@handsofhopeoutreach.com"
+                href="mailto:info@handsofhopeoutreach.org"
                 className="mt-3 block text-lg text-foreground hover:opacity-70 transition-opacity"
               >
-                info@handsofhopeoutreach.com
+                info@handsofhopeoutreach.org
               </a>
             </div>
 

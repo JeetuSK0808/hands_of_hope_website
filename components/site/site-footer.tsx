@@ -17,7 +17,7 @@ const RESOURCES = [
   { label: "Awards Ceremony", href: "/annual-events" },
   { label: "Ripple for Change", href: "/annual-events" },
   { label: "Start a Chapter", href: "/contact" },
-  { label: "STEM Buddies", href: "/about#branches" },
+  { label: "STEM Together", href: "/about#branches" },
 ];
 
 export function SiteFooter() {
@@ -47,10 +47,10 @@ export function SiteFooter() {
             <ul className="mt-6 space-y-3 text-sm">
               <li>
                 <a
-                  href="mailto:info@handsofhopeoutreach.com"
+                  href="mailto:info@handsofhopeoutreach.org"
                   className="text-foreground hover:opacity-70 transition-opacity"
                 >
-                  info@handsofhopeoutreach.com
+                  info@handsofhopeoutreach.org
                 </a>
               </li>
               <li className="text-muted-foreground">Atlanta, GA</li>

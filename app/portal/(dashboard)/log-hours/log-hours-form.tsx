@@ -25,6 +25,10 @@ export function LogHoursForm({ role, events }: { role: UserRole; events: EventOp
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [compressing, setCompressing] = useState(false);
+  // `pending` only covers the post-success navigation. The submit itself —
+  // which uploads a photo — needs its own flag, or the button stays live
+  // through the whole upload and a double-click files the hours twice.
+  const [submitting, setSubmitting] = useState(false);
 
   async function handleFile(file: File | null) {
     if (!file) { setProof(null); setProofNote(null); return; }
@@ -50,6 +54,7 @@ export function LogHoursForm({ role, events }: { role: UserRole; events: EventOp
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    if (submitting || pending) return;
     setError(null);
 
     const hoursNum = parseFloat(hours);
@@ -69,13 +74,22 @@ export function LogHoursForm({ role, events }: { role: UserRole; events: EventOp
     formData.set("description", description);
     if (proof) formData.set("proof", proof);
 
-    const result = await submitHours(formData);
-    if (result.ok) {
-      startTransition(() => {
-        router.replace("/portal/dashboard");
-      });
-    } else {
+    setSubmitting(true);
+    try {
+      const result = await submitHours(formData);
+      if (result.ok) {
+        // Stay disabled through the navigation — re-enabling here would let a
+        // second click fire while the route transition is still in flight.
+        startTransition(() => {
+          router.replace("/portal/dashboard");
+        });
+        return;
+      }
       setError(result.error);
+      setSubmitting(false);
+    } catch {
+      setError("Could not reach the server. Check your connection and try again.");
+      setSubmitting(false);
     }
   }
 
@@ -149,8 +163,16 @@ export function LogHoursForm({ role, events }: { role: UserRole; events: EventOp
 
       {error ? <p className="text-sm" style={{ color: "var(--status-rejected)" }}>{error}</p> : null}
 
-      <button type="submit" disabled={pending || compressing} className="portal-btn-primary w-full justify-center disabled:opacity-60">
-        {pending ? "Submitting…" : compressing ? "Preparing photo…" : "Submit for approval"}
+      <button
+        type="submit"
+        disabled={submitting || pending || compressing}
+        className="portal-btn-primary w-full justify-center disabled:opacity-60"
+      >
+        {compressing
+          ? "Preparing photo…"
+          : submitting || pending
+            ? "Submitting…"
+            : "Submit for approval"}
       </button>
     </form>
   );

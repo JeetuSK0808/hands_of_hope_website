@@ -23,7 +23,7 @@ const SITE_NAME = "Hands of Hope Outreach";
 const DEFAULT_TITLE =
   "Hands of Hope Outreach · Student-led 501(c)(3) nonprofit · Atlanta";
 const DEFAULT_DESCRIPTION =
-  "Hands of Hope Outreach is a student-led 501(c)(3) nonprofit based in Atlanta. High school chapters across the US, Canada, Chile, and Denmark run STEM Buddies mentoring, the Ripple for Change kit-packing assembly, and the annual Awards Ceremony.";
+  "Hands of Hope Outreach is a student-led 501(c)(3) nonprofit based in Atlanta. High school chapters across the US, Canada, Chile, and Denmark run STEM Together, the spring Ripple for Change kit-packing assembly, and the winter Awards Ceremony.";
 const OG_IMAGE = `${SITE_URL}/general/award-ceremony-hi.jpg`;
 
 export const metadata: Metadata = {
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     "hands of hope student nonprofit",
     "student nonprofit Atlanta",
     "high school volunteer nonprofit",
-    "STEM Buddies",
+    "STEM Together",
     "Ripple for Change",
     "youth-led 501c3",
     "Atlanta youth service",
@@ -161,7 +161,7 @@ const organizationJsonLd = {
   image: OG_IMAGE,
   description: DEFAULT_DESCRIPTION,
   slogan: "Compassion, in action.",
-  email: "info@handsofhopeoutreach.com",
+  email: "info@handsofhopeoutreach.org",
   foundingDate: "2023",
   foundingLocation: {
     "@type": "Place",
@@ -196,7 +196,7 @@ const organizationJsonLd = {
     "chapter starter kits",
   ],
   keywords:
-    "Hands of Hope, Hands of Hope Outreach, student nonprofit, Atlanta, 501(c)(3), STEM Buddies, Ripple for Change, high school volunteering",
+    "Hands of Hope, Hands of Hope Outreach, student nonprofit, Atlanta, 501(c)(3), STEM Together, Ripple for Change, high school volunteering",
   nonprofitStatus: "Nonprofit501c3",
   hasCredential: {
     "@type": "EducationalOccupationalCredential",
@@ -220,14 +220,14 @@ const organizationJsonLd = {
     {
       "@type": "ContactPoint",
       contactType: "General",
-      email: "info@handsofhopeoutreach.com",
+      email: "info@handsofhopeoutreach.org",
       availableLanguage: ["English"],
       areaServed: ["US", "CA", "CL", "DK"],
     },
     {
       "@type": "ContactPoint",
       contactType: "Chapter applications",
-      email: "info@handsofhopeoutreach.com",
+      email: "info@handsofhopeoutreach.org",
       availableLanguage: ["English"],
       areaServed: ["US", "CA", "CL", "DK"],
     },
@@ -300,7 +300,7 @@ export default function RootLayout({
         {/* Identity confirmation for Google Knowledge Graph via rel="me". */}
         <link rel="me" href="https://www.instagram.com/handsofhope_outreach/" />
         <link rel="me" href="https://linkedin.com/company/handsofhopeoutreach" />
-        <link rel="me" href="mailto:info@handsofhopeoutreach.com" />
+        <link rel="me" href="mailto:info@handsofhopeoutreach.org" />
         <meta name="theme-color" content="#f7f5ef" />
         <meta name="application-name" content="Hands of Hope Outreach" />
         <meta name="apple-mobile-web-app-title" content="Hands of Hope Outreach" />

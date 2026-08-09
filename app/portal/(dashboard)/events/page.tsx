@@ -15,28 +15,32 @@ export default async function PortalEventsPage() {
   const supabase = await createSupabaseServerClient();
   const canCreate = roleAtLeast(user.role, "branch_leader");
 
-  const { data: events } = await supabase
-    .from("events")
-    .select("*, branches(name), regions(name), event_signups(count)")
-    .order("event_date", { ascending: false })
-    .limit(200);
+  // None of these reads depend on each other — run them as one round trip
+  // instead of four stacked ones.
+  const [
+    { data: events },
+    { data: mySignups },
+    branchResult,
+    regionResult,
+  ] = await Promise.all([
+    supabase
+      .from("events")
+      .select("*, branches(name), regions(name), event_signups(count)")
+      .order("event_date", { ascending: false })
+      .limit(200),
+    supabase.from("event_signups").select("event_id").eq("user_id", user.user_id),
+    canCreate
+      ? supabase.from("branches").select("*").eq("is_active", true)
+      : Promise.resolve({ data: null }),
+    canCreate
+      ? supabase.from("regions").select("*").eq("is_active", true)
+      : Promise.resolve({ data: null }),
+  ]);
 
   const rows = (events ?? []) as EventRow[];
-
-  const { data: mySignups } = await supabase
-    .from("event_signups")
-    .select("event_id")
-    .eq("user_id", user.user_id);
   const signedSet = new Set((mySignups ?? []).map((s) => s.event_id as string));
-
-  let branches: DbBranch[] = [];
-  let regions: DbRegion[] = [];
-  if (canCreate) {
-    const { data: brs } = await supabase.from("branches").select("*").eq("is_active", true);
-    branches = (brs ?? []) as DbBranch[];
-    const { data: rgs } = await supabase.from("regions").select("*").eq("is_active", true);
-    regions = (rgs ?? []) as DbRegion[];
-  }
+  const branches = (branchResult.data ?? []) as DbBranch[];
+  const regions = (regionResult.data ?? []) as DbRegion[];
 
   const today = new Date().toISOString().slice(0, 10);
 

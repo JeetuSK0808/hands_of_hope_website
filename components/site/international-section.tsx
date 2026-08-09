@@ -3,18 +3,20 @@
 import * as React from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
 const REGIONS = [
-  { code: "US", label: "United States", note: "Atlanta · Greater metro" },
-  { code: "INTL", label: "International", note: "Chapters across borders" },
+  { code: "US", label: "United States", note: "Founded in Atlanta · branches across multiple states" },
+  { code: "INTL", label: "Canada · Chile · Denmark", note: "Branches running their own causes abroad" },
   { code: "501c3", label: "501(c)(3)", note: "Fiscally sponsored · tax-deductible" },
 ];
 
 export function InternationalSection() {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const wordRef = React.useRef<HTMLDivElement>(null);
+  const prefersReduced = usePrefersReducedMotion();
 
   React.useEffect(() => {
     if (!rootRef.current) return;
@@ -22,14 +24,23 @@ export function InternationalSection() {
       const word = wordRef.current;
       if (!word) return;
 
+      if (prefersReduced) {
+        gsap.set([word, ".intl-row", ".intl-eyebrow", ".intl-caption"], {
+          opacity: 1,
+          scale: 1,
+          y: 0,
+        });
+        return;
+      }
+
+      // Transform + opacity only — scrubbing `letter-spacing` and a blur on a
+      // 16rem word relayouts and repaints the section on every frame.
       gsap.fromTo(
         word,
-        { scale: 0.62, opacity: 0, filter: "blur(10px)", letterSpacing: "0.18em" },
+        { scale: 0.74, opacity: 0 },
         {
           scale: 1,
           opacity: 1,
-          filter: "blur(0px)",
-          letterSpacing: "-0.04em",
           ease: "none",
           scrollTrigger: {
             trigger: rootRef.current,
@@ -91,7 +102,7 @@ export function InternationalSection() {
       );
     }, rootRef);
     return () => ctx.revert();
-  }, []);
+  }, [prefersReduced]);
 
   return (
     <section
@@ -128,7 +139,7 @@ export function InternationalSection() {
           ref={wordRef}
           aria-label="International"
           className="relative mt-14 select-none font-display font-light italic leading-[0.85] text-[clamp(4.5rem,18vw,16rem)] text-foreground"
-          style={{ willChange: "transform, filter, letter-spacing" }}
+          style={{ willChange: "transform, opacity" }}
         >
           International
           <span
@@ -142,10 +153,11 @@ export function InternationalSection() {
 
         <div className="intl-caption mt-10 grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-end">
           <p className="max-w-2xl text-base md:text-lg text-foreground/80 leading-relaxed">
-            Hands of Hope began in Atlanta and now supports student-led
-            chapters across the United States and abroad. Wherever a student
-            wants to build something for the people around them, we want a
-            foothold there.
+            Hands of Hope started in Atlanta. Students now run branches across
+            multiple U.S. states and in Canada, Chile, and Denmark — each one
+            picking its own cause and its own community partners. Wherever a
+            student wants to build something for the people around them, there
+            should be a branch.
           </p>
           <div className="text-sm text-muted-foreground md:text-right">
             <div className="editorial-eyebrow text-muted-foreground">

@@ -12,30 +12,54 @@ export function ApprovalsTable({ logs }: { logs: Row[] }) {
   const [pending, startTransition] = useTransition();
   const [rejectingId, setRejectingId] = useState<string | null>(null);
   const [reason, setReason] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   if (logs.length === 0) {
     return <p className="py-8 text-center text-muted-foreground">Nothing waiting on you. Good work.</p>;
   }
 
+  /** The review actions reject on real conditions a reviewer needs to read —
+   *  self-review, and another leader having already decided. Surface them
+   *  in the table instead of letting them hit the error boundary. */
   function handleApprove(id: string) {
+    setError(null);
     startTransition(async () => {
-      await approveLog(id);
-      router.refresh();
+      try {
+        await approveLog(id);
+        router.refresh();
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Could not approve.");
+      }
     });
   }
 
   function handleReject(id: string) {
     if (!reason.trim()) return;
+    setError(null);
     startTransition(async () => {
-      await rejectLog(id, reason.trim());
-      setRejectingId(null);
-      setReason("");
-      router.refresh();
+      try {
+        await rejectLog(id, reason.trim());
+        setRejectingId(null);
+        setReason("");
+        router.refresh();
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Could not reject.");
+      }
     });
   }
 
   return (
-    <table className="portal-table">
+    <>
+      {error ? (
+        <p
+          role="alert"
+          className="mb-4 text-sm"
+          style={{ color: "var(--status-rejected)" }}
+        >
+          {error}
+        </p>
+      ) : null}
+      <table className="portal-table">
       <thead>
         <tr>
           <th>Submitter</th>
@@ -105,6 +129,7 @@ export function ApprovalsTable({ logs }: { logs: Row[] }) {
           </tr>
         ))}
       </tbody>
-    </table>
+      </table>
+    </>
   );
 }

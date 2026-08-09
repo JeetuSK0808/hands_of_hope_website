@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     url: "https://handsofhopeoutreach.org/donate",
     title: "Donate to Hands of Hope Outreach",
     description:
-      "Tax-deductible gifts fund STEM Buddies, chapter projects, and the Awards Ceremony.",
+      "Tax-deductible gifts fund STEM Together, chapter projects, and the Awards Ceremony.",
   },
 };
 
@@ -23,7 +23,7 @@ const ALLOCATION = [
   {
     pct: "72%",
     label: "Programs",
-    body: "STEM Buddies kits, chapter projects, and the supplies that go straight to community partners.",
+    body: "STEM Together kits, chapter projects, and the supplies that go straight to community partners.",
     accent: "var(--brand-rose)",
   },
   {
@@ -44,7 +44,7 @@ const OTHER_WAYS = [
   {
     title: "In-kind giving",
     body: "Books, kits, food, and supplies are placed directly into chapter projects.",
-    cta: { label: "Email the team", href: "mailto:info@handsofhopeoutreach.com?subject=In-kind%20donation" },
+    cta: { label: "Email the team", href: "mailto:info@handsofhopeoutreach.org?subject=In-kind%20donation" },
   },
   {
     title: "Partner with us",
@@ -54,7 +54,7 @@ const OTHER_WAYS = [
   {
     title: "Host a drive",
     body: "Run a fundraiser or supply drive at your school, business, or community group.",
-    cta: { label: "Get the drive kit", href: "mailto:info@handsofhopeoutreach.com?subject=Hosting%20a%20drive" },
+    cta: { label: "Get the drive kit", href: "mailto:info@handsofhopeoutreach.org?subject=Hosting%20a%20drive" },
   },
 ];
 
@@ -295,10 +295,10 @@ export default function DonatePage() {
               Questions
             </div>
             <a
-              href="mailto:info@handsofhopeoutreach.com"
+              href="mailto:info@handsofhopeoutreach.org"
               className="mt-3 inline-block font-display text-xl italic text-foreground transition-opacity hover:opacity-70"
             >
-              info@handsofhopeoutreach.com
+              info@handsofhopeoutreach.org
             </a>
           </div>
         </div>

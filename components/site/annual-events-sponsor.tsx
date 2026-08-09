@@ -1,13 +1,17 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
+type TierId = "droplet" | "ripple" | "wave-maker" | "tide-turner";
+
 type Tier = {
-  id: "drop" | "ripple" | "wave";
+  id: TierId;
   ordinal: string;
   prefix: string;
   italic: string;
@@ -21,23 +25,23 @@ type Tier = {
 
 const TIERS: Tier[] = [
   {
-    id: "drop",
+    id: "droplet",
     ordinal: "I.",
     prefix: "The",
-    italic: "Drop",
+    italic: "Droplet",
     position: "Local partner",
     range: "Suggested · $2,500",
     blurb:
-      "Where every chapter begins. One name on the program, one seat held at the winter table, and a steady line back to the work for the rest of the year.",
+      "Where it starts. One name on the program, one seat held at the winter table, and a steady line back to the work for the rest of the year.",
     callout: "One event. One name. A foothold in the room.",
     benefits: [
       "Logo placement on the printed program and lobby signage at one event",
       "Sponsor acknowledgement from the stage during opening remarks",
-      "Two reserved seats at the Awards Ceremony with a dedicated host for the evening",
+      "Two reserved seats at the Awards Ceremony with a host for the evening",
       "Quarterly impact note from the founders — what your name made possible this season",
       "Welcome packet with lapel pin, signed thank-you card, and the season program",
     ],
-    accent: "var(--brand-navy)",
+    accent: "var(--brand-navy-soft)",
   },
   {
     id: "ripple",
@@ -47,40 +51,214 @@ const TIERS: Tier[] = [
     position: "Presenting sponsor",
     range: "Suggested · $10,000",
     blurb:
-      "Your name spreads outward. Lead billing on one of the two nights, a short film cut from the season, and rings of recognition that reach every partner family in the network.",
-    callout: "One night, top billing. A story that travels.",
+      "Your name spreads outward. Lead billing on one of the two dates, a short film cut from the season, and rings of recognition that reach every partner family in the network.",
+    callout: "One date, top billing. A story that travels.",
     benefits: [
-      "Lead naming on one of the two annual nights — “Presented by [Your Name]”",
-      "Full-page placement in the printed program and primary banner on the event microsite",
+      "Lead naming on one of the two annual dates — “Presented by [Your Name]”",
+      "Full-page placement in the printed program and primary banner on the event page",
       "A bespoke sixty-second social film, produced during the campaign window",
-      "Eight reserved seats and a curated table at the gala, hosted by a board member",
-      "A named scholarship category announced and presented from the stage",
+      "Eight reserved seats and a curated table at the ceremony",
+      "A named award category announced and presented from the stage",
       "Private tour of an active kit-packing line with the operations team",
     ],
     accent: "var(--brand-rose)",
   },
   {
-    id: "wave",
+    id: "wave-maker",
     ordinal: "III.",
     prefix: "The",
     italic: "Wave Maker",
     position: "Title sponsor",
-    range: "Suggested · $35,000+",
+    range: "Suggested · $25,000",
     blurb:
-      "The room turns. Top billing across both nights, a year of co-authored storytelling, and a kit drive that ships under your name to the communities you choose.",
-    callout: "Both nights. A film. A drive shipped under your name.",
+      "The room turns. Top billing across both dates, a year of co-authored storytelling, and a kit drive that ships under your name to the communities you choose.",
+    callout: "Both dates. A film. A drive shipped under your name.",
     benefits: [
-      "Top billing across both annual nights — “In partnership with [Your Name]”",
-      "Marquee placement on the save-the-date, citywide outdoor placements, and the full press kit",
+      "Top billing across both annual dates — “In partnership with [Your Name]”",
+      "Marquee placement on the save-the-date, outdoor placements, and the full press kit",
       "A co-produced three-minute documentary short, released across the season",
-      "Sixteen reserved seats and a private after-party suite at the gala",
-      "Founders’ table at both events, plus a quiet dinner with the executive team",
+      "Sixteen reserved seats and a private suite at the ceremony",
+      "Founders’ table at both events, plus a dinner with the executive team",
       "Year-round inclusion on every press release and on the partner masthead",
-      "A named summer kit drive — choose the community, we ship under your banner",
+      "A named spring kit drive — choose the community, we ship under your banner",
     ],
     accent: "var(--brand-navy)",
   },
+  {
+    id: "tide-turner",
+    ordinal: "IV.",
+    prefix: "The",
+    italic: "Tide Turner",
+    position: "Founding benefactor",
+    range: "Suggested · $50,000+",
+    blurb:
+      "The water level itself moves. At this depth a sponsorship stops funding events and starts funding branches — new schools onboarded, new causes taken up, students who would never otherwise have had a way in.",
+    callout: "Not a night. A year, and the branches it opens.",
+    benefits: [
+      "Everything in The Wave Maker, held across a full multi-year commitment",
+      "A named branch cohort — new chapters onboarded under your name, with their causes chosen by the students who run them",
+      "Founding benefactor listing on the organization masthead and in the annual report",
+      "A named endowment line for the STEM Together program across every branch that runs it",
+      "Seat at the annual planning session where the Ripple for Change theme is set",
+      "Two documentary films — one on the season, one on a branch you help open",
+      "Standing invitation to every event in the calendar, for your whole team",
+    ],
+    accent: "var(--brand-rose)",
+  },
 ];
+
+const NARRATIVE = [
+  {
+    n: "01",
+    color: "var(--brand-navy-soft)",
+    title: "The drop lands.",
+    body: "A sponsor signs. A logo finds its place on the printed program. A student, somewhere in the network, is handed a folder with your name pressed onto the back of it.",
+  },
+  {
+    n: "02",
+    color: "var(--brand-rose)",
+    title: "The ripple spreads.",
+    body: "Two dates move through the year. A short film tours the region. Thousands of kits ship out with a thank-you card that carries your name into kitchens, classrooms, and quiet weekends.",
+  },
+  {
+    n: "03",
+    color: "var(--brand-navy)",
+    title: "The wave builds.",
+    body: "A branch that could not afford supplies runs its full year. A second school asks how to start one. The work stops depending on whether a given month went well.",
+  },
+  {
+    n: "04",
+    color: "var(--brand-rose)",
+    title: "The tide turns.",
+    body: "Years later, an alum mentions your company on a panel. A grant gets approved because we listed you. A volunteer chooses a career because of a card she still has. The first drop is still moving.",
+  },
+];
+
+/* ── Tier motifs, escalating with the water ───────────────────────── */
+
+function DropletMotif() {
+  return (
+    <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden>
+      <line
+        x1="12"
+        y1="70"
+        x2="88"
+        y2="70"
+        stroke="currentColor"
+        strokeWidth="0.5"
+        opacity="0.4"
+        strokeDasharray="0.8 1.4"
+      />
+      <g fill="none" stroke="currentColor" strokeWidth="0.55">
+        <circle cx="50" cy="70" r="1" data-motif-drop-ring opacity="0" />
+        <circle cx="50" cy="70" r="1" data-motif-drop-ring opacity="0" />
+      </g>
+      <path
+        d="M 50 18 Q 46 32 50 40 Q 54 32 50 18 Z"
+        fill="currentColor"
+        data-motif-drop
+        opacity="0"
+      />
+      <circle cx="50" cy="70" r="1.4" fill="currentColor" />
+    </svg>
+  );
+}
+
+function RippleMotif() {
+  return (
+    <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden>
+      <g fill="none" strokeWidth="0.6" stroke="currentColor">
+        {[0, 1, 2, 3].map((i) => (
+          <circle key={i} cx="50" cy="50" r="1" data-motif-ripple-ring opacity="0" />
+        ))}
+      </g>
+      <circle cx="50" cy="50" r="1.6" fill="currentColor" />
+    </svg>
+  );
+}
+
+function WaveMakerMotif() {
+  return (
+    <div className="relative h-full w-full overflow-hidden">
+      <svg
+        viewBox="0 0 200 100"
+        preserveAspectRatio="none"
+        className="absolute inset-y-0 left-0 h-full w-[200%]"
+        data-motif-wave
+      >
+        {[
+          { y: 34, w: 0.9, o: 0.9 },
+          { y: 54, w: 0.7, o: 0.6 },
+          { y: 74, w: 0.5, o: 0.38 },
+        ].map((l) => (
+          <path
+            key={l.y}
+            d={`M0 ${l.y} Q12.5 ${l.y - 16} 25 ${l.y} T50 ${l.y} T75 ${l.y} T100 ${l.y} T125 ${l.y} T150 ${l.y} T175 ${l.y} T200 ${l.y}`}
+            fill="none"
+            stroke="currentColor"
+            strokeWidth={l.w}
+            opacity={l.o}
+          />
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+function TideTurnerMotif() {
+  return (
+    <div className="relative h-full w-full overflow-hidden">
+      <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden>
+        {/* Low-water and high-water marks */}
+        <line
+          x1="6"
+          y1="74"
+          x2="94"
+          y2="74"
+          stroke="currentColor"
+          strokeWidth="0.35"
+          opacity="0.3"
+          strokeDasharray="1 1.6"
+        />
+        <line
+          x1="6"
+          y1="34"
+          x2="94"
+          y2="34"
+          stroke="currentColor"
+          strokeWidth="0.35"
+          opacity="0.3"
+          strokeDasharray="1 1.6"
+        />
+        {/* The lunar pull */}
+        <path
+          d="M 18 26 A 34 34 0 0 1 82 26"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="0.4"
+          opacity="0.45"
+          data-motif-tide-arc
+        />
+        <circle cx="50" cy="14" r="2.6" fill="currentColor" opacity="0.6" data-motif-tide-moon />
+        {/* The water body, which rises between the two marks */}
+        <g data-motif-tide-body>
+          <path
+            d="M0 74 Q12.5 68 25 74 T50 74 T75 74 T100 74 L100 100 L0 100 Z"
+            fill="currentColor"
+            opacity="0.16"
+          />
+          <path
+            d="M0 74 Q12.5 68 25 74 T50 74 T75 74 T100 74"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="0.6"
+            opacity="0.8"
+          />
+        </g>
+      </svg>
+    </div>
+  );
+}
 
 function PondIllustration({
   pondRef,
@@ -165,107 +343,13 @@ function PondIllustration({
   );
 }
 
-function DropMotif({ accent }: { accent: string }) {
-  return (
-    <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden>
-      <line
-        x1="14"
-        y1="68"
-        x2="86"
-        y2="68"
-        stroke={accent}
-        strokeWidth="0.5"
-        opacity="0.45"
-        strokeDasharray="0.8 1.4"
-      />
-      <g fill="none" stroke={accent} strokeWidth="0.55">
-        <circle cx="50" cy="68" r="1" data-motif-drop-ring opacity="0" />
-        <circle cx="50" cy="68" r="1" data-motif-drop-ring opacity="0" />
-      </g>
-      <path
-        d="M 50 18 Q 46 32 50 40 Q 54 32 50 18 Z"
-        fill={accent}
-        data-motif-drop
-        opacity="0"
-      />
-      <circle cx="50" cy="68" r="1.4" fill={accent} />
-    </svg>
-  );
-}
-
-function RippleMotif({ accent }: { accent: string }) {
-  return (
-    <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden>
-      <g fill="none" strokeWidth="0.6">
-        <circle cx="50" cy="50" r="1" stroke={accent} data-motif-ripple-ring opacity="0" />
-        <circle cx="50" cy="50" r="1" stroke="var(--brand-navy)" data-motif-ripple-ring opacity="0" />
-        <circle cx="50" cy="50" r="1" stroke={accent} data-motif-ripple-ring opacity="0" />
-        <circle cx="50" cy="50" r="1" stroke="var(--brand-navy-soft)" data-motif-ripple-ring opacity="0" />
-      </g>
-      <circle cx="50" cy="50" r="1.6" fill={accent} />
-    </svg>
-  );
-}
-
-function WaveMotif({ accent }: { accent: string }) {
-  return (
-    <div className="relative h-full w-full overflow-hidden">
-      <svg
-        viewBox="0 0 200 100"
-        preserveAspectRatio="none"
-        className="absolute inset-y-0 left-0 h-full w-[200%]"
-        data-motif-wave
-      >
-        <path
-          d="M0 36 Q12.5 20 25 36 T50 36 T75 36 T100 36 T125 36 T150 36 T175 36 T200 36"
-          fill="none"
-          stroke={accent}
-          strokeWidth="0.9"
-          opacity="0.85"
-        />
-        <path
-          d="M0 56 Q12.5 40 25 56 T50 56 T75 56 T100 56 T125 56 T150 56 T175 56 T200 56"
-          fill="none"
-          stroke={accent}
-          strokeWidth="0.7"
-          opacity="0.55"
-        />
-        <path
-          d="M0 76 Q12.5 60 25 76 T50 76 T75 76 T100 76 T125 76 T150 76 T175 76 T200 76"
-          fill="none"
-          stroke={accent}
-          strokeWidth="0.5"
-          opacity="0.35"
-        />
-      </svg>
-    </div>
-  );
-}
-
-const NARRATIVE = [
-  {
-    n: "01",
-    color: "var(--brand-navy)",
-    title: "The drop lands.",
-    body:
-      "A sponsor signs. A logo finds its place on the printed program. A student, somewhere across the chapter network, is handed a folder with your name pressed onto the back of it.",
-  },
-  {
-    n: "02",
-    color: "var(--brand-rose)",
-    title: "The ripple spreads.",
-    body:
-      "Two nights move through the year. A short film tours the region. Three thousand kits ship out with a thank-you card that carries your name into kitchens, classrooms, and quiet weekends.",
-  },
-  {
-    n: "03",
-    color: "var(--brand-navy)",
-    title: "The wave returns.",
-    body:
-      "Years later, an alum mentions your company on a panel. A grant gets approved because we listed you. A volunteer chooses a career because of a card she still has. The first drop is still moving.",
-  },
-];
-
+/**
+ * Act III — sponsorship, as four depths of the same water.
+ *
+ * The tier stack is threaded by a scroll-scrubbed drop that grows as it
+ * descends past each marker, so the reader physically watches a droplet become
+ * a tide over the length of the section.
+ */
 export function AnnualEventsSponsor() {
   const rootRef = React.useRef<HTMLDivElement>(null);
   const tierStackRef = React.useRef<HTMLDivElement>(null);
@@ -273,11 +357,23 @@ export function AnnualEventsSponsor() {
   const pondRef = React.useRef<HTMLDivElement>(null);
   const [notice, setNotice] = React.useState(false);
   const timeoutRef = React.useRef<number | null>(null);
+  const prefersReduced = usePrefersReducedMotion();
 
   React.useEffect(() => {
-    if (!rootRef.current) return;
+    const root = rootRef.current;
+    if (!root) return;
+
     const ctx = gsap.context(() => {
-      // ─── Rise reveals ───
+      if (prefersReduced) {
+        gsap.set(
+          ".sp-rise, .sp-step, .tier-meta, .tier-title-word, .tier-body, .tier-callout, .tier-benefit, .tier-marker, .tier-motif",
+          { clearProps: "all", autoAlpha: 1, y: 0, x: 0, yPercent: 0, scale: 1 },
+        );
+        gsap.set(".tier-callout-rule", { scaleX: 1 });
+        return;
+      }
+
+      // ── Rise reveals ───
       gsap.utils.toArray<HTMLElement>(".sp-rise").forEach((el, i) => {
         gsap.fromTo(
           el,
@@ -290,11 +386,10 @@ export function AnnualEventsSponsor() {
             ease: "power3.out",
             delay: i * 0.05,
             scrollTrigger: { trigger: el, start: "top 90%" },
-          }
+          },
         );
       });
 
-      // ─── Headline word reveal ───
       gsap.utils.toArray<HTMLElement>(".sp-headline-word").forEach((el, i) => {
         gsap.fromTo(
           el,
@@ -305,11 +400,10 @@ export function AnnualEventsSponsor() {
             ease: "power3.out",
             delay: 0.08 + i * 0.07,
             scrollTrigger: { trigger: el, start: "top 92%" },
-          }
+          },
         );
       });
 
-      // ─── Narrative step reveals ───
       gsap.utils.toArray<HTMLElement>(".sp-step").forEach((el, i) => {
         gsap.fromTo(
           el,
@@ -319,30 +413,25 @@ export function AnnualEventsSponsor() {
             opacity: 1,
             duration: 1,
             ease: "power3.out",
-            delay: i * 0.12,
+            delay: i * 0.1,
             scrollTrigger: { trigger: el, start: "top 90%" },
-          }
+          },
         );
       });
 
-      // ─── Pond illustration loop ───
+      // ── Pond illustration loop ───
       const pond = pondRef.current;
       if (pond) {
         const pondDrop = pond.querySelector<SVGElement>("[data-pond-drop]");
-        const pondRings = pond.querySelectorAll<SVGCircleElement>(
-          "[data-pond-ring]"
-        );
+        const pondRings =
+          pond.querySelectorAll<SVGCircleElement>("[data-pond-ring]");
 
         if (pondDrop) {
           gsap
             .timeline({ repeat: -1 })
             .set(pondDrop, { y: 0, opacity: 0 })
             .to(pondDrop, { opacity: 1, duration: 0.3, ease: "power2.out" }, 0.4)
-            .to(
-              pondDrop,
-              { y: 56, duration: 1.0, ease: "power2.in" },
-              "<0.05"
-            )
+            .to(pondDrop, { y: 56, duration: 1.0, ease: "power2.in" }, "<0.05")
             .to(pondDrop, { opacity: 0, duration: 0.15 })
             .to({}, { duration: 2.5 });
         }
@@ -355,25 +444,26 @@ export function AnnualEventsSponsor() {
             .to(
               ring,
               { attr: { r: 92 }, opacity: 0, duration: 3.6, ease: "power2.out" },
-              "<"
+              "<",
             );
         });
       }
 
-      // ─── Tier motif loops ───
+      // ── Tier motif loops ───
       gsap.utils.toArray<HTMLElement>(".tier-card").forEach((card) => {
-        const tierId = card.dataset.tier;
-        if (tierId === "drop") {
+        const tierId = card.dataset.tier as TierId | undefined;
+
+        if (tierId === "droplet") {
           const md = card.querySelector<SVGElement>("[data-motif-drop]");
           const mr = card.querySelectorAll<SVGCircleElement>(
-            "[data-motif-drop-ring]"
+            "[data-motif-drop-ring]",
           );
           if (md) {
             gsap
               .timeline({ repeat: -1 })
               .set(md, { y: 0, opacity: 0 })
               .to(md, { opacity: 1, duration: 0.25 }, 0.4)
-              .to(md, { y: 22, duration: 0.9, ease: "power2.in" }, "<0.05")
+              .to(md, { y: 24, duration: 0.9, ease: "power2.in" }, "<0.05")
               .to(md, { opacity: 0, duration: 0.15 })
               .to({}, { duration: 1.8 });
           }
@@ -385,38 +475,76 @@ export function AnnualEventsSponsor() {
               .to(
                 ring,
                 { attr: { r: 26 }, opacity: 0, duration: 2.2, ease: "power2.out" },
-                "<"
+                "<",
               );
           });
         } else if (tierId === "ripple") {
-          const mr = card.querySelectorAll<SVGCircleElement>(
-            "[data-motif-ripple-ring]"
-          );
-          mr.forEach((ring, i) => {
-            gsap
-              .timeline({ repeat: -1, delay: i * 0.7 })
-              .set(ring, { attr: { r: 1 }, opacity: 0 })
-              .to(ring, { opacity: 0.7, duration: 0.3 })
-              .to(
-                ring,
-                { attr: { r: 42 }, opacity: 0, duration: 3.2, ease: "power2.out" },
-                "<"
-              );
-          });
-        } else if (tierId === "wave") {
+          card
+            .querySelectorAll<SVGCircleElement>("[data-motif-ripple-ring]")
+            .forEach((ring, i) => {
+              gsap
+                .timeline({ repeat: -1, delay: i * 0.7 })
+                .set(ring, { attr: { r: 1 }, opacity: 0 })
+                .to(ring, { opacity: 0.7, duration: 0.3 })
+                .to(
+                  ring,
+                  {
+                    attr: { r: 42 },
+                    opacity: 0,
+                    duration: 3.2,
+                    ease: "power2.out",
+                  },
+                  "<",
+                );
+            });
+        } else if (tierId === "wave-maker") {
           const mw = card.querySelector<SVGElement>("[data-motif-wave]");
           if (mw) {
-            gsap.to(mw, {
-              xPercent: -50,
-              duration: 14,
-              ease: "none",
-              repeat: -1,
+            gsap.to(mw, { xPercent: -50, duration: 14, ease: "none", repeat: -1 });
+          }
+        } else if (tierId === "tide-turner") {
+          const body = card.querySelector<SVGElement>("[data-motif-tide-body]");
+          const moon = card.querySelector<SVGElement>("[data-motif-tide-moon]");
+          const arc = card.querySelector<SVGElement>("[data-motif-tide-arc]");
+          // The whole water body rises to the high-water mark and falls back.
+          if (body) {
+            gsap.fromTo(
+              body,
+              { y: 0 },
+              {
+                y: -40,
+                duration: 6,
+                ease: "sine.inOut",
+                yoyo: true,
+                repeat: -1,
+              },
+            );
+          }
+          if (moon) {
+            gsap.fromTo(
+              moon,
+              { opacity: 0.35 },
+              { opacity: 0.85, duration: 3, ease: "sine.inOut", yoyo: true, repeat: -1 },
+            );
+          }
+          if (arc) {
+            const len =
+              typeof (arc as unknown as SVGGeometryElement).getTotalLength ===
+              "function"
+                ? (arc as unknown as SVGGeometryElement).getTotalLength()
+                : 200;
+            gsap.set(arc, { strokeDasharray: len, strokeDashoffset: len });
+            gsap.to(arc, {
+              strokeDashoffset: 0,
+              duration: 2.4,
+              ease: "power2.out",
+              scrollTrigger: { trigger: card, start: "top 80%" },
             });
           }
         }
       });
 
-      // ─── Tier card reveals on scroll ───
+      // ── Tier card reveals ───
       gsap.utils.toArray<HTMLElement>(".tier-card").forEach((card) => {
         const motif = card.querySelector<HTMLElement>(".tier-motif");
         const meta = card.querySelectorAll<HTMLElement>(".tier-meta");
@@ -441,84 +569,62 @@ export function AnnualEventsSponsor() {
             marker,
             { scale: 0, opacity: 0 },
             { scale: 1, opacity: 1, duration: 0.7, ease: "back.out(1.8)" },
-            0
+            0,
           );
         if (motif)
           tl.fromTo(
             motif,
             { scale: 0.6, opacity: 0, rotate: -6 },
             { scale: 1, opacity: 1, rotate: 0, duration: 1, ease: "back.out(1.4)" },
-            "-=0.55"
+            "-=0.55",
           );
         if (meta.length)
           tl.fromTo(
             meta,
             { y: 14, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.7,
-              ease: "power3.out",
-              stagger: 0.06,
-            },
-            "-=0.75"
+            { y: 0, opacity: 1, duration: 0.7, ease: "power3.out", stagger: 0.06 },
+            "-=0.75",
           );
         if (title.length)
           tl.fromTo(
             title,
             { yPercent: 120 },
-            {
-              yPercent: 0,
-              duration: 1,
-              ease: "power3.out",
-              stagger: 0.08,
-            },
-            "-=0.65"
+            { yPercent: 0, duration: 1, ease: "power3.out", stagger: 0.08 },
+            "-=0.65",
           );
         if (body)
           tl.fromTo(
             body,
             { y: 20, opacity: 0 },
             { y: 0, opacity: 1, duration: 0.9, ease: "power3.out" },
-            "-=0.65"
+            "-=0.65",
           );
         if (calloutRule)
           tl.fromTo(
             calloutRule,
             { scaleX: 0, transformOrigin: "left center" },
             { scaleX: 1, duration: 0.8, ease: "power3.out" },
-            "-=0.7"
+            "-=0.7",
           );
         if (callout)
-          tl.fromTo(
-            callout,
-            { opacity: 0 },
-            { opacity: 1, duration: 0.6 },
-            "-=0.6"
-          );
+          tl.fromTo(callout, { opacity: 0 }, { opacity: 1, duration: 0.6 }, "-=0.6");
         if (benefits.length)
           tl.fromTo(
             benefits,
             { x: -16, opacity: 0 },
-            {
-              x: 0,
-              opacity: 1,
-              duration: 0.7,
-              stagger: 0.07,
-              ease: "power3.out",
-            },
-            "-=0.5"
+            { x: 0, opacity: 1, duration: 0.7, stagger: 0.07, ease: "power3.out" },
+            "-=0.5",
           );
       });
 
-      // ─── Spine drop scroll-driven travel ───
+      // ── The drop that grows into a tide as it travels the stack ───
       const stack = tierStackRef.current;
       const drop = dropRef.current;
       if (stack && drop) {
-        gsap.set(drop, { y: 0, scale: 0.85 });
+        gsap.set(drop, { y: 0, scale: 0.7 });
         gsap.to(drop, {
           y: () => stack.offsetHeight - 28,
-          scale: 1.45,
+          scale: 1.9,
           ease: "none",
           scrollTrigger: {
             trigger: stack,
@@ -529,15 +635,17 @@ export function AnnualEventsSponsor() {
           },
         });
       }
-    }, rootRef);
-    return () => ctx.revert();
-  }, []);
+    }, root);
 
-  React.useEffect(() => {
-    return () => {
+    return () => ctx.revert();
+  }, [prefersReduced]);
+
+  React.useEffect(
+    () => () => {
       if (timeoutRef.current) window.clearTimeout(timeoutRef.current);
-    };
-  }, []);
+    },
+    [],
+  );
 
   const handleSponsorClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -570,7 +678,7 @@ export function AnnualEventsSponsor() {
                 />
               </span>
               <span className="text-muted-foreground/70 normal-case tracking-normal text-[0.65rem] italic font-display">
-                · three depths, one current
+                · four depths, one current
               </span>
             </div>
 
@@ -604,10 +712,9 @@ export function AnnualEventsSponsor() {
             </h2>
           </div>
           <p className="sp-rise max-w-md text-muted-foreground md:text-right md:self-end leading-relaxed">
-            Sponsorship is not signage. It is a small, deliberate
-            disturbance — a name placed in still water — that becomes a
-            ring, then a wave, that reaches students you will never meet
-            by name.
+            Sponsorship is not signage. It is a small, deliberate disturbance — a
+            name placed in still water — that becomes a ring, then a wave, then
+            the level everything else sits at.
           </p>
         </div>
       </div>
@@ -647,6 +754,28 @@ export function AnnualEventsSponsor() {
               </ol>
             </div>
 
+            {/* What the money is actually in the room for */}
+            <figure className="sp-rise mt-14 max-w-md">
+              <div className="relative aspect-[4/3] w-full overflow-hidden">
+                <Image
+                  src="/general/ripple-for-change-new.jpg"
+                  alt="Hands of Hope students together at a Ripple for Change assembly"
+                  fill
+                  sizes="(min-width: 1024px) 32vw, 90vw"
+                  className="object-cover"
+                />
+                <div className="tint-overlay" aria-hidden />
+                <span aria-hidden className="absolute left-4 top-4 h-5 w-5 border-l border-t border-white/60" />
+                <span aria-hidden className="absolute right-4 top-4 h-5 w-5 border-r border-t border-white/60" />
+                <span aria-hidden className="absolute left-4 bottom-4 h-5 w-5 border-l border-b border-white/60" />
+                <span aria-hidden className="absolute right-4 bottom-4 h-5 w-5 border-r border-b border-white/60" />
+              </div>
+              <figcaption className="mt-4 text-sm text-muted-foreground leading-relaxed">
+                This is what a sponsorship buys: the room, the tables, and the
+                students who fill both.
+              </figcaption>
+            </figure>
+
             <div className="sp-rise mt-14 flex flex-wrap items-center gap-7">
               <button
                 type="button"
@@ -672,7 +801,7 @@ export function AnnualEventsSponsor() {
                 </svg>
               </button>
               <a
-                href="mailto:info@handsofhopeoutreach.com?subject=Sponsorship%20inquiry"
+                href="mailto:info@handsofhopeoutreach.org?subject=Sponsorship%20inquiry"
                 className="inline-flex items-center border-b border-foreground pb-1 text-sm font-medium text-foreground transition-opacity hover:opacity-70"
               >
                 Or email the team
@@ -709,10 +838,9 @@ export function AnnualEventsSponsor() {
             </div>
           </div>
 
-          {/* Right column: tier stack with traveling drop */}
+          {/* Right column: tier stack with the growing drop */}
           <div className="relative">
             <div ref={tierStackRef} className="relative pl-10 md:pl-14">
-              {/* Spine line */}
               <div
                 aria-hidden
                 className="pointer-events-none absolute left-0 top-0 bottom-0 w-px"
@@ -724,7 +852,6 @@ export function AnnualEventsSponsor() {
                 style={{ background: "var(--brand-navy)", opacity: 0.45 }}
               />
 
-              {/* Traveling drop */}
               <div
                 ref={dropRef}
                 aria-hidden
@@ -742,7 +869,6 @@ export function AnnualEventsSponsor() {
                 </svg>
               </div>
 
-              {/* Tier cards */}
               <div className="grid gap-20 md:gap-28">
                 {TIERS.map((tier) => (
                   <article
@@ -750,25 +876,24 @@ export function AnnualEventsSponsor() {
                     className="tier-card relative"
                     data-tier={tier.id}
                   >
-                    {/* Spine marker — sits on the vertical line at the container's left edge */}
                     <span
                       aria-hidden
                       className="tier-marker pointer-events-none absolute top-7 -left-10 md:-left-14 inline-flex h-2.5 w-2.5 rotate-45"
-                      style={{
-                        marginLeft: "-5px",
-                        background: tier.accent,
-                      }}
+                      style={{ marginLeft: "-5px", background: tier.accent }}
                     />
 
-                    {/* Header */}
                     <header className="grid grid-cols-[auto_1fr] items-start gap-6 md:gap-8">
                       <div
                         className="tier-motif relative h-24 w-24 md:h-28 md:w-28 shrink-0 overflow-hidden border border-border"
-                        style={{ background: "oklch(0.985 0.004 80)" }}
+                        style={{
+                          background: "oklch(0.985 0.004 80)",
+                          color: tier.accent,
+                        }}
                       >
-                        {tier.id === "drop" && <DropMotif accent={tier.accent} />}
-                        {tier.id === "ripple" && <RippleMotif accent={tier.accent} />}
-                        {tier.id === "wave" && <WaveMotif accent={tier.accent} />}
+                        {tier.id === "droplet" && <DropletMotif />}
+                        {tier.id === "ripple" && <RippleMotif />}
+                        {tier.id === "wave-maker" && <WaveMakerMotif />}
+                        {tier.id === "tide-turner" && <TideTurnerMotif />}
                       </div>
 
                       <div className="min-w-0">

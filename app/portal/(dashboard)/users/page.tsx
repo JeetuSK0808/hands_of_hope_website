@@ -13,14 +13,15 @@ export default async function PortalUsersPage() {
   const actor = await requireRole("branch_leader");
   const supabase = await createSupabaseServerClient();
 
-  const { data } = await supabase
-    .from("users")
-    .select("*, branches(name), regions(name)")
-    .order("created_at", { ascending: false });
+  const [{ data }, { data: branches }] = await Promise.all([
+    supabase
+      .from("users")
+      .select("*, branches(name), regions(name)")
+      .order("created_at", { ascending: false }),
+    supabase.from("branches").select("*"),
+  ]);
 
   const users = (data ?? []) as UserRow[];
-
-  const { data: branches } = await supabase.from("branches").select("*");
 
   return (
     <div className="space-y-8">

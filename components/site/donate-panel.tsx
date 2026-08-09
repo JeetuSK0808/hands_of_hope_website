@@ -17,7 +17,7 @@ const TIERS: Tier[] = [
   {
     amount: 25,
     label: "A start",
-    impact: "Stocks the materials for a STEM Buddies session: paper, kits, snacks for a room of kids.",
+    impact: "Stocks the materials for a STEM Together session: paper, kits, snacks for a room of kids.",
   },
   {
     amount: 50,
@@ -37,7 +37,7 @@ const TIERS: Tier[] = [
   {
     amount: 500,
     label: "A program",
-    impact: "Sponsors a full year of STEM Buddies at one partner school.",
+    impact: "Sponsors a full year of STEM Together at one partner school.",
   },
 ];
 
@@ -485,7 +485,7 @@ export function DonatePanel() {
                     </div>
                     <div className="method-panel-row mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
                       <a
-                        href={`mailto:info@handsofhopeoutreach.com?subject=ACH%20donation%20%C2%B7%20%24${effectiveAmount ?? 0}&body=Hi%2C%20I%20just%20initiated%20an%20ACH%20transfer%20for%20%24${effectiveAmount ?? 0}.%20Please%20send%20the%20account%20number%20%2F%20wire%20details%20and%20I%27ll%20reply%20with%20my%20transfer%20confirmation%20for%20a%20receipt.`}
+                        href={`mailto:info@handsofhopeoutreach.org?subject=ACH%20donation%20%C2%B7%20%24${effectiveAmount ?? 0}&body=Hi%2C%20I%20just%20initiated%20an%20ACH%20transfer%20for%20%24${effectiveAmount ?? 0}.%20Please%20send%20the%20account%20number%20%2F%20wire%20details%20and%20I%27ll%20reply%20with%20my%20transfer%20confirmation%20for%20a%20receipt.`}
                         className="inline-flex items-center gap-3 bg-foreground px-6 py-3 text-sm font-medium tracking-wide text-background transition-opacity hover:opacity-85"
                       >
                         <span>Request account number</span>

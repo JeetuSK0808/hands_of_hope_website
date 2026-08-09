@@ -3,7 +3,7 @@ import { Resend } from "resend";
 
 const FROM =
   process.env.PORTAL_EMAIL_FROM ??
-  "Hands of Hope <notifications@handsofhopeoutreach.com>";
+  "Hands of Hope <notifications@handsofhopeoutreach.org>";
 
 let cached: Resend | null = null;
 function client(): Resend | null {

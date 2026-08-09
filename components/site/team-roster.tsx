@@ -19,7 +19,7 @@ type Member = {
 const FOUNDERS: Member[] = [
   {
     name: "Daksh Shah",
-    role: "Co-founder",
+    role: "Co-founder · Executive Director",
     photo: "/team/daksh-shah.jpg",
     focusY: 30,
     accent: "rose",
@@ -54,6 +54,25 @@ const EXECUTIVES: Member[] = [
     photo: "/team/satyajeeth-suresh-kannan.jpg",
     focusY: 28,
     accent: "navy",
+  },
+];
+
+/** Leadership without a portrait on file yet — listed, not hidden. */
+const ALSO_LEADING: { name: string; role: string; note: string }[] = [
+  {
+    name: "Zubin Jacob",
+    role: "Chief Development Officer",
+    note: "Growth of the chapter network and the partnerships each chapter runs on.",
+  },
+  {
+    name: "Alex Turc",
+    role: "Branch Director · Global Coordinator",
+    note: "Keeps the international chapters connected to the rest of the network.",
+  },
+  {
+    name: "Krishna Osgood",
+    role: "Digital Strategist",
+    note: "Runs the channels the network talks to its communities through.",
   },
 ];
 
@@ -385,45 +404,20 @@ export function TeamRoster() {
         }
       );
 
-      // Crew band reveal + slow parallax on the photo itself
-      gsap.utils.toArray<HTMLElement>(".crew-band").forEach((band) => {
+      // Also-leading rows: staggered rise
+      gsap.utils.toArray<HTMLElement>(".roster-listing-row").forEach((row, i) => {
         gsap.fromTo(
-          band,
-          { y: 50, opacity: 0, filter: "blur(6px)" },
+          row,
+          { y: 22, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            filter: "blur(0px)",
-            duration: 1.4,
+            duration: 0.9,
             ease: "power3.out",
-            scrollTrigger: { trigger: band, start: "top 85%" },
+            delay: i * 0.08,
+            scrollTrigger: { trigger: row, start: "top 92%" },
           },
         );
-        const img = band.querySelector<HTMLElement>(".crew-band-img");
-        if (img) {
-          gsap.fromTo(
-            img,
-            { scale: 1.14 },
-            {
-              scale: 1,
-              duration: 1.8,
-              ease: "power3.out",
-              scrollTrigger: { trigger: band, start: "top 85%" },
-            },
-          );
-          if (!prefersReduced) {
-            gsap.to(img, {
-              yPercent: -6,
-              ease: "none",
-              scrollTrigger: {
-                trigger: band,
-                start: "top bottom",
-                end: "bottom top",
-                scrub: true,
-              },
-            });
-          }
-        }
       });
     }, rootRef);
 
@@ -475,7 +469,7 @@ export function TeamRoster() {
           eyebrow="Co-founders"
           index="01"
           total="02"
-          caption="Two students who started Hands of Hope with one stubborn question, what does showing up actually look like, and have spent every year since answering it."
+          caption="Two students who started Hands of Hope with one stubborn question, what does showing up actually look like, and have spent every year since answering it. Both still pack kits at Ripple for Change."
         />
 
         <div className="relative mt-14">
@@ -492,40 +486,13 @@ export function TeamRoster() {
           </div>
         </div>
 
-        {/* ───────────── Crew photo band ───────────── */}
-        <figure className="crew-band relative mt-28 md:mt-36 overflow-hidden">
-          <div className="relative aspect-[16/8] w-full">
-            <Image
-              src="/general/our-crew.png"
-              alt="Hands of Hope Outreach crew gathered together after a service day"
-              fill
-              sizes="100vw"
-              className="crew-band-img object-cover"
-            />
-            <div className="tint-overlay" aria-hidden />
-            {/* Corner brackets */}
-            <span aria-hidden className="absolute left-4 top-4 h-6 w-6 border-l border-t border-white/60" />
-            <span aria-hidden className="absolute right-4 top-4 h-6 w-6 border-r border-t border-white/60" />
-            <span aria-hidden className="absolute left-4 bottom-4 h-6 w-6 border-l border-b border-white/60" />
-            <span aria-hidden className="absolute right-4 bottom-4 h-6 w-6 border-r border-b border-white/60" />
-          </div>
-          <figcaption className="mt-6 flex flex-wrap items-baseline justify-between gap-4">
-            <div className="editorial-rule editorial-eyebrow text-muted-foreground">
-              Our crew · Off the clock
-            </div>
-            <div className="font-display italic text-sm md:text-base text-muted-foreground">
-              The whole team, one frame.
-            </div>
-          </figcaption>
-        </figure>
-
         {/* ───────────── Executives ───────────── */}
         <div className="mt-32 md:mt-40">
           <GroupHeader
             eyebrow="Executive Team"
             index="02"
             total="02"
-            caption="The leadership team running operations, marketing, and technology across every chapter."
+            caption="They run operations, marketing, and technology — and they run chapters, pack kits, and log hours like everyone else. Nobody here sits above the work."
           />
         </div>
 
@@ -541,6 +508,31 @@ export function TeamRoster() {
               <PortraitCard key={m.name} m={m} size="md" index={i} />
             ))}
           </div>
+        </div>
+
+        {/* ───────────── Also leading (no portrait on file) ───────────── */}
+        <div className="mt-28 md:mt-36 border-t border-border pt-12">
+          <div className="editorial-rule editorial-eyebrow text-muted-foreground">
+            Also leading
+          </div>
+          <ul className="mt-10 grid gap-px bg-border">
+            {ALSO_LEADING.map((p) => (
+              <li
+                key={p.name}
+                className="roster-listing-row grid items-baseline gap-x-8 gap-y-2 bg-background py-7 sm:grid-cols-[minmax(0,14rem)_minmax(0,16rem)_1fr]"
+              >
+                <span className="font-display text-2xl md:text-3xl italic leading-none">
+                  {p.name}
+                </span>
+                <span className="editorial-eyebrow text-muted-foreground">
+                  {p.role}
+                </span>
+                <span className="text-sm text-muted-foreground leading-relaxed">
+                  {p.note}
+                </span>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
     </section>

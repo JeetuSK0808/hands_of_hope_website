@@ -53,8 +53,8 @@ const INTENTS: Intent[] = [
       "explain hands of hope", "describe the org", "introduce hands of hope",
     ],
     responses: [
-      "Hands of Hope is a 501(c)(3) student-led nonprofit, fiscally sponsored by Hack Club. We connect high school students with the communities just outside their classroom through service projects, fundraisers, and STEM Buddies sessions.",
-      "We're a student-led nonprofit out of Atlanta. The short version: high schoolers run service projects, raise money for local partners, and lead STEM Buddies, hands-on STEM mentorship for disabled children. Every chapter is shaped by the people running it.",
+      "Hands of Hope is a 501(c)(3) student-led nonprofit, fiscally sponsored by Hack Club. We connect high school students with the communities just outside their classroom through service projects, fundraisers, and STEM Together sessions.",
+      "We're a student-led nonprofit out of Atlanta. The short version: high schoolers run service projects, raise money for local partners, and lead STEM Together, hands-on STEM mentorship for disabled children. Every chapter is shaped by the people running it.",
     ],
     followUps: [
       "What programs do you run?",
@@ -82,12 +82,12 @@ const INTENTS: Intent[] = [
       "what activities", "what services", "kinds of projects",
     ],
     responses: [
-      "Three branches plus a signature event. Chapter Network: school-based service for high schoolers. STEM Buddies: accessible, hands-on STEM mentorship for disabled children. Start a Chapter: student-led, anywhere. Plus the annual Hands of Hope Awards Ceremony recognizing service hours, leadership, and impact.",
-      "We run a Chapter Network at high schools, STEM Buddies for inclusive STEM learning, and the Ripple for Change event each year. Service hours are verified and recognized beyond school.",
+      "Three branches plus a signature event. Chapter Network: school-based service for high schoolers. STEM Together: accessible, hands-on STEM mentorship for disabled children. Start a Chapter: student-led, anywhere. Plus the annual Hands of Hope Awards Ceremony recognizing service hours, leadership, and impact.",
+      "We run a Chapter Network at high schools, STEM Together for inclusive STEM learning, and the Ripple for Change event each year. Service hours are verified and recognized beyond school.",
     ],
     followUps: [
       "How do I start a chapter?",
-      "What is STEM Buddies?",
+      "What is STEM Together?",
       "When is the awards ceremony?",
     ],
   },
@@ -98,7 +98,7 @@ const INTENTS: Intent[] = [
       "stem mentorship", "disabled children", "inclusive stem",
     ],
     responses: [
-      "STEM Buddies is a dedicated branch providing hands-on, accessible STEM learning to disabled children. It's built around joy, agency, and discovery, not curriculum compliance. If you'd like to volunteer with the program, our Contact page is the way in.",
+      "STEM Together is a dedicated branch providing hands-on, accessible STEM learning to disabled children. It's built around joy, agency, and discovery, not curriculum compliance. If you'd like to volunteer with the program, our Contact page is the way in.",
     ],
     followUps: ["How can I volunteer?", "Where are you based?"],
   },
@@ -106,10 +106,10 @@ const INTENTS: Intent[] = [
     id: "ripple",
     utterances: [
       "ripple for change", "what is ripple", "tell me about ripple",
-      "kit packing", "summer event", "annual event",
+      "kit packing", "spring event", "summer event", "annual event",
     ],
     responses: [
-      "Ripple for Change is our summer kit-packing assembly. Every year, students, families, and partners gather for one long afternoon to pack thousands of community kits that ship out to partner shelters and schools the same week. Full details live at /annual-events.",
+      "Ripple for Change is our spring kit-packing assembly. Every year, students, families, and partners gather for one long afternoon to pack thousands of community kits that ship out to partner shelters and schools the same week. Full details live at /annual-events.",
     ],
     followUps: ["When is the awards ceremony?", "How can I sponsor a night?"],
   },
@@ -131,7 +131,7 @@ const INTENTS: Intent[] = [
       "sponsor packet", "sponsorship packet", "underwrite",
     ],
     responses: [
-      "Sponsorship tiers run from local community partner to title sponsor across both the winter Awards Ceremony and the summer Ripple for Change assembly. The full packet is still being put together, so for now email info@handsofhopeoutreach.com and the team will walk you through current options.",
+      "Sponsorship tiers run from local community partner to title sponsor across both the winter Awards Ceremony and the spring Ripple for Change assembly. The full packet is still being put together, so for now email info@handsofhopeoutreach.org and the team will walk you through current options.",
     ],
     followUps: ["What is Ripple for Change?", "When is the awards ceremony?"],
   },
@@ -143,8 +143,8 @@ const INTENTS: Intent[] = [
       "bring hands of hope to my school",
     ],
     responses: [
-      "Wonderful, every chapter begins with one student. Email info@handsofhopeoutreach.com or visit our Contact page; we'll send the chapter starter kit and pair you with a founder mentor within 48 hours.",
-      "Easy enough: head to /contact or write to info@handsofhopeoutreach.com. We'll send the starter kit and a founder mentor within 48 hours, and you're off.",
+      "Wonderful, every chapter begins with one student. Email info@handsofhopeoutreach.org or visit our Contact page; we'll send the chapter starter kit and pair you with a founder mentor within 48 hours.",
+      "Easy enough: head to /contact or write to info@handsofhopeoutreach.org. We'll send the starter kit and a founder mentor within 48 hours, and you're off.",
     ],
     followUps: ["How can I volunteer?", "Where are you based?"],
   },
@@ -157,7 +157,7 @@ const INTENTS: Intent[] = [
     ],
     responses: [
       "If your school has a Hands of Hope chapter, register through it. That's the fastest path. If it doesn't, you can start one and we'll guide you the whole way through.",
-      "Two paths. (1) If your school has a chapter, sign up there. (2) If not, start one. Email info@handsofhopeoutreach.com or use the Contact page. Either way you're in.",
+      "Two paths. (1) If your school has a chapter, sign up there. (2) If not, start one. Email info@handsofhopeoutreach.org or use the Contact page. Either way you're in.",
     ],
     followUps: ["How do I start a chapter?", "What programs do you run?"],
   },
@@ -203,7 +203,7 @@ const INTENTS: Intent[] = [
       "reach out", "where do i write", "support", "info@",
     ],
     responses: [
-      "Email info@handsofhopeoutreach.com, or use the Contact page. We're on Instagram (@handsofhope_outreach) and LinkedIn too.",
+      "Email info@handsofhopeoutreach.org, or use the Contact page. We're on Instagram (@handsofhope_outreach) and LinkedIn too.",
     ],
     followUps: ["How do I start a chapter?", "Tell me about your impact"],
   },
@@ -223,7 +223,7 @@ const INTENTS: Intent[] = [
     id: "thanks",
     utterances: ["thanks", "thank you", "appreciate it", "ty", "thx", "cool", "great"],
     responses: [
-      "Anytime. If you'd like a human to follow up, info@handsofhopeoutreach.com is the door.",
+      "Anytime. If you'd like a human to follow up, info@handsofhopeoutreach.org is the door.",
       "You're welcome. Anything else I can answer?",
     ],
   },
@@ -312,8 +312,8 @@ function pickResponse(intent: Intent): string {
 }
 
 const FALLBACK = [
-  "I'm not sure I caught that. Try asking about chapters, programs, volunteering, or our impact, or email info@handsofhopeoutreach.com for a real person.",
-  "I'm a small on-device guide, so I might not know that one. I'm best on chapters, STEM Buddies, the Awards Ceremony, partners, and how to volunteer.",
+  "I'm not sure I caught that. Try asking about chapters, programs, volunteering, or our impact, or email info@handsofhopeoutreach.org for a real person.",
+  "I'm a small on-device guide, so I might not know that one. I'm best on chapters, STEM Together, the Awards Ceremony, partners, and how to volunteer.",
 ];
 let fallbackIdx = 0;
 

@@ -1,5 +1,6 @@
 "use server";
 
+import { after } from "next/server";
 import { createSupabaseServerClient } from "@/lib/portal/supabase/server";
 import { requireRole } from "@/lib/portal/auth/current-user";
 import { notifyHoursApproved, notifyHoursRejected } from "@/lib/portal/email/notify";
@@ -26,7 +27,11 @@ interface LogSnapshot {
   submitter: LogSubmitter | null;
 }
 
-async function assertCanReview(logId: string, reviewerRole: UserRole) {
+async function assertCanReview(
+  logId: string,
+  reviewerRole: UserRole,
+  reviewerId: string,
+) {
   const supabase = await createSupabaseServerClient();
   const { data: log } = await supabase
     .from("hour_logs")
@@ -38,6 +43,16 @@ async function assertCanReview(logId: string, reviewerRole: UserRole) {
 
   if (!log) throw new Error("Submission not found.");
   if (log.status !== "pending") throw new Error("Already reviewed.");
+
+  // No self-review, at any rank. The spec requires each co-founder's hours to
+  // be approved by the *other* co-founder, and these records back Gold Award
+  // and grant applications — a self-approved row would compromise all of them.
+  if (log.user_id === reviewerId) {
+    throw new Error(
+      "You cannot review your own hours. Another leader has to approve them.",
+    );
+  }
+
   const submitter = (log.users as unknown as LogSubmitter | null) ?? null;
   if (!submitter) throw new Error("Cannot resolve submitter.");
   if (!CAN_APPROVE_ROLE[reviewerRole].includes(submitter.role)) {
@@ -54,8 +69,16 @@ async function assertCanReview(logId: string, reviewerRole: UserRole) {
 
 export async function approveLog(logId: string) {
   const reviewer = await requireRole("branch_leader");
-  const { supabase, snapshot } = await assertCanReview(logId, reviewer.role);
-  const { error } = await supabase
+  const { supabase, snapshot } = await assertCanReview(
+    logId,
+    reviewer.role,
+    reviewer.user_id,
+  );
+
+  // `status = pending` in the predicate closes the window between the check
+  // above and this write: if a second reviewer got there first, this updates
+  // nothing rather than overwriting their decision.
+  const { data: updated, error } = await supabase
     .from("hour_logs")
     .update({
       status: "approved",
@@ -63,24 +86,36 @@ export async function approveLog(logId: string) {
       reviewed_at: new Date().toISOString(),
       rejection_reason: null,
     })
-    .eq("log_id", logId);
+    .eq("log_id", logId)
+    .eq("status", "pending")
+    .select("log_id");
   if (error) throw new Error(error.message);
+  if (!updated?.length) throw new Error("Already reviewed by someone else.");
 
+  // Notification is not worth making the reviewer wait for.
   if (snapshot.submitter) {
-    await notifyHoursApproved({
-      submitterEmail: snapshot.submitter.email,
-      submitterName: snapshot.submitter.name,
-      reviewerName: reviewer.name,
-      hours: snapshot.hours,
-      activityDate: snapshot.activity_date,
-    }).catch(() => { /* best-effort */ });
+    const submitter = snapshot.submitter;
+    after(() =>
+      notifyHoursApproved({
+        submitterEmail: submitter.email,
+        submitterName: submitter.name,
+        reviewerName: reviewer.name,
+        hours: snapshot.hours,
+        activityDate: snapshot.activity_date,
+      }).catch(() => { /* best-effort */ }),
+    );
   }
 }
 
 export async function rejectLog(logId: string, reason: string) {
   const reviewer = await requireRole("branch_leader");
-  const { supabase, snapshot } = await assertCanReview(logId, reviewer.role);
-  const { error } = await supabase
+  const { supabase, snapshot } = await assertCanReview(
+    logId,
+    reviewer.role,
+    reviewer.user_id,
+  );
+
+  const { data: updated, error } = await supabase
     .from("hour_logs")
     .update({
       status: "rejected",
@@ -89,22 +124,30 @@ export async function rejectLog(logId: string, reason: string) {
       rejection_reason: reason,
       proof_image_url: null,
     })
-    .eq("log_id", logId);
+    .eq("log_id", logId)
+    .eq("status", "pending")
+    .select("log_id");
   if (error) throw new Error(error.message);
+  if (!updated?.length) throw new Error("Already reviewed by someone else.");
 
-  // Spec: rejected photos deleted immediately.
-  if (snapshot.proof_image_url) {
-    await supabase.storage.from("proof").remove([snapshot.proof_image_url]).catch(() => { /* best-effort */ });
-  }
-
-  if (snapshot.submitter) {
-    await notifyHoursRejected({
-      submitterEmail: snapshot.submitter.email,
-      submitterName: snapshot.submitter.name,
-      reviewerName: reviewer.name,
-      hours: snapshot.hours,
-      activityDate: snapshot.activity_date,
-      reason,
-    }).catch(() => { /* best-effort */ });
-  }
+  after(async () => {
+    // Spec: rejected photos deleted immediately. The DB column is already
+    // cleared above, so this only reclaims the object.
+    if (snapshot.proof_image_url) {
+      await supabase.storage
+        .from("proof")
+        .remove([snapshot.proof_image_url])
+        .catch(() => { /* best-effort */ });
+    }
+    if (snapshot.submitter) {
+      await notifyHoursRejected({
+        submitterEmail: snapshot.submitter.email,
+        submitterName: snapshot.submitter.name,
+        reviewerName: reviewer.name,
+        hours: snapshot.hours,
+        activityDate: snapshot.activity_date,
+        reason,
+      }).catch(() => { /* best-effort */ });
+    }
+  });
 }

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { after } from "next/server";
 import type Stripe from "stripe";
 import { stripeClient } from "@/lib/stripe";
 import { supabaseAdmin } from "@/lib/supabase/admin";
@@ -56,7 +57,8 @@ export async function POST(req: Request) {
 
   const session = event.data.object as Stripe.Checkout.Session;
 
-  // Idempotency: bail if we already recorded this session.
+  // Fast path for redeliveries. This read is only an optimization — the real
+  // guarantee is the unique constraint on stripe_session_id enforced below.
   const { data: existing } = await supabaseAdmin()
     .from("merch_orders")
     .select("id")
@@ -124,21 +126,14 @@ export async function POST(req: Request) {
     totalCents: session.amount_total ?? 0,
   };
 
-  let notified = false;
-  try {
-    await sendTigerHillOrderEmail(payload);
-    notified = true;
-  } catch (err) {
-    console.error("[stripe webhook] tigerhill email failed", err);
-  }
-
-  try {
-    await sendCustomerConfirmationEmail(payload);
-  } catch (err) {
-    console.error("[stripe webhook] customer email failed", err);
-  }
-
-  const { error: insertErr } = await supabaseAdmin()
+  // Claim the order BEFORE sending anything.
+  //
+  // The unique index on stripe_session_id is what actually makes this handler
+  // idempotent. Sending first and inserting second meant that any failed
+  // insert returned 500, Stripe retried, the read-based duplicate check found
+  // nothing (because the insert had failed), and TigerHill got a second copy
+  // of an order they had already been told to ship.
+  const { data: inserted, error: insertErr } = await supabaseAdmin()
     .from("merch_orders")
     .insert({
       order_number: orderNumber,
@@ -149,13 +144,48 @@ export async function POST(req: Request) {
       shipping_address: payload.address,
       line_items: lineItems,
       total_charged_cents: payload.totalCents,
-      tigerhill_notified: notified,
-    });
+      tigerhill_notified: false,
+    })
+    .select("id")
+    .single();
 
   if (insertErr) {
+    // 23505 = unique_violation: a concurrent delivery of the same event won
+    // the race. That is success, not failure — do not let Stripe retry.
+    if (insertErr.code === "23505") {
+      return NextResponse.json({ received: true, duplicate: true });
+    }
     console.error("[stripe webhook] order insert", insertErr.message);
     return NextResponse.json({ error: "Insert failed" }, { status: 500 });
   }
+
+  // Acknowledge to Stripe immediately; two Resend round-trips do not belong
+  // inside its delivery timeout.
+  after(async () => {
+    try {
+      await sendTigerHillOrderEmail(payload);
+      await supabaseAdmin()
+        .from("merch_orders")
+        .update({ tigerhill_notified: true })
+        .eq("id", inserted.id);
+    } catch (err) {
+      // tigerhill_notified stays false — that flag is the queue of orders a
+      // human still has to forward by hand.
+      console.error(
+        `[stripe webhook] tigerhill email failed for ${orderNumber}`,
+        err,
+      );
+    }
+
+    try {
+      await sendCustomerConfirmationEmail(payload);
+    } catch (err) {
+      console.error(
+        `[stripe webhook] customer email failed for ${orderNumber}`,
+        err,
+      );
+    }
+  });
 
   return NextResponse.json({ received: true });
 }

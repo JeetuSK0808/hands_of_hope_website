@@ -7,8 +7,10 @@ export default async function PortalReportsPage() {
   const user = await requireRole("region_leader");
   const supabase = await createSupabaseServerClient();
 
-  const { data: regions } = await supabase.from("regions").select("*").order("name");
-  const { data: branches } = await supabase.from("branches").select("*").order("name");
+  const [{ data: regions }, { data: branches }] = await Promise.all([
+    supabase.from("regions").select("*").order("name"),
+    supabase.from("branches").select("*").order("name"),
+  ]);
 
   return (
     <div className="space-y-8">
