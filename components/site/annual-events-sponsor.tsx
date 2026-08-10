@@ -634,6 +634,25 @@ export function AnnualEventsSponsor() {
             invalidateOnRefresh: true,
           },
         });
+
+        // The water level itself rises up behind the stack on the same
+        // journey — by the time the reader reaches Tide Turner, the whole
+        // ladder is standing in water.
+        gsap.fromTo(
+          ".ae-tide-water",
+          { yPercent: 100 },
+          {
+            yPercent: 0,
+            ease: "none",
+            scrollTrigger: {
+              trigger: stack,
+              start: "top 62%",
+              end: "bottom 78%",
+              scrub: 0.7,
+              invalidateOnRefresh: true,
+            },
+          },
+        );
       }
     }, root);
 
@@ -841,6 +860,30 @@ export function AnnualEventsSponsor() {
           {/* Right column: tier stack with the growing drop */}
           <div className="relative">
             <div ref={tierStackRef} className="relative pl-10 md:pl-14">
+              {/* The rising tide. Sits behind everything in the stack;
+                  translateY keeps the surface hairline crisp while the body
+                  slides up inside the clipped wrapper. */}
+              <div
+                aria-hidden
+                className="pointer-events-none absolute -inset-x-5 bottom-0 top-0 -z-10 overflow-hidden md:-inset-x-8"
+              >
+                <div
+                  className="ae-tide-water absolute inset-0 will-change-transform"
+                  style={{ transform: "translateY(100%)" }}
+                >
+                  <div
+                    className="absolute inset-x-0 top-0 h-px"
+                    style={{ background: "var(--brand-rose)", opacity: 0.3 }}
+                  />
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, oklch(0.28 0.075 255 / 0.055) 0%, oklch(0.28 0.075 255 / 0.02) 100%)",
+                    }}
+                  />
+                </div>
+              </div>
               <div
                 aria-hidden
                 className="pointer-events-none absolute left-0 top-0 bottom-0 w-px"

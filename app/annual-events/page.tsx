@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AnnualEventsHero } from "@/components/site/annual-events-hero";
 import { AnnualEventsStage } from "@/components/site/annual-events-stage";
+import { AnnualEventsDivider } from "@/components/site/annual-events-divider";
 import { AnnualEventsSponsor } from "@/components/site/annual-events-sponsor";
 import { AnnualEventsRail } from "@/components/site/annual-events-rail";
 import { FollowUs } from "@/components/site/follow-us";
@@ -26,6 +27,7 @@ export default function AnnualEventsPage() {
       <AnnualEventsRail />
       <AnnualEventsHero />
       <AnnualEventsStage />
+      <AnnualEventsDivider />
       <AnnualEventsSponsor />
       <FollowUs />
       <SiteFooter />

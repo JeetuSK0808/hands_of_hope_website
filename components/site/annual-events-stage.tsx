@@ -93,6 +93,9 @@ const EVENTS: AnnualEvent[] = [
   },
 ];
 
+/** Where the ripple wipe originates, as CSS percentages of the frame. */
+const WIPE_ORIGIN = { x: 34, y: 58 };
+
 function WinterMotif() {
   return (
     <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden>
@@ -151,14 +154,17 @@ function SpringMotif() {
 /**
  * Act II — the two dates.
  *
- * On desktop this is one pinned stage that the page scrubs through: the winter
- * scene settles, then a water line sweeps down the viewport and hands the frame
- * to spring. Below the pin breakpoint the same markup falls back to two stacked
- * scenes with ordinary reveals, because pinning a viewport on a phone is a good
- * way to make a page feel broken.
+ * One pinned stage the page scrubs through. Winter settles in piece by piece,
+ * then spring is revealed through a circular ripple wipe — a drop lands low in
+ * the frame and the new season expands outward from the point of impact, two
+ * ring strokes riding the wipe edge. Both photographs drift slowly the whole
+ * time so the frame is never inert.
+ *
+ * Below the pin breakpoint the same markup falls back to two stacked scenes
+ * with ordinary reveals — pinning a viewport on a phone reads as broken.
  */
 export function AnnualEventsStage() {
-  const rootRef = React.useRef<HTMLDivElement>(null);
+  const rootRef = React.useRef<HTMLElement>(null);
   const pinRef = React.useRef<HTMLDivElement>(null);
   const prefersReduced = usePrefersReducedMotion();
   const [active, setActive] = React.useState(0);
@@ -170,7 +176,7 @@ export function AnnualEventsStage() {
 
     const ctx = gsap.context(() => {
       if (prefersReduced) {
-        gsap.set(".ae-scene", { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)" });
+        gsap.set(".ae-scene", { autoAlpha: 1, clipPath: "none" });
         gsap.set(
           ".ae-eyebrow, .ae-numeral, .ae-title-word, .ae-body, .ae-meta-item, .ae-highlight",
           { autoAlpha: 1, y: 0, yPercent: 0 },
@@ -183,7 +189,7 @@ export function AnnualEventsStage() {
 
       // ── Below the pin breakpoint: plain, well-behaved reveals ──────
       mm.add("(max-width: 1023px)", () => {
-        gsap.set(".ae-scene", { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)" });
+        gsap.set(".ae-scene", { autoAlpha: 1, clipPath: "none" });
         gsap.utils.toArray<HTMLElement>(".ae-scene").forEach((scene) => {
           const bits = scene.querySelectorAll<HTMLElement>(
             ".ae-eyebrow, .ae-numeral, .ae-title-word, .ae-body, .ae-meta-item, .ae-highlight",
@@ -207,10 +213,11 @@ export function AnnualEventsStage() {
       // ── Desktop: the pinned stage ──────────────────────────────────
       mm.add("(min-width: 1024px)", () => {
         const scenes = gsap.utils.toArray<HTMLElement>(".ae-scene");
+        const origin = `${WIPE_ORIGIN.x}% ${WIPE_ORIGIN.y}%`;
 
-        // Scene 1 starts open; scene 2 starts clipped shut from the bottom.
-        gsap.set(scenes[0], { autoAlpha: 1, clipPath: "inset(0% 0% 0% 0%)" });
-        gsap.set(scenes[1], { autoAlpha: 1, clipPath: "inset(100% 0% 0% 0%)" });
+        // Scene 1 starts open; scene 2 starts as an unopened drop.
+        gsap.set(scenes[0], { autoAlpha: 1, clipPath: "none" });
+        gsap.set(scenes[1], { autoAlpha: 1, clipPath: `circle(0% at ${origin})` });
 
         scenes.forEach((scene, i) => {
           const bits = scene.querySelectorAll<HTMLElement>(
@@ -224,63 +231,89 @@ export function AnnualEventsStage() {
           });
         });
 
+        // One fixed 10-unit score, every beat placed explicitly. Scrub maps
+        // the 280% pin distance onto it linearly, so beat positions read as
+        // fractions of the reader's scroll through the act.
+        const T = 10;
         const tl = gsap.timeline({
           defaults: { ease: "power3.out" },
           scrollTrigger: {
             trigger: pin,
             start: "top top",
-            end: "+=260%",
-            pin: true,
+            end: "+=280%",
+            pin: pin,
             scrub: 0.8,
             anticipatePin: 1,
             invalidateOnRefresh: true,
-            onUpdate: (self) => setActive(self.progress > 0.52 ? 1 : 0),
+            onUpdate: (self) => setActive(self.progress > 0.48 ? 1 : 0),
           },
         });
 
-        const settle = (scene: HTMLElement) => {
+        const settle = (scene: HTMLElement, at: number) => {
           const bits = scene.querySelectorAll<HTMLElement>(
             ".ae-eyebrow, .ae-numeral, .ae-title-word, .ae-body, .ae-meta-item, .ae-highlight",
           );
-          tl.to(bits, { y: 0, autoAlpha: 1, duration: 1.1, stagger: 0.07 }, "<");
+          tl.to(bits, { y: 0, autoAlpha: 1, duration: 1.2, stagger: 0.08 }, at);
           tl.to(
             scene.querySelectorAll(".ae-motif"),
-            { autoAlpha: 0.85, scale: 1, rotate: 0, duration: 1.4 },
-            "<+0.15",
-          );
-          tl.to(
-            scene.querySelectorAll<HTMLElement>(".ae-photo"),
-            { scale: 1, duration: 2.4, ease: "power2.out" },
-            "<-0.4",
+            { autoAlpha: 0.85, scale: 1, rotate: 0, duration: 1.5 },
+            at + 0.2,
           );
         };
 
-        // Winter settles in.
-        settle(scenes[0]);
-        tl.to({}, { duration: 1.4 });
+        // Both photographs drift for the entire pinned span — the frame is
+        // alive even while the reader lingers on copy.
+        scenes.forEach((scene) => {
+          const photo = scene.querySelector<HTMLElement>(".ae-photo");
+          if (photo) {
+            tl.fromTo(
+              photo,
+              { yPercent: -2.5, scale: 1.12 },
+              { yPercent: 2.5, scale: 1.06, ease: "none", duration: T },
+              0,
+            );
+          }
+        });
 
-        // The water line sweeps down and swaps the frame underneath it.
+        // Winter settles in and holds until ~40%.
+        settle(scenes[0], 0.2);
+
+        // ── The ripple wipe, 40% → 66% of the act ────────────────────
+        // A drop lands low in the frame; spring expands outward from the
+        // impact point while two ring strokes ride the wipe edge.
+        const WIPE = 4.0;
         tl.fromTo(
-          ".ae-sweep",
-          { yPercent: -102, autoAlpha: 1 },
-          { yPercent: 102, duration: 1.6, ease: "power2.inOut" },
-          "sweep",
+          ".ae-wipe-drop",
+          { yPercent: -900, autoAlpha: 0 },
+          { yPercent: 0, autoAlpha: 1, ease: "power2.in", duration: 0.5 },
+          WIPE,
         )
-          .to(
-            scenes[1],
-            { clipPath: "inset(0% 0% 0% 0%)", duration: 1.6, ease: "power2.inOut" },
-            "sweep",
-          )
+          .to(".ae-wipe-drop", { autoAlpha: 0, scaleY: 0.3, duration: 0.08 }, WIPE + 0.5)
           .to(
             scenes[0].querySelectorAll<HTMLElement>(".ae-copy"),
-            { yPercent: -12, autoAlpha: 0, duration: 1.1, ease: "power2.in" },
-            "sweep",
+            { yPercent: -10, autoAlpha: 0, duration: 1.0, ease: "power2.in" },
+            WIPE + 0.35,
           )
-          .to(".ae-sweep", { autoAlpha: 0, duration: 0.2 }, "sweep+=1.5");
+          .fromTo(
+            scenes[1],
+            { clipPath: `circle(0% at ${origin})` },
+            { clipPath: `circle(142% at ${origin})`, duration: 2.0, ease: "power2.inOut" },
+            WIPE + 0.58,
+          );
 
-        // Spring settles in.
-        settle(scenes[1]);
-        tl.to({}, { duration: 1.6 });
+        // Ring strokes riding the wipe.
+        gsap.utils.toArray<HTMLElement>(".ae-wipe-ring").forEach((ring, i) => {
+          tl.fromTo(
+            ring,
+            { scale: 0.02, autoAlpha: 0.85 },
+            { scale: 1, autoAlpha: 0, ease: "power2.out", duration: 1.8 },
+            WIPE + 0.58 + i * 0.15,
+          );
+        });
+
+        // Spring settles at ~68% and holds to the end of the act.
+        settle(scenes[1], 6.8);
+        tl.to({}, { duration: 0.01 }, T - 0.01);
       });
     }, root);
 
@@ -288,35 +321,41 @@ export function AnnualEventsStage() {
   }, [prefersReduced]);
 
   return (
-    <section
-      id="stage"
-      ref={rootRef}
-      className="relative w-full border-t border-border bg-background"
-    >
-      <div
-        ref={pinRef}
-        className="relative isolate w-full overflow-hidden lg:h-svh"
-      >
-        {/* The sweeping water line that carries the transition */}
-        <div
+    <section ref={rootRef} id="stage" className="relative w-full border-t border-border bg-background">
+      <div ref={pinRef} className="relative isolate w-full overflow-hidden lg:h-svh">
+        {/* The drop that triggers the seasonal wipe */}
+        <span
           aria-hidden
-          className="ae-sweep pointer-events-none absolute inset-x-0 top-0 z-30 hidden opacity-0 lg:block"
+          className="ae-wipe-drop pointer-events-none absolute z-30 hidden h-10 w-7 -translate-x-1/2 opacity-0 will-change-transform lg:block"
+          style={{ left: `${WIPE_ORIGIN.x}%`, top: `calc(${WIPE_ORIGIN.y}% - 2.5rem)` }}
         >
-          <div
-            className="h-px w-full"
-            style={{ background: "var(--brand-rose)" }}
-          />
-          <div
-            className="h-24 w-full"
+          <svg viewBox="0 0 16 24" className="h-full w-full">
+            <path d="M 8 1 Q 2 14 8 22 Q 14 14 8 1 Z" fill="var(--brand-rose)" />
+          </svg>
+        </span>
+
+        {/* Rings riding the wipe edge */}
+        {[0, 1].map((i) => (
+          <span
+            key={i}
+            aria-hidden
+            className="ae-wipe-ring pointer-events-none absolute z-30 hidden rounded-full border opacity-0 lg:block"
             style={{
-              background:
-                "linear-gradient(180deg, oklch(0.45 0.13 350 / 0.18) 0%, transparent 100%)",
+              left: `${WIPE_ORIGIN.x}%`,
+              top: `${WIPE_ORIGIN.y}%`,
+              width: "160vmax",
+              height: "160vmax",
+              marginLeft: "-80vmax",
+              marginTop: "-80vmax",
+              borderColor: i === 0 ? "var(--brand-rose)" : "rgba(255,255,255,0.65)",
+              borderWidth: i === 0 ? 1.5 : 1,
             }}
           />
-        </div>
+        ))}
 
-        {/* Season counter, fixed inside the pinned frame */}
-        <div className="pointer-events-none absolute inset-x-0 top-0 z-30 mx-auto hidden w-full max-w-[88rem] px-12 pt-10 lg:block">
+        {/* Season counter, fixed inside the pinned frame. pt clears the
+            sticky nav, which otherwise sits exactly on top of it. */}
+        <div className="pointer-events-none absolute inset-x-0 top-0 z-30 mx-auto hidden w-full max-w-[88rem] px-12 pt-28 lg:block">
           <div className="flex items-center justify-between">
             <span className="editorial-eyebrow text-white/70">The calendar</span>
             <div className="flex items-center gap-5">
@@ -416,15 +455,10 @@ export function AnnualEventsStage() {
                 <ul className="mt-9 grid max-w-3xl gap-4 border-t border-white/20 pt-7 sm:grid-cols-3">
                   {ev.highlights.map((h, i) => (
                     <li key={h.label} className="ae-highlight">
-                      <span
-                        className="font-display text-lg italic"
-                        style={{ color: "#ffffff" }}
-                      >
+                      <span className="font-display text-lg italic text-white">
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <div className="mt-1.5 font-medium text-white">
-                        {h.label}
-                      </div>
+                      <div className="mt-1.5 font-medium text-white">{h.label}</div>
                       <p className="mt-1 text-sm text-white/70 leading-relaxed">
                         {h.detail}
                       </p>

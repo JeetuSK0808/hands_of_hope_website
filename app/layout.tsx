@@ -3,6 +3,7 @@ import { Inter, Cormorant_Garamond } from "next/font/google";
 import "./globals.css";
 import { NavBar } from "@/components/site/nav-bar";
 import { Chatbot } from "@/components/site/chatbot";
+import { HashScrollFix } from "@/components/site/hash-scroll-fix";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -308,6 +309,7 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col bg-background text-foreground overflow-x-hidden">
         <NavBar />
         <main className="flex-1">{children}</main>
+        <HashScrollFix />
         <Chatbot />
         <script
           type="application/ld+json"
