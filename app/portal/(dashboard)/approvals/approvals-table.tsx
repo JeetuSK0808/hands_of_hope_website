@@ -18,7 +18,7 @@ export function ApprovalsTable({ logs }: { logs: Row[] }) {
     return <p className="py-8 text-center text-muted-foreground">Nothing waiting on you. Good work.</p>;
   }
 
-  /** The review actions reject on real conditions a reviewer needs to read —
+  /** The review actions reject on real conditions a reviewer needs to read:
    *  self-review, and another leader having already decided. Surface them
    *  in the table instead of letting them hit the error boundary. */
   function handleApprove(id: string) {

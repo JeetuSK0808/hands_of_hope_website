@@ -5,7 +5,7 @@ export default function manifest(): MetadataRoute.Manifest {
     name: "Hands of Hope Outreach",
     short_name: "Hands of Hope",
     description:
-      "Hands of Hope Outreach — student-led 501(c)(3) nonprofit based in Atlanta. Chapters in the US, Canada, Chile, and Denmark.",
+      "Hands of Hope Outreach, a student-led 501(c)(3) nonprofit based in Atlanta. Chapters in the US, Canada, Chile, and Denmark.",
     start_url: "/",
     scope: "/",
     display: "standalone",

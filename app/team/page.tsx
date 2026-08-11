@@ -8,7 +8,7 @@ import { SeoBreadcrumb } from "@/components/site/seo-breadcrumb";
 const SITE_URL = "https://handsofhopeoutreach.org";
 
 export const metadata: Metadata = {
-  title: "Meet the Team — Founders & Executive Board",
+  title: "Meet the Team · Founders & Executive Board",
   description:
     "The founders and executive board behind Hands of Hope Outreach, the student-led 501(c)(3) nonprofit based in Atlanta running chapters across the US, Canada, Chile, and Denmark.",
   alternates: { canonical: "/team" },
@@ -80,7 +80,7 @@ const teamCollectionJsonLd = {
   "@type": "CollectionPage",
   "@id": `${SITE_URL}/team#collection`,
   url: `${SITE_URL}/team`,
-  name: "Meet the Team — Hands of Hope Outreach",
+  name: "Meet the Team · Hands of Hope Outreach",
   isPartOf: { "@id": `${SITE_URL}/#website` },
   about: { "@id": `${SITE_URL}/#organization` },
   inLanguage: "en-US",

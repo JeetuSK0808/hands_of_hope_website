@@ -59,7 +59,7 @@ export function ReportsPanel({
         return;
       }
 
-      // PDF — group by user
+      // PDF: group by user
       const grouped = new Map<string, { subject: {
         name: string; email: string; role: UserRole; branch_name: string | null; region_name: string | null;
       }; rows: HoursReportRow[] }>();

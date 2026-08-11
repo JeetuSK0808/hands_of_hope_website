@@ -53,14 +53,14 @@ export async function sendTigerHillOrderEmail(p: OrderEmailPayload) {
   const items = p.lineItems
     .map(
       (i) =>
-        `- ${i.quantity} × ${i.productName} (size ${i.size}) — ${formatMoney(
+        `- ${i.quantity} × ${i.productName} (size ${i.size}) at ${formatMoney(
           i.unitPriceCents
         )} ea`
     )
     .join("\n");
 
   const text = [
-    `New Hands of Hope merch order — ${p.orderNumber}`,
+    `New Hands of Hope merch order ${p.orderNumber}`,
     "",
     "Customer",
     `  Name:  ${p.customerName}`,
@@ -86,7 +86,7 @@ export async function sendTigerHillOrderEmail(p: OrderEmailPayload) {
     from: FROM_ADDRESS,
     to: TIGERHILL_ADDRESS,
     replyTo: "info@handsofhopeoutreach.org",
-    subject: `HOH Order ${p.orderNumber} — ${p.customerName}`,
+    subject: `HOH Order ${p.orderNumber} for ${p.customerName}`,
     text,
   });
 }
@@ -95,14 +95,14 @@ export async function sendCustomerConfirmationEmail(p: OrderEmailPayload) {
   const items = p.lineItems
     .map(
       (i) =>
-        `- ${i.quantity} × ${i.productName} (size ${i.size}) — ${formatMoney(
+        `- ${i.quantity} × ${i.productName} (size ${i.size}) at ${formatMoney(
           i.unitPriceCents
         )} ea`
     )
     .join("\n");
 
   const text = [
-    `Thanks for supporting Hands of Hope — order ${p.orderNumber}.`,
+    `Thanks for supporting Hands of Hope. Order ${p.orderNumber}.`,
     "",
     "Your order",
     items,
@@ -113,7 +113,7 @@ export async function sendCustomerConfirmationEmail(p: OrderEmailPayload) {
     "order and email tracking directly to you. Reply here with any",
     "questions and we'll get back to you.",
     "",
-    "— Hands of Hope Outreach",
+    "Hands of Hope Outreach",
   ].join("\n");
 
   return resendClient().emails.send({

@@ -34,7 +34,7 @@ const EVENTS: AnnualEvent[] = [
     eyebrow: "Winter · The year read back out loud",
     title: "Awards",
     italic: "Ceremony",
-    body: "Once a year the whole network stops moving and looks at what it did. Branches and individual members are recognized from the stage for the work they carried — in front of the families, partners, and classmates who watched them carry it. The night belongs to the people who showed up.",
+    body: "Once a year the whole network stops moving and looks at what it did. Branches and individual members are recognized from the stage for the work they carried, in front of the families, partners, and classmates who watched them carry it. The night belongs to the people who showed up.",
     image: "/general/award-ceremony-hi.jpg",
     alt: "Hands of Hope Awards Ceremony, students gathered in formalwear under stage light",
     accent: "var(--brand-navy)",
@@ -66,7 +66,7 @@ const EVENTS: AnnualEvent[] = [
     eyebrow: "Spring · Every branch, one set of tables",
     title: "Ripple",
     italic: "for Change",
-    body: "Every branch spends the year listening to the community it serves and tallying what those people say they need most. Whatever comes out on top becomes the theme. Then, once a year, every branch converges on the same tables and packs thousands of care kits around it — the day many branches become visibly one organization.",
+    body: "Every branch spends the year listening to the community it serves and tallying what those people say they need most. Whatever comes out on top becomes the theme. Then, once a year, every branch converges on the same tables and packs thousands of care kits around it, the day many branches become visibly one organization.",
     image: "/general/first-kit-packing.jpg",
     alt: "Hands of Hope volunteers packing kits at long tables during Ripple for Change",
     accent: "var(--brand-rose)",
@@ -79,7 +79,7 @@ const EVENTS: AnnualEvent[] = [
     highlights: [
       {
         label: "The theme",
-        detail: "Not chosen for us — tallied from what communities said they needed",
+        detail: "Not chosen for us, but tallied from what communities said they needed",
       },
       {
         label: "The assembly",
@@ -152,16 +152,16 @@ function SpringMotif() {
 }
 
 /**
- * Act II — the two dates.
+ * Act II: the two dates.
  *
  * One pinned stage the page scrubs through. Winter settles in piece by piece,
- * then spring is revealed through a circular ripple wipe — a drop lands low in
+ * then spring is revealed through a circular ripple wipe: a drop lands low in
  * the frame and the new season expands outward from the point of impact, two
  * ring strokes riding the wipe edge. Both photographs drift slowly the whole
  * time so the frame is never inert.
  *
  * Below the pin breakpoint the same markup falls back to two stacked scenes
- * with ordinary reveals — pinning a viewport on a phone reads as broken.
+ * with ordinary reveals, because pinning a viewport on a phone reads as broken.
  */
 export function AnnualEventsStage() {
   const rootRef = React.useRef<HTMLElement>(null);
@@ -261,7 +261,7 @@ export function AnnualEventsStage() {
           );
         };
 
-        // Both photographs drift for the entire pinned span — the frame is
+        // Both photographs drift for the entire pinned span, so the frame is
         // alive even while the reader lingers on copy.
         scenes.forEach((scene) => {
           const photo = scene.querySelector<HTMLElement>(".ae-photo");

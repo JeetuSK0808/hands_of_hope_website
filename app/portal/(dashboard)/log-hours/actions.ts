@@ -69,7 +69,7 @@ export async function submitHours(formData: FormData): Promise<Result> {
     activity_date: parsed.data.date,
     description: parsed.data.description,
     proof_image_url: proofUrl,
-    // Everyone lands in `pending`, Super Admins included — the spec requires
+    // Everyone lands in `pending`, Super Admins included, because the spec requires
     // a co-founder to approve the other co-founder's hours, so nothing here
     // may self-approve.
     status: "pending",

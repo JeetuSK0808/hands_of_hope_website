@@ -295,7 +295,7 @@
 /* ── Reduced motion ───────────────────────────────────────────────────
    GSAP timelines check the media query themselves (see
    lib/use-prefers-reduced-motion.ts). This block covers the CSS-only
-   animations — Ken Burns, the rotating rosettes, the marquees, the pulse —
+   animations (Ken Burns, the rotating rosettes, the marquees, the pulse)
    which otherwise keep running forever regardless of the setting. */
 @media (prefers-reduced-motion: reduce) {
   .rotate-very-slow,
@@ -320,7 +320,7 @@
 }
 
 /* ── Portal (Volunteer Tracker) ───────────────────────────────────── */
-/* Uses main site's tokens (ivory/ink/rose) — same visual family. */
+/* Uses main site's tokens (ivory/ink/rose) for the same visual family. */
 
 .portal-shell {
   --status-approved: oklch(0.55 0.13 145);

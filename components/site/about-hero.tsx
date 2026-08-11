@@ -29,7 +29,7 @@ export function AboutHero() {
           What if every high schooler had a way to turn what they care about
           into something real for someone else? Daksh Shah and Shubham Trivedi
           started Hands of Hope in Atlanta to answer it, and every year since,
-          students have answered it themselves — one branch, one cause, one
+          students have answered it themselves: one branch, one cause, one
           community at a time.
         </p>
       </div>

@@ -86,7 +86,7 @@ export async function POST(req: Request) {
           currency: "usd",
           unit_amount: product.price_cents,
           product_data: {
-            name: `${product.name} — ${item.size.toUpperCase()}`,
+            name: `${product.name} · ${item.size.toUpperCase()}`,
             images: product.front_image_url ? [product.front_image_url] : undefined,
             metadata: {
               product_id: product.id,

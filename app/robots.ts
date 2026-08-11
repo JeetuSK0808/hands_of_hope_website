@@ -17,7 +17,7 @@ export default function robots(): MetadataRoute.Robots {
         allow: "/",
         disallow: ["/portal/", "/admin/"],
       },
-      // Some AI training crawlers ignore Disallow: /portal — leave the site
+      // Some AI training crawlers ignore Disallow: /portal, so leave the site
       // fully open to search crawlers and only block portal for everyone else.
       {
         userAgent: "Googlebot",

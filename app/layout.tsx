@@ -32,7 +32,7 @@ export const metadata: Metadata = {
   title: {
     default: DEFAULT_TITLE,
     // Brand front-loaded so "Hands of Hope Outreach" is always the first token
-    // in the SERP title link — strengthens brand-name recognition ranking.
+    // in the SERP title link, which strengthens brand-name recognition ranking.
     template: "Hands of Hope Outreach · %s",
   },
   description: DEFAULT_DESCRIPTION,
@@ -78,7 +78,7 @@ export const metadata: Metadata = {
         url: OG_IMAGE,
         width: 1600,
         height: 900,
-        alt: "Hands of Hope Outreach — Awards Ceremony",
+        alt: "Hands of Hope Outreach · Awards Ceremony",
       },
     ],
   },
@@ -202,7 +202,7 @@ const organizationJsonLd = {
   hasCredential: {
     "@type": "EducationalOccupationalCredential",
     credentialCategory: "Tax status",
-    name: "IRS 501(c)(3) — via fiscal sponsor The Hack Foundation",
+    name: "IRS 501(c)(3) via fiscal sponsor The Hack Foundation",
   },
   founder: [FOUNDER_DAKSH, FOUNDER_SHUBHAM],
   founders: [FOUNDER_DAKSH, FOUNDER_SHUBHAM],
@@ -273,7 +273,7 @@ const siteNavJsonLd = {
   "@context": "https://schema.org",
   "@type": "ItemList",
   "@id": `${SITE_URL}/#sitelinks`,
-  name: `${SITE_NAME} — key pages`,
+  name: `${SITE_NAME} · key pages`,
   itemListElement: [
     { "@type": "SiteNavigationElement", name: "About", url: `${SITE_URL}/about` },
     { "@type": "SiteNavigationElement", name: "Meet the Team", url: `${SITE_URL}/team` },

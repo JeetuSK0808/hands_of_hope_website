@@ -67,7 +67,7 @@ export async function notifyHoursSubmitted(input: {
   `;
   await sendEmail({
     to: approvers.map((a) => a.email),
-    subject: `Hours submitted for review — ${input.submitterName}`,
+    subject: `Hours submitted for review by ${input.submitterName}`,
     html: shell("New hours pending review", body),
   });
 }
@@ -157,7 +157,7 @@ export async function notifyNewMember(input: {
   `;
   await sendEmail({
     to: recipients,
-    subject: `New member joined — ${input.memberName}`,
+    subject: `New member joined: ${input.memberName}`,
     html: shell("New member joined", body),
   });
 }

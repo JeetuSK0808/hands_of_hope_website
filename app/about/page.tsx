@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { AboutHero } from "@/components/site/about-hero";
 import { HowWeWork } from "@/components/site/how-we-work";
+import { AnnualEventsShowcase } from "@/components/site/annual-events-showcase";
 import { InternationalSection } from "@/components/site/international-section";
 import { BranchesShowcase } from "@/components/site/branches-showcase";
 import { FollowUs } from "@/components/site/follow-us";
@@ -14,9 +15,9 @@ export const metadata: Metadata = {
   alternates: { canonical: "/about" },
   openGraph: {
     url: "https://handsofhopeoutreach.org/about",
-    title: "About Hands of Hope Outreach — Student-led 501(c)(3)",
+    title: "About Hands of Hope Outreach · Student-led 501(c)(3)",
     description:
-      "Student-led 501(c)(3) network of high school chapters — Atlanta, US, Canada, Chile, Denmark.",
+      "Student-led 501(c)(3) network of high school chapters across Atlanta, the US, Canada, Chile, and Denmark.",
   },
 };
 
@@ -26,6 +27,7 @@ export default function AboutPage() {
       <AboutHero />
       <HowWeWork />
       <BranchesShowcase />
+      <AnnualEventsShowcase />
       <InternationalSection />
       <FollowUs />
       <SiteFooter />

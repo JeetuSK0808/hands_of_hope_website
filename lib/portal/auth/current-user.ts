@@ -11,8 +11,8 @@ export function roleAtLeast(role: UserRole, min: UserRole): boolean {
 /**
  * Resolves the signed-in user once per request.
  *
- * Every dashboard route asks for this at least twice — once in the layout to
- * gate the shell, once in the page to gate the data — and each call costs an
+ * Every dashboard route asks for this at least twice, once in the layout to
+ * gate the shell, once in the page to gate the data, and each call costs an
  * `auth.getUser()` plus a `users` row read. `cache()` makes the second and
  * third callers free.
  */

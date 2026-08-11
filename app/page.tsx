@@ -91,7 +91,7 @@ const homeWebPageJsonLd = {
   },
   inLanguage: "en-US",
   description:
-    "Official website of Hands of Hope Outreach — student-led 501(c)(3) nonprofit based in Atlanta, running high school chapters across the US, Canada, Chile, and Denmark.",
+    "Official website of Hands of Hope Outreach, a student-led 501(c)(3) nonprofit based in Atlanta, running high school chapters across the US, Canada, Chile, and Denmark.",
   speakable: {
     "@type": "SpeakableSpecification",
     cssSelector: ["h1", "p"],

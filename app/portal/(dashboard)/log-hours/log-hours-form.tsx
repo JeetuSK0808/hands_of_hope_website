@@ -25,8 +25,8 @@ export function LogHoursForm({ role, events }: { role: UserRole; events: EventOp
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
   const [compressing, setCompressing] = useState(false);
-  // `pending` only covers the post-success navigation. The submit itself —
-  // which uploads a photo — needs its own flag, or the button stays live
+  // `pending` only covers the post-success navigation. The submit itself,
+  // which uploads a photo, needs its own flag, or the button stays live
   // through the whole upload and a double-click files the hours twice.
   const [submitting, setSubmitting] = useState(false);
 
@@ -42,7 +42,7 @@ export function LogHoursForm({ role, events }: { role: UserRole; events: EventOp
         const origKb = Math.round(file.size / 1024);
         setProofNote(`Compressed ${origKb}KB → ${kb}KB.`);
       } else {
-        setProofNote(`${kb}KB — ready.`);
+        setProofNote(`${kb}KB, ready.`);
       }
     } catch {
       setProof(file);
@@ -78,7 +78,7 @@ export function LogHoursForm({ role, events }: { role: UserRole; events: EventOp
     try {
       const result = await submitHours(formData);
       if (result.ok) {
-        // Stay disabled through the navigation — re-enabling here would let a
+        // Stay disabled through the navigation; re-enabling here would let a
         // second click fire while the route transition is still in flight.
         startTransition(() => {
           router.replace("/portal/dashboard");

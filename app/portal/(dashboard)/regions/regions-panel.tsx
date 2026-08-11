@@ -60,7 +60,7 @@ export function RegionsPanel({ regions }: { regions: RegionRow[] }) {
                 <tr key={r.region_id}>
                   <td className="font-medium">{r.name}</td>
                   <td className="text-xs">
-                    {r.region_leader ? <><div>{r.region_leader.name}</div><div className="text-muted-foreground">{r.region_leader.email}</div></> : "—"}
+                    {r.region_leader ? <><div>{r.region_leader.name}</div><div className="text-muted-foreground">{r.region_leader.email}</div></> : "None"}
                   </td>
                   <td className="font-mono text-xs">{r.branches?.[0]?.count ?? 0}</td>
                   <td>

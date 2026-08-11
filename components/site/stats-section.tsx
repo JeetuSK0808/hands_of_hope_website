@@ -195,7 +195,7 @@ export function StatsSection() {
         },
       });
 
-      // Editorial photo triptych below the numbers — clean staggered reveal
+      // Editorial photo triptych below the numbers, a clean staggered reveal
       gsap.utils.toArray<HTMLElement>(".hours-photo").forEach((el, i) => {
         const inner = el.querySelector<HTMLElement>(".hours-photo-inner");
         const caption = el.querySelector<HTMLElement>(".hours-photo-caption");
@@ -414,7 +414,7 @@ export function StatsSection() {
               ))}
             </div>
 
-            {/* Editorial photo triptych — the five thousand hours, in frame */}
+            {/* Editorial photo triptych: the five thousand hours, in frame */}
             <div className="mt-24 md:mt-32">
               <div className="mx-auto grid max-w-6xl grid-cols-1 gap-6 md:gap-8 md:grid-cols-3 md:items-end">
                 {[

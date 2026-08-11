@@ -5,7 +5,7 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { SeoBreadcrumb } from "@/components/site/seo-breadcrumb";
 
 export const metadata: Metadata = {
-  title: "Contact — Start a chapter, volunteer, or partner",
+  title: "Contact · Start a chapter, volunteer, or partner",
   description:
     "Contact Hands of Hope Outreach to start a high school chapter, volunteer, partner with us, sponsor an event, or reach the executive team. Email info@handsofhopeoutreach.org.",
   alternates: { canonical: "/contact" },

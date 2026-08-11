@@ -48,7 +48,7 @@ export async function toggleActiveAction(id: string, formData: FormData) {
       .single();
     if (error || !data) throw new Error("Product not found");
     if (data.model_status !== "ready" || !data.glb_model_url) {
-      throw new Error("Model is not ready yet — cannot publish.");
+      throw new Error("Model is not ready yet, so it cannot be published.");
     }
   }
 

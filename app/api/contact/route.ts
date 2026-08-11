@@ -11,7 +11,7 @@ const ContactSchema = z.object({
   subject: z.string().trim().min(1).max(120),
   message: z.string().trim().min(10).max(5000),
   // Honeypot: real users never see this field, so a filled value means a bot.
-  // Deliberately permissive here — a bot that fills it should be waved through
+  // Deliberately permissive here: a bot that fills it should be waved through
   // to the silent-accept branch below, not handed a validation error it can
   // learn from.
   company: z.string().max(200).optional().default(""),
@@ -19,7 +19,7 @@ const ContactSchema = z.object({
 
 /**
  * Best-effort per-IP throttle. Serverless instances are not shared, so this
- * bounds a single warm instance rather than the whole deployment — enough to
+ * bounds a single warm instance rather than the whole deployment, enough to
  * stop a naive flood without pulling in external state.
  */
 const WINDOW_MS = 10 * 60 * 1000;
@@ -72,7 +72,7 @@ export async function POST(req: Request) {
   const result = await sendContactMessage(parsed.data);
 
   if (!result.ok) {
-    // Never claim delivery we did not achieve — the form falls back to mailto.
+    // Never claim delivery we did not achieve; the form falls back to mailto.
     console.error("[contact] send failed:", result.reason);
     return NextResponse.json(
       { error: "unsent", reason: result.reason },

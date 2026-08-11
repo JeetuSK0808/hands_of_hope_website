@@ -57,7 +57,7 @@ const EXECUTIVES: Member[] = [
   },
 ];
 
-/** Leadership without a portrait on file yet — listed, not hidden. */
+/** Leadership without a portrait on file yet, listed rather than hidden. */
 const ALSO_LEADING: { name: string; role: string; note: string }[] = [
   {
     name: "Zubin Jacob",
@@ -492,7 +492,7 @@ export function TeamRoster() {
             eyebrow="Executive Team"
             index="02"
             total="02"
-            caption="They run operations, marketing, and technology — and they run chapters, pack kits, and log hours like everyone else. Nobody here sits above the work."
+            caption="They run operations, marketing, and technology, and they run chapters, pack kits, and log hours like everyone else. Nobody here sits above the work."
           />
         </div>
 

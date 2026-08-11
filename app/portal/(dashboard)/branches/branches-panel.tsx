@@ -89,7 +89,7 @@ export function BranchesPanel({
           <label className="block">
             <span className="text-sm font-medium">Region</span>
             <select required value={regionId} onChange={(e) => setRegionId(e.target.value)} className="portal-input mt-2">
-              <option value="">— select region —</option>
+              <option value="">Select a region</option>
               {scopedRegions.map((r) => (
                 <option key={r.region_id} value={r.region_id}>{r.name}</option>
               ))}
@@ -128,10 +128,10 @@ export function BranchesPanel({
               ) : scopedBranches.map((b) => (
                 <tr key={b.branch_id}>
                   <td className="font-medium">{b.name}</td>
-                  <td className="text-xs">{b.school_location ?? "—"}</td>
-                  <td className="text-xs">{b.regions?.name ?? "—"}</td>
+                  <td className="text-xs">{b.school_location ?? "None"}</td>
+                  <td className="text-xs">{b.regions?.name ?? "None"}</td>
                   <td className="text-xs">
-                    {b.branch_leader ? (<><div>{b.branch_leader.name}</div><div className="text-muted-foreground">{b.branch_leader.email}</div></>) : "—"}
+                    {b.branch_leader ? (<><div>{b.branch_leader.name}</div><div className="text-muted-foreground">{b.branch_leader.email}</div></>) : "None"}
                   </td>
                   <td>
                     <span className={`portal-badge ${b.is_active ? "portal-badge-approved" : "portal-badge-rejected"}`}>

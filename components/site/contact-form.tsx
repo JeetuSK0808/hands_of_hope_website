@@ -92,7 +92,7 @@ export function ContactForm() {
   const mailtoHref = React.useMemo(() => {
     const body = [
       `Name: ${form.name}`,
-      `School / organization: ${form.school || "—"}`,
+      `School / organization: ${form.school || "None"}`,
       "",
       form.message,
     ].join("\n");
@@ -190,7 +190,7 @@ export function ContactForm() {
         textarea
       />
 
-      {/* Honeypot — hidden from humans and assistive tech, tempting to bots. */}
+      {/* Honeypot: hidden from humans and assistive tech, tempting to bots. */}
       <div className="hidden" aria-hidden>
         <label htmlFor="company">Company</label>
         <input
@@ -213,7 +213,7 @@ export function ContactForm() {
             That didn&apos;t send.
           </div>
           <p className="mt-1 text-muted-foreground">
-            Something went wrong on our end — your message was not delivered.{" "}
+            Something went wrong on our end, and your message was not delivered.{" "}
             <a
               href={mailtoHref}
               className="underline underline-offset-4 decoration-dotted text-foreground"

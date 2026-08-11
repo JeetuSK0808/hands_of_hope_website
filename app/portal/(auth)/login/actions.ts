@@ -33,11 +33,11 @@ export async function preCheckLogin(email: string): Promise<PreCheck> {
         ok: false,
         locked: true,
         error:
-          "Account locked — 5 failed attempts in the last 15 minutes. Try again shortly; a security notice was emailed to the account owner.",
+          "Account locked after 5 failed attempts in the last 15 minutes. Try again shortly; a security notice was emailed to the account owner.",
       };
     }
   } catch {
-    // Rate-limit RPCs not installed on this Supabase project yet — skip precheck.
+    // Rate-limit RPCs not installed on this Supabase project yet, so skip precheck.
   }
   return { ok: true };
 }

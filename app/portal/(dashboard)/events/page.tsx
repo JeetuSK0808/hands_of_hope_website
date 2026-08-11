@@ -15,7 +15,7 @@ export default async function PortalEventsPage() {
   const supabase = await createSupabaseServerClient();
   const canCreate = roleAtLeast(user.role, "branch_leader");
 
-  // None of these reads depend on each other — run them as one round trip
+  // None of these reads depend on each other, so run them as one round trip
   // instead of four stacked ones.
   const [
     { data: events },
@@ -90,9 +90,9 @@ export default async function PortalEventsPage() {
                   <tr key={event.event_id}>
                     <td className="font-mono text-xs">{event.event_date}</td>
                     <td>{event.event_name}</td>
-                    <td>{event.branches?.name ?? "—"}</td>
-                    <td>{event.regions?.name ?? "—"}</td>
-                    <td>{event.location ?? "—"}</td>
+                    <td>{event.branches?.name ?? "None"}</td>
+                    <td>{event.regions?.name ?? "None"}</td>
+                    <td>{event.location ?? "None"}</td>
                     <td>
                       {upcoming ? (
                         <SignupButton

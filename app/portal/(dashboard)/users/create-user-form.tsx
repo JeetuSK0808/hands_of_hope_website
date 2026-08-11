@@ -151,7 +151,7 @@ export function CreateUserForm({ actor, branches }: { actor: DbUser; branches: D
                 onChange={(e) => setBranchId(e.target.value)}
                 required
               >
-                <option value="">— select a branch —</option>
+                <option value="">Select a branch</option>
                 {scopedBranches.map((b) => (
                   <option key={b.branch_id} value={b.branch_id}>
                     {b.name}

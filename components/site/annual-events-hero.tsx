@@ -15,7 +15,7 @@ if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
  * veil, the copy separates into depth layers and lifts away at different
  * rates, and a single drop falls to a rising water line. On impact the drop
  * throws rings and a small crown splash, and the surface line then sinks to
- * the bottom edge of the frame — handing the page to Act II.
+ * the bottom edge of the frame, handing the page to Act II.
  *
  * IMPORTANT: the pin target is the INNER wrapper (pinRef), never the
  * <section> itself. Pinning a route-level node makes ScrollTrigger wrap it in
@@ -61,18 +61,35 @@ export function AnnualEventsHero() {
             },
           });
 
-          // The room recedes. Scale + a deepening veil — no scrubbed blur,
+          // The room recedes. Scale + a deepening veil, with no scrubbed blur,
           // which repaints a full-viewport image on every frame.
+          // Copy layers leave at different rates: parallax depth, not a
+          // single block sliding off.
+          //
+          // These MUST be fromTo. The copy enters on a CSS keyframe animation
+          // with fill-mode `both`, so during its delay the computed opacity is
+          // 0. A plain .to() snapshots that 0 as the start value, and autoAlpha
+          // then stamps visibility:hidden on the headline forever. Declaring
+          // the start explicitly removes the race.
+          const exit = (sel: string, yPercent: number, at: number) =>
+            tl.fromTo(
+              sel,
+              { yPercent: 0, autoAlpha: 1 },
+              { yPercent, autoAlpha: 0, ease: "none" },
+              at,
+            );
+
           tl.to(".ah-photo", { scale: 1.22, ease: "none" }, 0)
-            .to(".ah-veil", { opacity: 1, ease: "none" }, 0)
-            // Copy layers leave at different rates — parallax depth, not a
-            // single block sliding off.
-            .to(".ah-eyebrow", { yPercent: -260, autoAlpha: 0, ease: "none" }, 0)
-            .to(".ah-line-1", { yPercent: -170, autoAlpha: 0, ease: "none" }, 0)
-            .to(".ah-line-2", { yPercent: -105, autoAlpha: 0, ease: "none" }, 0.04)
-            .to(".ah-body", { yPercent: -65, autoAlpha: 0, ease: "none" }, 0.07)
-            .to(".ah-ctas", { yPercent: -45, autoAlpha: 0, ease: "none" }, 0.03)
-            .to(".ah-cue", { autoAlpha: 0, ease: "none" }, 0)
+            .to(".ah-veil", { opacity: 1, ease: "none" }, 0);
+
+          exit(".ah-eyebrow", -260, 0);
+          exit(".ah-line-1", -170, 0);
+          exit(".ah-line-2", -105, 0.04);
+          exit(".ah-body", -65, 0.07);
+          exit(".ah-ctas", -45, 0.03);
+          tl.fromTo(".ah-cue", { autoAlpha: 1 }, { autoAlpha: 0, ease: "none" }, 0);
+
+          tl
 
             // The drop falls, swaying slightly as real water does.
             .fromTo(
@@ -119,7 +136,7 @@ export function AnnualEventsHero() {
             )
             .to(".ah-splash-r", { y: 22, autoAlpha: 0, ease: "power2.in", duration: 0.15 }, 0.64)
 
-            // The water settles and sinks to the bottom edge — handing the
+            // The water settles and sinks to the bottom edge, handing the
             // scroll to the next act.
             .to(
               ".ah-water-event",
@@ -142,15 +159,34 @@ export function AnnualEventsHero() {
       >
         <div className="ah-photo absolute inset-0 will-change-transform">
           <Image
-            src="/general/awards-ceremony.jpg"
-            alt="Hands of Hope annual gathering, room filled with students and partners"
+            src="/general/voss.jpg"
+            alt="Hands of Hope students gathered around the supply tables at an outdoor packing event"
             fill
             priority
             sizes="100vw"
             className="object-cover"
           />
         </div>
-        <div className="tint-overlay-strong" aria-hidden />
+        {/* This photograph is bright daylight, not the dim room the shared
+            scrim was tuned for, so white type needs its own gradient: heavy
+            along the bottom and left where the headline and body sit, light
+            across the top so the picture still reads. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(180deg, oklch(0.16 0.012 60 / 0.42) 0%, oklch(0.14 0.012 60 / 0.50) 38%, oklch(0.11 0.012 60 / 0.86) 100%)",
+          }}
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "linear-gradient(90deg, oklch(0.11 0.012 60 / 0.62) 0%, oklch(0.11 0.012 60 / 0.28) 45%, transparent 78%)",
+          }}
+        />
         {/* Deepens as the section is scrolled through, easing into the ivory page. */}
         <div
           aria-hidden

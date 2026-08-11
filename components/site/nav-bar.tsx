@@ -57,7 +57,7 @@ export function NavBar() {
           <Link
             href="/"
             className="group inline-flex items-center gap-3"
-            aria-label="Hands of Hope Outreach — Home"
+            aria-label="Hands of Hope Outreach, Home"
             title="Hands of Hope Outreach"
           >
             <AnimatedLogo size={34} monochrome={scrolled ? "dark" : "light"} />

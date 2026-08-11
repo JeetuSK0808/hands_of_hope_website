@@ -9,7 +9,7 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { SeoBreadcrumb } from "@/components/site/seo-breadcrumb";
 
 export const metadata: Metadata = {
-  title: "Annual Events — Awards Ceremony & Ripple for Change",
+  title: "Annual Events · Awards Ceremony & Ripple for Change",
   description:
     "Hands of Hope Outreach runs two flagship events every year: the winter Awards Ceremony and the spring Ripple for Change kit-packing assembly. Sponsorship info, tickets, and volunteer sign-up.",
   alternates: { canonical: "/annual-events" },

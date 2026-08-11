@@ -152,7 +152,7 @@ export function UsersTable({
                         onChange={(e) => handleBranchChange(u, e.target.value)}
                         disabled={pending}
                       >
-                        <option value="">— none —</option>
+                        <option value="">None</option>
                         {branches
                           .filter((b) => actor.role !== "region_leader" || b.region_id === actor.region_id)
                           .map((b) => (
@@ -160,10 +160,10 @@ export function UsersTable({
                         ))}
                       </select>
                     ) : (
-                      <span className="text-xs">{u.branches?.name ?? "—"}</span>
+                      <span className="text-xs">{u.branches?.name ?? "None"}</span>
                     )}
                   </td>
-                  <td className="text-xs">{u.regions?.name ?? "—"}</td>
+                  <td className="text-xs">{u.regions?.name ?? "None"}</td>
                   <td>
                     {actor.role === "super_admin" && u.user_id !== actor.user_id && u.is_active ? (
                       <button

@@ -46,7 +46,7 @@ async function assertCanReview(
 
   // No self-review, at any rank. The spec requires each co-founder's hours to
   // be approved by the *other* co-founder, and these records back Gold Award
-  // and grant applications — a self-approved row would compromise all of them.
+  // and grant applications; a self-approved row would compromise all of them.
   if (log.user_id === reviewerId) {
     throw new Error(
       "You cannot review your own hours. Another leader has to approve them.",

@@ -21,7 +21,7 @@ export function LoginForm() {
     setBusy(true);
 
     try {
-      // Run lockout precheck and auth in parallel — precheck is advisory,
+      // Run lockout precheck and auth in parallel; precheck is advisory,
       // so we don't want it adding a serial round-trip on the happy path.
       const [pre, signIn] = await Promise.all([
         preCheckLogin(email),
@@ -45,7 +45,7 @@ export function LoginForm() {
         return;
       }
 
-      // Fire-and-forget the success record — server-side `after()` finishes it.
+      // Fire-and-forget the success record; server-side `after()` finishes it.
       void recordLoginResult(email, true);
       startTransition(() => {
         router.replace("/portal/dashboard");
@@ -93,6 +93,6 @@ export function LoginForm() {
 
 function mapAuthError(message: string): string {
   if (/invalid login credentials/i.test(message)) return "Incorrect email or password.";
-  if (/email not confirmed/i.test(message)) return "Verify your email first — check your inbox.";
+  if (/email not confirmed/i.test(message)) return "Verify your email first. Check your inbox for the link.";
   return message;
 }

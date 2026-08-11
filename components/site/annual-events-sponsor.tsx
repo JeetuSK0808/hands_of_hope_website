@@ -30,7 +30,7 @@ const TIERS: Tier[] = [
     prefix: "The",
     italic: "Droplet",
     position: "Local partner",
-    range: "Suggested · $2,500",
+    range: "Suggested · $500",
     blurb:
       "Where it starts. One name on the program, one seat held at the winter table, and a steady line back to the work for the rest of the year.",
     callout: "One event. One name. A foothold in the room.",
@@ -38,7 +38,7 @@ const TIERS: Tier[] = [
       "Logo placement on the printed program and lobby signage at one event",
       "Sponsor acknowledgement from the stage during opening remarks",
       "Two reserved seats at the Awards Ceremony with a host for the evening",
-      "Quarterly impact note from the founders — what your name made possible this season",
+      "Quarterly impact note from the founders on what your name made possible this season",
       "Welcome packet with lapel pin, signed thank-you card, and the season program",
     ],
     accent: "var(--brand-navy-soft)",
@@ -49,12 +49,12 @@ const TIERS: Tier[] = [
     prefix: "The",
     italic: "Ripple",
     position: "Presenting sponsor",
-    range: "Suggested · $10,000",
+    range: "Suggested · $1,000",
     blurb:
       "Your name spreads outward. Lead billing on one of the two dates, a short film cut from the season, and rings of recognition that reach every partner family in the network.",
     callout: "One date, top billing. A story that travels.",
     benefits: [
-      "Lead naming on one of the two annual dates — “Presented by [Your Name]”",
+      "Lead naming on one of the two annual dates: “Presented by [Your Name]”",
       "Full-page placement in the printed program and primary banner on the event page",
       "A bespoke sixty-second social film, produced during the campaign window",
       "Eight reserved seats and a curated table at the ceremony",
@@ -69,18 +69,18 @@ const TIERS: Tier[] = [
     prefix: "The",
     italic: "Wave Maker",
     position: "Title sponsor",
-    range: "Suggested · $25,000",
+    range: "Suggested · $3,000",
     blurb:
       "The room turns. Top billing across both dates, a year of co-authored storytelling, and a kit drive that ships under your name to the communities you choose.",
     callout: "Both dates. A film. A drive shipped under your name.",
     benefits: [
-      "Top billing across both annual dates — “In partnership with [Your Name]”",
+      "Top billing across both annual dates: “In partnership with [Your Name]”",
       "Marquee placement on the save-the-date, outdoor placements, and the full press kit",
       "A co-produced three-minute documentary short, released across the season",
       "Sixteen reserved seats and a private suite at the ceremony",
       "Founders’ table at both events, plus a dinner with the executive team",
       "Year-round inclusion on every press release and on the partner masthead",
-      "A named spring kit drive — choose the community, we ship under your banner",
+      "A named spring kit drive: choose the community, and we ship under your banner",
     ],
     accent: "var(--brand-navy)",
   },
@@ -90,17 +90,17 @@ const TIERS: Tier[] = [
     prefix: "The",
     italic: "Tide Turner",
     position: "Founding benefactor",
-    range: "Suggested · $50,000+",
+    range: "Suggested · $10,000",
     blurb:
-      "The water level itself moves. At this depth a sponsorship stops funding events and starts funding branches — new schools onboarded, new causes taken up, students who would never otherwise have had a way in.",
+      "The water level itself moves. At this depth a sponsorship stops funding events and starts funding branches: new schools onboarded, new causes taken up, students who would never otherwise have had a way in.",
     callout: "Not a night. A year, and the branches it opens.",
     benefits: [
       "Everything in The Wave Maker, held across a full multi-year commitment",
-      "A named branch cohort — new chapters onboarded under your name, with their causes chosen by the students who run them",
+      "A named branch cohort: new chapters onboarded under your name, with their causes chosen by the students who run them",
       "Founding benefactor listing on the organization masthead and in the annual report",
       "A named endowment line for the STEM Together program across every branch that runs it",
       "Seat at the annual planning session where the Ripple for Change theme is set",
-      "Two documentary films — one on the season, one on a branch you help open",
+      "Two documentary films, one on the season and one on a branch you help open",
       "Standing invitation to every event in the calendar, for your whole team",
     ],
     accent: "var(--brand-rose)",
@@ -344,7 +344,7 @@ function PondIllustration({
 }
 
 /**
- * Act III — sponsorship, as four depths of the same water.
+ * Act III: sponsorship, as four depths of the same water.
  *
  * The tier stack is threaded by a scroll-scrubbed drop that grows as it
  * descends past each marker, so the reader physically watches a droplet become
@@ -636,7 +636,7 @@ export function AnnualEventsSponsor() {
         });
 
         // The water level itself rises up behind the stack on the same
-        // journey — by the time the reader reaches Tide Turner, the whole
+        // journey, so by the time the reader reaches Tide Turner, the whole
         // ladder is standing in water.
         gsap.fromTo(
           ".ae-tide-water",
@@ -731,8 +731,8 @@ export function AnnualEventsSponsor() {
             </h2>
           </div>
           <p className="sp-rise max-w-md text-muted-foreground md:text-right md:self-end leading-relaxed">
-            Sponsorship is not signage. It is a small, deliberate disturbance — a
-            name placed in still water — that becomes a ring, then a wave, then
+            Sponsorship is not signage. It is a small, deliberate disturbance, a
+            name placed in still water, that becomes a ring, then a wave, then
             the level everything else sits at.
           </p>
         </div>
@@ -775,15 +775,26 @@ export function AnnualEventsSponsor() {
 
             {/* What the money is actually in the room for */}
             <figure className="sp-rise mt-14 max-w-md">
-              <div className="relative aspect-[4/3] w-full overflow-hidden">
+              <div className="relative aspect-[3/4] w-full overflow-hidden">
                 <Image
-                  src="/general/ripple-for-change-new.jpg"
-                  alt="Hands of Hope students together at a Ripple for Change assembly"
+                  src="/general/michael.jpg"
+                  alt="A Hands of Hope student raising the Ripple for Change banner above the venue"
                   fill
                   sizes="(min-width: 1024px) 32vw, 90vw"
                   className="object-cover"
                 />
-                <div className="tint-overlay" aria-hidden />
+                {/* No scrim here: nothing is set over this photograph, and the
+                    shot is already backlit, so the shared tint would crush the
+                    banner into the roofline. A light vignette is enough to keep
+                    the corner brackets legible. */}
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute inset-0"
+                  style={{
+                    background:
+                      "linear-gradient(180deg, oklch(0.12 0.012 60 / 0.12) 0%, transparent 32%, transparent 70%, oklch(0.12 0.012 60 / 0.22) 100%)",
+                  }}
+                />
                 <span aria-hidden className="absolute left-4 top-4 h-5 w-5 border-l border-t border-white/60" />
                 <span aria-hidden className="absolute right-4 top-4 h-5 w-5 border-r border-t border-white/60" />
                 <span aria-hidden className="absolute left-4 bottom-4 h-5 w-5 border-l border-b border-white/60" />

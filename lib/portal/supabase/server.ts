@@ -10,7 +10,7 @@ type CookieToSet = { name: string; value: string; options: CookieOptions };
  *
  * A portal page typically builds a client in the layout, again in the page, and
  * again in any server action it renders. Without `cache()` each of those awaits
- * `cookies()` and stands up a fresh client, and — worse — each one re-runs the
+ * `cookies()` and stands up a fresh client and, worse, each one re-runs the
  * `auth.getUser()` network round-trip that Supabase does not share between
  * instances. Caching collapses all of that to one.
  */
@@ -30,7 +30,7 @@ export const createSupabaseServerClient = cache(async function createClient() {
               cookieStore.set(name, value, options),
             );
           } catch {
-            // Called from a Server Component — mutation ignored. Middleware handles refresh.
+            // Called from a Server Component; mutation ignored. Middleware handles refresh.
           }
         },
       },

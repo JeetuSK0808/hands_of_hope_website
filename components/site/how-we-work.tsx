@@ -10,8 +10,8 @@ if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 /**
  * The organization's operating model, straight from the internal reference doc.
  *
- * Voice rule that governs every string in this file: students — leadership
- * included — are the subject of the verb. Never "Hands of Hope empowers
+ * Voice rule that governs every string in this file: students, leadership
+ * included, are the subject of the verb. Never "Hands of Hope empowers
  * students to…". See hands-of-hope-how-we-work-2.md.
  */
 
@@ -20,7 +20,7 @@ const GOALS = [
     n: "01",
     label: "Global impact",
     accent: "var(--brand-navy)",
-    body: "Communities around the world get real, sustained support — not a single visit and a photo.",
+    body: "Communities around the world get real, sustained support, not a single visit and a photo.",
   },
   {
     n: "02",
@@ -30,38 +30,47 @@ const GOALS = [
   },
 ];
 
-const UNITERS = [
+/** Relative plumb depths for the branch-system gauge, 0 to 1. */
+const PROBES = [
   {
-    season: "Spring",
-    name: "Ripple for Change",
-    accent: "var(--brand-rose)",
-    body: "Once a year every branch packs thousands of care kits around a single theme. The theme is not a guess: branches spend the year tracking what the communities they serve say they need most, tally the answers, and build that year's kits around whatever comes out on top.",
-    tag: "Many branches become visibly one organization.",
+    label: "A typical single-cause nonprofit",
+    sub: "One cause, and that is the whole organization",
+    depth: 0.3,
+    color: "var(--muted-foreground)",
+    strands: 1,
   },
   {
-    season: "Winter",
-    name: "Awards Ceremony",
-    accent: "var(--brand-navy)",
-    body: "The night the year gets read back out loud — branches and individual members recognized for the work they carried, in front of the families and partners who watched them carry it.",
-    tag: "The people who showed up get named.",
+    label: "One Hands of Hope branch",
+    sub: "The same cause, taken all the way down",
+    depth: 1,
+    color: "var(--brand-rose)",
+    strands: 1,
+  },
+  {
+    label: "The network",
+    sub: "Every branch, every cause, at that depth",
+    depth: 1,
+    color: "var(--brand-navy)",
+    strands: 7,
   },
 ];
 
 export function HowWeWork() {
-  const rootRef = React.useRef<HTMLDivElement>(null);
+  const rootRef = React.useRef<HTMLElement>(null);
   const prefersReduced = usePrefersReducedMotion();
 
   React.useEffect(() => {
-    if (!rootRef.current) return;
+    const root = rootRef.current;
+    if (!root) return;
 
     const ctx = gsap.context(() => {
       if (prefersReduced) {
-        gsap.set(
-          [".hww-rise", ".hww-goal", ".hww-uniter", ".hww-depth-row"],
-          { clearProps: "all", opacity: 1, y: 0 },
-        );
-        gsap.set(".hww-converge", { scaleY: 1 });
-        gsap.set(".hww-depth-fill", { scaleX: 1 });
+        gsap.set([".hww-rise", ".hww-goal"], { clearProps: "all", opacity: 1, y: 0 });
+        gsap.set(".hww-stream", { strokeDashoffset: 0 });
+        gsap.set(".hww-junction, .hww-junction-ring", { autoAlpha: 1, scale: 1 });
+        gsap.set(".hww-plumb", { scaleY: 1 });
+        gsap.set(".hww-plumb-tip", { autoAlpha: 1 });
+        gsap.set(".hww-surface", { scaleX: 1 });
         return;
       }
 
@@ -80,12 +89,15 @@ export function HowWeWork() {
         );
       });
 
-      // The two goals arrive from opposite sides, then a hairline draws down
-      // between them — the point being that they are one mechanism, not two.
+      // ── Two-goal confluence ──────────────────────────────────────
+      // The goals arrive from opposite sides, then two streams draw down
+      // and meet at a single point. The copy says the first goal is what
+      // happens when enough branches do the second one well; the diagram
+      // is that sentence.
       gsap.utils.toArray<HTMLElement>(".hww-goal").forEach((el, i) => {
         gsap.fromTo(
           el,
-          { xPercent: i === 0 ? -6 : 6, opacity: 0 },
+          { xPercent: i === 0 ? -7 : 7, opacity: 0 },
           {
             xPercent: 0,
             opacity: 1,
@@ -96,68 +108,119 @@ export function HowWeWork() {
         );
       });
 
-      gsap.fromTo(
-        ".hww-converge",
-        { scaleY: 0 },
-        {
-          scaleY: 1,
+      gsap.utils.toArray<SVGPathElement>(".hww-stream").forEach((path) => {
+        const len = path.getTotalLength();
+        gsap.set(path, { strokeDasharray: len, strokeDashoffset: len });
+        gsap.to(path, {
+          strokeDashoffset: 0,
           ease: "none",
-          transformOrigin: "top center",
           scrollTrigger: {
-            trigger: ".hww-goals",
-            start: "top 78%",
-            end: "bottom 60%",
+            trigger: ".hww-confluence",
+            start: "top 88%",
+            end: "bottom 68%",
+            scrub: 0.7,
+          },
+        });
+      });
+
+      // The junction only exists once both streams have arrived.
+      // svgOrigin pins the scale to the confluence point in user-space
+      // coordinates; a percentage origin resolves against each shape's own
+      // bounding box, which throws the rings off-centre from the dot.
+      const CONFLUENCE = "480 186";
+
+      gsap.fromTo(
+        ".hww-junction",
+        { scale: 0, autoAlpha: 0 },
+        {
+          scale: 1,
+          autoAlpha: 1,
+          svgOrigin: CONFLUENCE,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: ".hww-confluence",
+            start: "bottom 76%",
+            end: "bottom 62%",
+            scrub: 0.6,
+          },
+        },
+      );
+      gsap.utils.toArray<SVGElement>(".hww-junction-ring").forEach((ring, i) => {
+        gsap.fromTo(
+          ring,
+          { scale: 0.05, autoAlpha: 0.8, svgOrigin: CONFLUENCE },
+          {
+            scale: 1,
+            autoAlpha: 0,
+            svgOrigin: CONFLUENCE,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: ".hww-confluence",
+              start: `bottom ${74 - i * 4}%`,
+              end: "bottom 40%",
+              scrub: 0.8,
+            },
+          },
+        );
+      });
+
+      // ── Depth gauge ──────────────────────────────────────────────
+      // Same treatment: the surface draws across, then every plumb line
+      // descends from it on scrub. Breadth is what you see across the top;
+      // depth is the only thing that moves.
+      gsap.fromTo(
+        ".hww-surface",
+        { scaleX: 0 },
+        {
+          scaleX: 1,
+          ease: "none",
+          transformOrigin: "left center",
+          scrollTrigger: {
+            trigger: ".hww-gauge",
+            start: "top 86%",
+            end: "top 52%",
             scrub: 0.6,
           },
         },
       );
 
-      // Depth-over-breadth bars fill left to right as the comparison enters.
-      gsap.utils.toArray<HTMLElement>(".hww-depth-row").forEach((row, i) => {
-        const fill = row.querySelector<HTMLElement>(".hww-depth-fill");
+      gsap.utils.toArray<HTMLElement>(".hww-probe").forEach((probe, i) => {
+        const plumbs = probe.querySelectorAll<HTMLElement>(".hww-plumb");
+        const tip = probe.querySelectorAll<HTMLElement>(".hww-plumb-tip");
         gsap.fromTo(
-          row,
-          { y: 18, opacity: 0 },
+          plumbs,
+          { scaleY: 0 },
           {
-            y: 0,
-            opacity: 1,
-            duration: 0.9,
-            ease: "power3.out",
-            delay: i * 0.1,
-            scrollTrigger: { trigger: row, start: "top 90%" },
-          },
-        );
-        if (fill) {
-          gsap.fromTo(
-            fill,
-            { scaleX: 0 },
-            {
-              scaleX: 1,
-              duration: 1.4,
-              ease: "power3.out",
-              delay: 0.2 + i * 0.1,
-              transformOrigin: "left center",
-              scrollTrigger: { trigger: row, start: "top 88%" },
+            scaleY: 1,
+            ease: "none",
+            transformOrigin: "top center",
+            stagger: 0.04,
+            scrollTrigger: {
+              trigger: ".hww-gauge",
+              start: `top ${78 - i * 5}%`,
+              end: "bottom 62%",
+              scrub: 0.75,
             },
-          );
-        }
-      });
-
-      gsap.utils.toArray<HTMLElement>(".hww-uniter").forEach((el, i) => {
+          },
+        );
         gsap.fromTo(
-          el,
-          { y: 30, opacity: 0 },
+          tip,
+          { autoAlpha: 0, scale: 0.4 },
           {
-            y: 0,
-            opacity: 1,
-            duration: 1.1,
-            ease: "power3.out",
-            delay: i * 0.12,
-            scrollTrigger: { trigger: el, start: "top 88%" },
+            autoAlpha: 1,
+            scale: 1,
+            ease: "power2.out",
+            stagger: 0.04,
+            scrollTrigger: {
+              trigger: ".hww-gauge",
+              start: `top ${58 - i * 4}%`,
+              end: "bottom 58%",
+              scrub: 0.7,
+            },
           },
         );
       });
-    }, rootRef);
+    }, root);
 
     return () => ctx.revert();
   }, [prefersReduced]);
@@ -188,23 +251,11 @@ export function HowWeWork() {
           </p>
         </div>
 
-        {/* ── Two-goal model ──────────────────────────────────────── */}
-        <div className="hww-goals relative mt-24 md:mt-32">
+        {/* ── Two-goal confluence ─────────────────────────────────── */}
+        <div className="relative mt-24 md:mt-32">
           <div className="hww-rise editorial-eyebrow text-muted-foreground">
             Everything serves two goals at once
           </div>
-
-          {/* Converging hairline, desktop only */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute left-1/2 top-24 hidden h-[calc(100%-6rem)] w-px -translate-x-1/2 md:block"
-            style={{ background: "var(--border)" }}
-          />
-          <div
-            aria-hidden
-            className="hww-converge pointer-events-none absolute left-1/2 top-24 hidden h-[calc(100%-6rem)] w-px -translate-x-1/2 origin-top md:block"
-            style={{ background: "var(--foreground)", opacity: 0.22 }}
-          />
 
           <div className="mt-12 grid gap-14 md:grid-cols-2 md:gap-24">
             {GOALS.map((g) => (
@@ -227,15 +278,72 @@ export function HowWeWork() {
             ))}
           </div>
 
-          <p className="hww-rise mx-auto mt-16 max-w-2xl text-center font-display text-xl md:text-2xl italic leading-relaxed text-foreground/75">
+          {/* Two streams drawing down into one.
+              Everything lives inside the SVG so the junction cannot drift away
+              from where the curves actually meet, and the stroke scales with
+              the path: a non-scaling stroke under non-uniform scaling makes the
+              dash length disagree with getTotalLength and the line renders in
+              fragments. */}
+          <div className="hww-confluence relative mx-auto mt-10 hidden h-44 w-full max-w-3xl md:block">
+            <svg
+              viewBox="0 0 960 220"
+              preserveAspectRatio="xMidYMid meet"
+              className="absolute inset-0 h-full w-full overflow-visible"
+              aria-hidden
+            >
+              <path
+                className="hww-stream"
+                d="M 180 0 C 180 104, 480 84, 480 186"
+                fill="none"
+                stroke="var(--brand-navy)"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                opacity="0.5"
+              />
+              <path
+                className="hww-stream"
+                d="M 780 0 C 780 104, 480 84, 480 186"
+                fill="none"
+                stroke="var(--brand-rose)"
+                strokeWidth="1.6"
+                strokeLinecap="round"
+                opacity="0.5"
+              />
+
+              {/* Impact rings at the confluence */}
+              {[0, 1, 2].map((i) => (
+                <circle
+                  key={i}
+                  className="hww-junction-ring"
+                  cx="480"
+                  cy="186"
+                  r="46"
+                  fill="none"
+                  stroke="var(--brand-rose)"
+                  strokeWidth="1.2"
+                  opacity="0"
+                />
+              ))}
+              <circle
+                className="hww-junction"
+                cx="480"
+                cy="186"
+                r="5"
+                fill="var(--foreground)"
+                opacity="0"
+              />
+            </svg>
+          </div>
+
+          <p className="hww-rise mx-auto mt-10 max-w-2xl text-center font-display text-xl md:text-2xl italic leading-relaxed text-foreground/75">
             These aren&apos;t two programs. The first is what happens when
             enough branches do the second one well.
           </p>
         </div>
 
-        {/* ── Depth over breadth ──────────────────────────────────── */}
+        {/* ── The branch system ───────────────────────────────────── */}
         <div className="mt-28 md:mt-36 border-t border-border pt-16">
-          <div className="grid gap-14 lg:grid-cols-[1fr_1.1fr] lg:gap-24">
+          <div className="grid gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20">
             <div>
               <div className="hww-rise editorial-eyebrow text-muted-foreground">
                 The branch system
@@ -253,7 +361,7 @@ export function HowWeWork() {
                 programming. The autonomy is real, not nominal.
               </p>
               <p className="hww-rise mt-6 max-w-lg text-base text-foreground/80 leading-relaxed">
-                Innovation Academy — the founding branch — is the one exception:
+                Innovation Academy, the founding branch, is the one exception:
                 two specialized sides running as one. STEM Together volunteers
                 with MDE School and other special-needs schools. Atlanta Mission
                 helps sustain the day-to-day operations of an understaffed local
@@ -261,92 +369,59 @@ export function HowWeWork() {
               </p>
             </div>
 
-            {/* Comparison bars */}
-            <div className="self-center">
-              <div className="grid gap-9">
-                {[
-                  {
-                    label: "A typical single-cause nonprofit",
-                    sub: "Entire organization",
-                    width: "34%",
-                    color: "var(--muted-foreground)",
-                    opacity: 0.4,
-                  },
-                  {
-                    label: "One Hands of Hope branch",
-                    sub: "Full-time focus of a few students",
-                    width: "34%",
-                    color: "var(--brand-rose)",
-                    opacity: 1,
-                  },
-                  {
-                    label: "The network",
-                    sub: "Every branch, every cause, at once",
-                    width: "100%",
-                    color: "var(--brand-navy)",
-                    opacity: 1,
-                  },
-                ].map((row) => (
-                  <div key={row.label} className="hww-depth-row">
-                    <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
-                      <span className="text-sm font-medium text-foreground">
-                        {row.label}
-                      </span>
-                      <span className="text-xs text-muted-foreground">
-                        {row.sub}
-                      </span>
+            {/* Depth gauge */}
+            <div className="hww-gauge self-center">
+              {/* The waterline every probe descends from */}
+              <div className="relative h-px w-full bg-border">
+                <span
+                  className="hww-surface absolute inset-0 block h-px origin-left"
+                  style={{ background: "var(--foreground)", opacity: 0.28 }}
+                  aria-hidden
+                />
+              </div>
+
+              <div className="mt-0 grid grid-cols-3 gap-5">
+                {PROBES.map((p) => (
+                  <div key={p.label} className="hww-probe">
+                    {/* Plumb lines hang from the surface */}
+                    <div className="flex h-52 items-start justify-center gap-[3px]">
+                      {Array.from({ length: p.strands }).map((_, s) => (
+                        <div
+                          key={s}
+                          className="relative flex flex-col items-center"
+                          style={{ height: `${p.depth * 100}%` }}
+                        >
+                          <span
+                            className="hww-plumb block w-px flex-1 origin-top"
+                            style={{ background: p.color, opacity: 0.75 }}
+                            aria-hidden
+                          />
+                          <span
+                            className="hww-plumb-tip block h-[5px] w-[5px] shrink-0 rounded-full opacity-0"
+                            style={{ background: p.color }}
+                            aria-hidden
+                          />
+                        </div>
+                      ))}
                     </div>
-                    <div className="relative mt-3 h-px w-full bg-border">
-                      <span
-                        className="hww-depth-fill absolute left-0 top-0 block h-[3px] -translate-y-px"
-                        style={{
-                          width: row.width,
-                          background: row.color,
-                          opacity: row.opacity,
-                        }}
-                        aria-hidden
-                      />
+
+                    <div className="mt-4 border-t border-border pt-3">
+                      <div className="text-sm font-medium leading-snug text-foreground">
+                        {p.label}
+                      </div>
+                      <div className="mt-1 text-xs leading-snug text-muted-foreground">
+                        {p.sub}
+                      </div>
                     </div>
                   </div>
                 ))}
               </div>
-              <p className="hww-rise mt-9 text-sm text-muted-foreground leading-relaxed">
+
+              <p className="hww-rise mt-8 text-sm text-muted-foreground leading-relaxed">
                 What another organization treats as its whole mission is, here,
                 one branch&apos;s full-time focus.
               </p>
             </div>
-          </div>
-        </div>
-
-        {/* ── What unites the branches ────────────────────────────── */}
-        <div className="mt-28 md:mt-36 border-t border-border pt-16">
-          <div className="hww-rise editorial-eyebrow text-muted-foreground">
-            Twice a year, the whole network is in one room
-          </div>
-
-          <div className="mt-12 grid gap-12 md:grid-cols-2 md:gap-16">
-            {UNITERS.map((u) => (
-              <article
-                key={u.name}
-                className="hww-uniter border-t-2 pt-8"
-                style={{ borderTopColor: u.accent }}
-              >
-                <div className="flex items-baseline gap-4">
-                  <span className="editorial-eyebrow" style={{ color: u.accent }}>
-                    {u.season}
-                  </span>
-                </div>
-                <h3 className="mt-5 editorial-display leading-[1.06] pb-1 text-[clamp(1.9rem,3.4vw,2.75rem)]">
-                  {u.name}
-                </h3>
-                <p className="mt-6 text-base text-foreground/80 leading-relaxed">
-                  {u.body}
-                </p>
-                <p className="mt-6 font-display text-lg italic text-foreground/70">
-                  {u.tag}
-                </p>
-              </article>
-            ))}
           </div>
         </div>
 

@@ -21,7 +21,7 @@ const ACTS = [
  * element that persists across every act, which is what makes the page read as
  * a single scroll rather than three stacked sections.
  *
- * Desktop only, and only when the visitor has not asked for reduced motion —
+ * Desktop only, and only when the visitor has not asked for reduced motion:
  * on a phone the rail would crowd the copy and earn nothing.
  */
 export function AnnualEventsRail() {

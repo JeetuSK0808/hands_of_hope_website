@@ -9,7 +9,7 @@ import { usePrefersReducedMotion } from "@/lib/use-prefers-reduced-motion";
 if (typeof window !== "undefined") gsap.registerPlugin(ScrollTrigger);
 
 // Mission and Vision are quoted verbatim from the organization's own wording.
-// Do not paraphrase these two strings — see hands-of-hope-how-we-work-2.md.
+// Do not paraphrase these two strings; see hands-of-hope-how-we-work-2.md.
 const SCENES = [
   {
     numeral: "I.",
@@ -58,7 +58,7 @@ export function MissionVision() {
 
       // Transform and opacity only. The previous version scrubbed
       // `letter-spacing` and a 14px blur on display type sized up to 18rem,
-      // which forces a layout and a full repaint on every scroll frame — the
+      // which forces a layout and a full repaint on every scroll frame, the
       // single most expensive thing on the page.
       gsap.set(scenes, { autoAlpha: 0, scale: 0.72, yPercent: 4 });
       gsap.set(".mv-scene .mv-copy-line", { yPercent: 110, opacity: 0 });

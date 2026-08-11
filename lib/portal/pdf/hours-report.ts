@@ -55,14 +55,14 @@ export function generateHoursPdf(subject: HoursReportSubject, rows: HoursReportR
   doc.text(`Name:   ${subject.name}`, margin, infoY);
   doc.text(`Email:  ${subject.email}`, margin, infoY + 14);
   doc.text(`Role:   ${ROLE_LABEL[subject.role]}`, margin, infoY + 28);
-  doc.text(`Branch: ${subject.branch_name ?? "—"}`, margin, infoY + 42);
-  doc.text(`Region: ${subject.region_name ?? "—"}`, margin, infoY + 56);
+  doc.text(`Branch: ${subject.branch_name ?? "None"}`, margin, infoY + 42);
+  doc.text(`Region: ${subject.region_name ?? "None"}`, margin, infoY + 56);
   doc.text(`Report date: ${new Date().toISOString().slice(0, 10)}`, pageW - margin - 180, infoY);
 
   const body = rows.map((r) => [
     r.activity_date,
     r.event_name ? `${r.event_name} · ${r.description}` : r.description,
-    r.location ?? "—",
+    r.location ?? "None",
     r.hours.toFixed(2),
     r.status,
   ]);
@@ -140,8 +140,8 @@ export function generateBulkHoursPdf(
     doc.text(`Name:   ${subject.name}`, margin, infoY);
     doc.text(`Email:  ${subject.email}`, margin, infoY + 14);
     doc.text(`Role:   ${ROLE_LABEL[subject.role]}`, margin, infoY + 28);
-    doc.text(`Branch: ${subject.branch_name ?? "—"}`, margin, infoY + 42);
-    doc.text(`Region: ${subject.region_name ?? "—"}`, margin, infoY + 56);
+    doc.text(`Branch: ${subject.branch_name ?? "None"}`, margin, infoY + 42);
+    doc.text(`Region: ${subject.region_name ?? "None"}`, margin, infoY + 56);
 
     autoTable(doc, {
       startY: infoY + 78,
@@ -149,7 +149,7 @@ export function generateBulkHoursPdf(
       body: rows.map((r) => [
         r.activity_date,
         r.event_name ? `${r.event_name} · ${r.description}` : r.description,
-        r.location ?? "—",
+        r.location ?? "None",
         r.hours.toFixed(2),
         r.status,
       ]),

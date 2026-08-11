@@ -57,7 +57,7 @@ export async function POST(req: Request) {
 
   const session = event.data.object as Stripe.Checkout.Session;
 
-  // Fast path for redeliveries. This read is only an optimization — the real
+  // Fast path for redeliveries. This read is only an optimization; the real
   // guarantee is the unique constraint on stripe_session_id enforced below.
   const { data: existing } = await supabaseAdmin()
     .from("merch_orders")
@@ -151,7 +151,7 @@ export async function POST(req: Request) {
 
   if (insertErr) {
     // 23505 = unique_violation: a concurrent delivery of the same event won
-    // the race. That is success, not failure — do not let Stripe retry.
+    // the race. That is success, not failure, so do not let Stripe retry.
     if (insertErr.code === "23505") {
       return NextResponse.json({ received: true, duplicate: true });
     }
@@ -169,7 +169,7 @@ export async function POST(req: Request) {
         .update({ tigerhill_notified: true })
         .eq("id", inserted.id);
     } catch (err) {
-      // tigerhill_notified stays false — that flag is the queue of orders a
+      // tigerhill_notified stays false; that flag is the queue of orders a
       // human still has to forward by hand.
       console.error(
         `[stripe webhook] tigerhill email failed for ${orderNumber}`,

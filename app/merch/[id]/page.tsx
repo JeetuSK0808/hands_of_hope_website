@@ -36,13 +36,13 @@ export async function generateMetadata({
   if (!product) return { title: "Merch not found" };
   return {
     title: `${product.name} · Hands of Hope Shop`,
-    description: product.description || `${product.name} — Hands of Hope Outreach.`,
+    description: product.description || `${product.name} from Hands of Hope Outreach.`,
     alternates: { canonical: `/merch/${product.id}` },
     openGraph: {
       url: `https://handsofhopeoutreach.org/merch/${product.id}`,
       title: product.name,
       description:
-        product.description || `${product.name} — Hands of Hope Outreach.`,
+        product.description || `${product.name} from Hands of Hope Outreach.`,
       images: product.front_image_url ? [product.front_image_url] : undefined,
     },
   };
@@ -71,7 +71,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               {product.front_image_url ? (
                 <Image
                   src={product.front_image_url}
-                  alt={`${product.name} — front`}
+                  alt={`${product.name}, front view`}
                   fill
                   sizes="(min-width: 1024px) 55vw, 100vw"
                   className="object-cover"
@@ -88,7 +88,7 @@ export default async function ProductDetailPage({ params }: PageProps) {
               <div className="relative aspect-[4/5] w-full overflow-hidden bg-secondary">
                 <Image
                   src={product.back_image_url}
-                  alt={`${product.name} — back`}
+                  alt={`${product.name}, back view`}
                   fill
                   sizes="(min-width: 1024px) 55vw, 100vw"
                   className="object-cover"

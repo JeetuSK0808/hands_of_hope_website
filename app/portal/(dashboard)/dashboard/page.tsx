@@ -19,7 +19,7 @@ export default async function PortalDashboardPage() {
   //  - `logs` carries the joins the table and the PDF export need, capped.
   //  - `totals` is two tiny columns with no joins and no cap, because an
   //    all-time figure that silently stops at the cap is worse than no figure
-  //    at all — these numbers go on Gold Award and grant applications.
+  //    at all; these numbers go on Gold Award and grant applications.
   const [{ data: logs }, { data: totals }] = await Promise.all([
     supabase
       .from("hour_logs")
@@ -133,7 +133,7 @@ function StatCard({ label, value }: { label: string; value: number }) {
   );
 }
 
-/** Callers pass approved rows only — the query already filters on status. */
+/** Callers pass approved rows only; the query already filters on status. */
 function summarize(rows: { hours: number; activity_date: string }[]) {
   const now = new Date();
   const cutoffWeek = new Date(now); cutoffWeek.setDate(now.getDate() - 7);

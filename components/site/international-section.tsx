@@ -33,7 +33,7 @@ export function InternationalSection() {
         return;
       }
 
-      // Transform + opacity only — scrubbing `letter-spacing` and a blur on a
+      // Transform + opacity only; scrubbing `letter-spacing` and a blur on a
       // 16rem word relayouts and repaints the section on every frame.
       gsap.fromTo(
         word,
@@ -154,8 +154,8 @@ export function InternationalSection() {
         <div className="intl-caption mt-10 grid gap-10 md:grid-cols-[1.4fr_1fr] md:items-end">
           <p className="max-w-2xl text-base md:text-lg text-foreground/80 leading-relaxed">
             Hands of Hope started in Atlanta. Students now run branches across
-            multiple U.S. states and in Canada, Chile, and Denmark — each one
-            picking its own cause and its own community partners. Wherever a
+            multiple U.S. states and in Canada, Chile, and Denmark. Each one
+            picks its own cause and its own community partners. Wherever a
             student wants to build something for the people around them, there
             should be a branch.
           </p>

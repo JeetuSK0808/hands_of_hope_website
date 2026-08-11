@@ -7,7 +7,7 @@ import { SiteFooter } from "@/components/site/site-footer";
 import { SeoBreadcrumb } from "@/components/site/seo-breadcrumb";
 
 export const metadata: Metadata = {
-  title: "Donate — Support student-led community work",
+  title: "Donate · Support student-led community work",
   description:
     "Donate to Hands of Hope Outreach. Every gift is tax-deductible under our 501(c)(3) status (fiscally sponsored by Hack Club) and funds student-led STEM mentoring, chapter projects, and community service across Atlanta and beyond.",
   alternates: { canonical: "/donate" },

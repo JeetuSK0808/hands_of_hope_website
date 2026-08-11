@@ -39,7 +39,7 @@ const BUBBLES = [
  * The water between the acts.
  *
  * A wordless bridge: three sine lines draw themselves across the page as the
- * reader scrolls through, then keep drifting sideways at different speeds —
+ * reader scrolls through, then keep drifting sideways at different speeds,
  * the moment the two dates become the same body of water the sponsorship act
  * asks people to step into. Small air bubbles rise through on scrub.
  */

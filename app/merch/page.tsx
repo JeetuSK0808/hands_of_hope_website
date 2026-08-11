@@ -8,7 +8,7 @@ import { SeoBreadcrumb } from "@/components/site/seo-breadcrumb";
 import type { MerchProduct } from "@/lib/merch/types";
 
 export const metadata: Metadata = {
-  title: "Shop — Student-designed merch that funds our work",
+  title: "Shop · Student-designed merch that funds our work",
   description:
     "Shop Hands of Hope Outreach: student-designed apparel from the Atlanta-based 501(c)(3). Every purchase helps fund STEM Together, the Ripple for Change assembly, and the annual Awards Ceremony.",
   alternates: { canonical: "/merch" },
@@ -54,7 +54,7 @@ export default async function MerchIndexPage() {
         </h1>
         <p className="mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground">
           Student-designed apparel from Hands of Hope Outreach. Every order
-          helps fund the programs your classmates are running — STEM Together,
+          helps fund the programs your classmates are running: STEM Together,
           the Ripple for Change kit-packing assembly, and the annual Awards
           Ceremony.
         </p>

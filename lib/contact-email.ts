@@ -41,7 +41,7 @@ function renderHtml(m: ContactMessage): string {
   const rows: [string, string][] = [
     ["Name", m.name],
     ["Email", m.email],
-    ["School / organization", m.school || "—"],
+    ["School / organization", m.school || "None"],
     ["Topic", m.subject],
   ];
 
@@ -74,7 +74,7 @@ function renderText(m: ContactMessage): string {
     ``,
     `Name:    ${m.name}`,
     `Email:   ${m.email}`,
-    `School:  ${m.school || "—"}`,
+    `School:  ${m.school || "None"}`,
     `Topic:   ${m.subject}`,
     ``,
     m.message,
